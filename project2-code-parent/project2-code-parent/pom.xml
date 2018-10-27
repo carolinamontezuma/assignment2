@@ -218,11 +218,9 @@
 					<artifactId>wildfly-maven-plugin</artifactId>
 					<version>${wildfly-plugin-version}</version>
 					<configuration>
-						<skip>false</skip>
+						<skip>true</skip>
 						<hostname>localhost</hostname>
 						<port>${server.port}</port>
-						<username>root</username>
-						<password>is</password>
 						<filename>${project.name}.ear</filename>
 					</configuration>
 				</plugin>
