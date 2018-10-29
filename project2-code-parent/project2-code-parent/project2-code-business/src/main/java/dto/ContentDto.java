@@ -2,21 +2,19 @@ package dto;
 
 import java.io.Serializable;
 
-public class ContentDto implements Serializable {
-	 private static final long serialVersionUID = 1L;
-	 int id;
+public class ContentDTO implements Serializable{
+	int id;
 	 private String title;
 	 private String director;
 	 private int year;
 	 private String category;
-	
 	 
 	 
-	 public ContentDto() {
+	 public ContentDTO() {
 	  super();
 	 }
 	 
-	 public ContentDto(String title, String director, int year, String category) {
+	 public ContentDTO(String title, String director, int year, String category) {
 	  super();
 	  this.title = title;
 	  this.director = director;
@@ -49,5 +47,8 @@ public class ContentDto implements Serializable {
 		 this.category=category;
 	 }
 	 
-	 
+	 @Override
+	 public String toString() {
+	  return " title = " +  this.title + " director = " + this.director + " year = " + this.year + "category = "+this.category;
+	 }
 }

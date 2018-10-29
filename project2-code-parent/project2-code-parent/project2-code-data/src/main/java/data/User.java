@@ -19,11 +19,11 @@ public class User implements Serializable {
  private String email;
  private String creditCard;
  
- private List<Content> watchList;
+ /*private List<Content> watchList;*/
  
- @Temporal(TemporalType.DATE)
- @ManyToOne
- private Content content;
+ /*@Temporal(TemporalType.DATE)*/
+ /*@ManyToOne
+ private Content content;*/
 
  
  public User() {
@@ -61,12 +61,12 @@ public class User implements Serializable {
 	 this.creditCard = creditCard;
  }
  
- public List<Content> getWatchList() {
+/* public List<Content> getWatchList() {
 	  return watchList;
 	 }
  public void setWatchList(List<Content> watchList) {
 	 this.watchList = watchList;
- }
+ }*/
 
 
  public static long getSerialversionuid() {

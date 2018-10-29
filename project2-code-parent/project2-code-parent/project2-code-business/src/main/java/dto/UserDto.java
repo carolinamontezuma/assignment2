@@ -1,25 +1,25 @@
 package dto;
 
 import java.io.Serializable;
-import java.util.List;
 
-public class UserDto implements Serializable {
-	 /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class UserDTO implements Serializable{
 	private int id;
 	 private String username;
 	 private String email;
 	 private String creditCard;
 	 
-	 private List<ContentDto> watchList;
-	 	 
-	 public UserDto() {
+	 /*private List<Content> watchList;*/
+	 
+	 /*@Temporal(TemporalType.DATE)*/
+	 /*@ManyToOne
+	 private Content content;*/
+
+	 
+	 public UserDTO() {
 	  super();
 	 }
 
-	 public UserDto(String username, String email,String creditCard) {
+	 public UserDTO(String username, String email,String creditCard) {
 	  super();
 	  this.username = username;
 	  this.email = email;
@@ -50,18 +50,15 @@ public class UserDto implements Serializable {
 		 this.creditCard = creditCard;
 	 }
 	 
-	 public List<ContentDto> getWatchList() {
+	/* public List<Content> getWatchList() {
 		  return watchList;
 		 }
-	 public void setWatchList(List<ContentDto> watchList) {
+	 public void setWatchList(List<Content> watchList) {
 		 this.watchList = watchList;
-	 }
+	 }*/
 
 
-	 public static long getSerialversionuid() {
-	  return serialVersionUID;
-	 }
-	 
+	
 	 @Override
 	 public String toString() {
 	  return " id = " +  this.id + " user = " + this.username + " email = " + this.email;

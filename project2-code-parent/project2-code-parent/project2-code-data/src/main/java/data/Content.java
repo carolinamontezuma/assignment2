@@ -14,13 +14,12 @@ public class Content implements Serializable {
  private static final long serialVersionUID = 1L;
  
  @Id @GeneratedValue(strategy=GenerationType.AUTO)
+ 
  int id;
  private String title;
  private String director;
  private int year;
  private String category;
- /*@OneToMany(mappedBy="team")
- private List<User> players;*/
  
  
  public Content() {
@@ -58,6 +57,11 @@ public class Content implements Serializable {
 	 }
  public void setCategory(String category) {
 	 this.category=category;
+ }
+ 
+ @Override
+ public String toString() {
+  return " title = " +  this.title + " director = " + this.director + " year = " + this.year + "category = "+this.category;
  }
  
  

@@ -119,6 +119,7 @@
 				<version>${hibernate.validator.version}</version>
 				<scope>provided</scope>
 			</dependency>
+			
 			<!-- https://mvnrepository.com/artifact/org.hibernate.common/hibernate-commons-annotations -->
 			<dependency>
 				<groupId>org.hibernate.common</groupId>
