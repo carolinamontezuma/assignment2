@@ -25,7 +25,7 @@ import ejb.ContentEJBRemote;
 //http://localhost:8080/project2-code-web/Webflix?fill=1
 //url = http://localhost:8080/project2-code-web/Webflix?category=comedy
 
-@WebServlet("/Webflix")
+@WebServlet("/PlayersTallerThan")
 public class PlayersTallerThan extends HttpServlet {
  private static final long serialVersionUID = 1L;
  @EJB
