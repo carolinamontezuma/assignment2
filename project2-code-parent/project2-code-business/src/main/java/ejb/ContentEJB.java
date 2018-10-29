@@ -74,8 +74,7 @@ public class ContentEJB implements ContentEJBRemote {
     public List <ContentDTO> seeContentFromCategory(String category){
     	List<Content> c = new ArrayList<Content>();
     	List<ContentDTO> cd = new ArrayList<ContentDTO>();
-    	Query query = em.createQuery("SELECT c FROM Content c where c.category LIKE:categoryN")
-    			.setParameter("categoryN", category);
+    	Query query = em.createQuery("SELECT c FROM Content c where c.category LIKE:categoryN").setParameter("categoryN", category);
     	c = query.getResultList();
     	for(Content con :c) {
     		cd.add(new ContentDTO(con.getTitle(),con.Director(),con.getYear(),con.getCategory()));
@@ -83,17 +82,7 @@ public class ContentEJB implements ContentEJBRemote {
     	return cd;
     }
     //listar Content de determinado director
-    public List <ContentDTO> seeContentFromDirector(String director){
-    	List<Content> c = new ArrayList<Content>();
-    	List<ContentDTO> cd = new ArrayList<ContentDTO>();
-    	Query query = em.createQuery("SELECT c FROM Content c where c.director LIKE:directorN")
-    			.setParameter("directorN", director);
-    	c = query.getResultList();
-    	for(Content con :c) {
-    		cd.add(new ContentDTO(con.getTitle(),con.Director(),con.getYear(),con.getCategory()));
-    	}
-    	return cd;
-    }
+    
     
     //listar Content por intervalo 
     

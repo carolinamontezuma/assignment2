@@ -1,4 +1,4 @@
-package org.projeto2.web;
+package test.java.org.projeto2.web;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
