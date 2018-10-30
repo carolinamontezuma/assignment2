@@ -12,7 +12,8 @@ public interface ContentEJBRemote {
 	public void populate();
 	public List<ContentDTO> seeAllContent();
 	public List <ContentDTO> seeContentFromCategory(String category);
-	public List <Content> seeContentFromYears(int year1,int year2);
+	public List <ContentDTO> seeContentFromYears(int year1,int year2);
+	public List <ContentDTO> seeContentFromDirector(String director);
 	public void addNewContent(String title,String director,int year,String category);
 	
 }

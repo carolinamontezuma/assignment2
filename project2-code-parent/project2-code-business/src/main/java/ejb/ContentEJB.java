@@ -82,15 +82,29 @@ public class ContentEJB implements ContentEJBRemote {
     	return cd;
     }
     //listar Content de determinado director
-    
+    public List <ContentDTO> seeContentFromDirector(String director){
+    	List<Content> c = new ArrayList<Content>();
+    	List<ContentDTO> cd = new ArrayList<ContentDTO>();
+    	Query query = em.createQuery("SELECT c FROM Content c where c.director LIKE:directorN").setParameter("directorN", director);
+    	c = query.getResultList();
+    	for(Content con :c) {
+    		cd.add(new ContentDTO(con.getTitle(),con.Director(),con.getYear(),con.getCategory()));
+    	}
+    	return cd;
+    }
     
     //listar Content por intervalo 
     
-    public List <Content> seeContentFromYears(int year1,int year2){
+    public List <ContentDTO> seeContentFromYears(int year1,int year2){
+    	List<Content> c = new ArrayList<Content>();
+    	List<ContentDTO> cd = new ArrayList<ContentDTO>();
     	Query query = em.createQuery("SELECT c FROM Content c where c.year BETWEEN :date1 and :date2")
     			.setParameter("date1", year1)
     			.setParameter("date2", year2);
-    	return query.getResultList();
+    	for(Content con :c) {
+    		cd.add(new ContentDTO(con.getTitle(),con.Director(),con.getYear(),con.getCategory()));
+    	}
+    	return cd;
 
     }
    
