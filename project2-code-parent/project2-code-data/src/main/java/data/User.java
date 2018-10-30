@@ -1,6 +1,7 @@
 package data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -19,10 +20,11 @@ public class User implements Serializable {
  private String email;
  private String creditCard;
  
- /*private List<Content> watchList;*/
+ @OneToMany
+ private List<Content> watchList;
  
- /*@Temporal(TemporalType.DATE)*/
- /*@ManyToOne
+/* @Temporal(TemporalType.DATE)
+ @ManyToOne
  private Content content;*/
 
  
@@ -35,6 +37,7 @@ public class User implements Serializable {
   this.username = username;
   this.email = email;
   this.creditCard=creditCard;
+  this.watchList = new ArrayList<>();
  }
 
  public String getUserame() {
@@ -61,12 +64,12 @@ public class User implements Serializable {
 	 this.creditCard = creditCard;
  }
  
-/* public List<Content> getWatchList() {
+ public List<Content> getWatchList() {
 	  return watchList;
 	 }
  public void setWatchList(List<Content> watchList) {
 	 this.watchList = watchList;
- }*/
+ }
 
 
  public static long getSerialversionuid() {

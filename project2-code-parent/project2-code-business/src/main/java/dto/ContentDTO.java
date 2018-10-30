@@ -2,6 +2,8 @@ package dto;
 
 import java.io.Serializable;
 
+import data.Content;
+
 public class ContentDTO implements Serializable{
 	int id;
 	 private String title;
@@ -12,6 +14,11 @@ public class ContentDTO implements Serializable{
 	 
 	 public ContentDTO() {
 	  super();
+	 }
+	 
+	 public ContentDTO(Content c)
+	 {
+		 this(c.getTitle(), c.Director(), c.getYear(), c.getCategory());
 	 }
 	 
 	 public ContentDTO(String title, String director, int year, String category) {

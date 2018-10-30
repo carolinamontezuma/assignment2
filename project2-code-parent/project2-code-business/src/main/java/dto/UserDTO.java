@@ -1,6 +1,11 @@
 package dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import data.User;
+import data.Content;
 
 public class UserDTO implements Serializable{
 	private int id;
@@ -8,22 +13,23 @@ public class UserDTO implements Serializable{
 	 private String email;
 	 private String creditCard;
 	 
-	 /*private List<Content> watchList;*/
-	 
-	 /*@Temporal(TemporalType.DATE)*/
-	 /*@ManyToOne
-	 private Content content;*/
-
+	 private List<Content> watchList;
 	 
 	 public UserDTO() {
 	  super();
 	 }
 
+	 public UserDTO(User u)
+	 {
+		 this(u.getUserame(), u.getEmail(), u.getCreditCard());
+	 }
+	 
 	 public UserDTO(String username, String email,String creditCard) {
 	  super();
 	  this.username = username;
 	  this.email = email;
 	  this.creditCard=creditCard;
+	  this.watchList = new ArrayList<>();
 	 }
 
 	 public String getUserame() {
@@ -50,12 +56,12 @@ public class UserDTO implements Serializable{
 		 this.creditCard = creditCard;
 	 }
 	 
-	/* public List<Content> getWatchList() {
+	 public List<Content> getWatchList() {
 		  return watchList;
 		 }
 	 public void setWatchList(List<Content> watchList) {
 		 this.watchList = watchList;
-	 }*/
+	 }
 
 
 	
