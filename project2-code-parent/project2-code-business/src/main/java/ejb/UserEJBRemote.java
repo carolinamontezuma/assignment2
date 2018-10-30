@@ -9,6 +9,7 @@ import data.User;
 
 @Remote
 public interface UserEJBRemote {
-	public void editPersonalInformation();
+	public void editPersonalInformation(int userID, String username, String email, String creditCard);
+	public void deleteAccount(int userID);
 	public void populate();
 }

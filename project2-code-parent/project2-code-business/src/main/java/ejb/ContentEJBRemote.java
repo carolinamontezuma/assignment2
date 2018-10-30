@@ -16,5 +16,6 @@ public interface ContentEJBRemote {
 	public void addNewContent(String title, String director, int year, String category);
 	public List<ContentDTO> seeUserWatchList(int userID);
 	public void addContentToWatchList(int contentID, int userID);
+	public void removeContentFromWatchList(int contentID, int userID);
 	public List<ContentDTO> seeContentByDirector(String director);
 }

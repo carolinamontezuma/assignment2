@@ -68,6 +68,19 @@ public class ContentEJB implements ContentEJBRemote {
     	em.merge(user);
     }
     
+    //remover um Content da watchList de um user
+    @Override
+    public void removeContentFromWatchList(int contentID, int userID){
+    	Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id").setParameter("id", contentID);
+    	Query queryUser = em.createQuery("SELECT u FROM User u WHERE u.id = :id").setParameter("id", userID);
+    	User user = (User) queryUser.getSingleResult();
+    	Content content = (Content) queryContent.getSingleResult();
+    	
+    	user.getWatchList().remove(content);
+    	
+    	em.merge(user);
+    }
+    
     //listar watchList de um user
     @Override
     public List<ContentDTO> seeUserWatchList(int userID){
