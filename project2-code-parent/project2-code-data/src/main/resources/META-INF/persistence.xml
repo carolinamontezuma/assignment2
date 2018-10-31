@@ -5,6 +5,7 @@
   <provider>org.hibernate.ejb.HibernatePersistence</provider>
   <jta-data-source>java:/MySqlDS</jta-data-source>
   <class>data.User</class>
+  <class>data.Manager</class>
   <class>data.Content</class>
   <properties>
    <property name="javax.persistence.jdbc.user" value="root" />
