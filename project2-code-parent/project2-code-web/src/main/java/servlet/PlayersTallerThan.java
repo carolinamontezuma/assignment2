@@ -41,30 +41,18 @@ public class PlayersTallerThan extends HttpServlet {
  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	 PrintWriter out = response.getWriter();
 	 response.setContentType("text/html");
-	 //out.println("<h1> PAI NATAL </h1>");
-
+	 
 	 if (request.getParameter("fill") != null) {
 		 ejbremote.populate();
 		 out.println("<h1>Populate Content: OK!</h1>");
 	 }
- 
-
-   if(request.getParameter("director") != null) {
+	 
+	 if(request.getParameter("director") != null) {
     	 String directorName = request.getParameter("director");
-        // String addressPath = "/listContents.jsp";
-         //RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("listContents.jsp");
-
-    	   // out.println(directorName + "<br/>");
     	 List<ContentDTO> content =  ejbremote.seeContentFromDirector(directorName);
          request.setAttribute("listDirector", content);
          RequestDispatcher dispatcher = request.getRequestDispatcher("/listContents.jsp");
-
-        dispatcher.forward(request, response);
-  		//
-   	  	
-   	  /* for (ContentDTO p : content)
-   	    out.println(p + "<br/>");*/
-
+         dispatcher.forward(request, response);
      }
  
     

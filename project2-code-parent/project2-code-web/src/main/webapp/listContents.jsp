@@ -1,38 +1,29 @@
 <%@page import="ejb.ContentEJB"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import = "java.util.List"%>
-<%@ page import = "ejb.ContentEJBRemote"%>
+<%@ page import = "java.util.ArrayList"%>
+<%@ page import = "ejb.ContentEJB"%>
 <%@ page import = "dto.ContentDTO"%>
 <%@ page import ="javax.ejb.Local"%>
 <!DOCTYPE html>
 <head>
-<%
-@EJB
-ContentEJB ejb = new ContentEJB();;
-ContentDTO content = new ContentDTO(); 
-Object ob =request.getAttribute("listDirector");
-String directorName = ob.toString();
-%>
+	
 <title>Insert title here</title>
 </head>
 <body>
 
 <p>ALO </p>
+<%  
+// retrieve your list from the request, with casting 
+ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("listDirector");
 
-
-
-
- 	
-  <%
-  List<ContentDTO> list = ejb.seeContentFromDirector(directorName);
-  for(int i = 0; i < list.size(); i++) {
-                content = list.get(i);
-                //out.println(actor.getId());
-                //out.println(actor.getFirstname());
-                //out.println(actor.getLastname());
-  }
-   %>
+// print the information about every category of the list
+for(ContentDTO content : list) {
+    out.println(content.getTitle());
+    out.println(content.getYear());
+    out.println(content.getCategory());
+}
+%>
    
 
 </body>
