@@ -6,7 +6,6 @@
 <%@ page import = "dto.ContentDTO"%>
 <%@ page import ="javax.ejb.Local"%>
 <!DOCTYPE html>
-<html>
 <head>
 <%
 @EJB
@@ -18,6 +17,7 @@ String directorName = ob.toString();
 <title>Insert title here</title>
 </head>
 <body>
+
 <p>ALO </p>
 
 
@@ -34,5 +34,6 @@ String directorName = ob.toString();
   }
    %>
    
+
 </body>
 </html>
