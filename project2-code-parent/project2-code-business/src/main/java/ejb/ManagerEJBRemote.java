@@ -8,6 +8,8 @@ public interface ManagerEJBRemote {
 
 	public void deleteAccount(int managerID);
 	
+	public boolean validateLogin(String username, String password);
+	
 	public void addNewContent(String title, String director, int year, String category);
 	
 	public void removeContent(int contentID);

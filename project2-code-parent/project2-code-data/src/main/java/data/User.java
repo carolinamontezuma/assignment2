@@ -17,6 +17,7 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String username;
+	private String password;
 	private String email;
 	private String creditCard;
 
@@ -27,9 +28,10 @@ public class User implements Serializable {
 		super();
 	}
 
-	public User(String username, String email, String creditCard) {
+	public User(String username, String password, String email, String creditCard) {
 		super();
 		this.username = username;
+		this.password = password;
 		this.email = email;
 		this.creditCard = creditCard;
 		this.watchList = new ArrayList<>();
@@ -45,6 +47,14 @@ public class User implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getEmail() {

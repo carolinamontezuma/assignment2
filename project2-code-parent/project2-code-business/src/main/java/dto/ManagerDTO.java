@@ -11,21 +11,19 @@ public class ManagerDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String username;
-	private String password;
 
 	public ManagerDTO() {
 		super();
 	}
 
 	public ManagerDTO(Manager m) {
-		this(m.getID(), m.getUsername(), m.getPassword());
+		this(m.getID(), m.getUsername());
 	}
 
-	public ManagerDTO(int ID, String username, String password) {
+	public ManagerDTO(int ID, String username) {
 		super();
 		this.id = ID;
 		this.username = username;
-		this.password = password;
 	}
 
 	public int getID() {
@@ -38,14 +36,6 @@ public class ManagerDTO implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	@Override

@@ -9,7 +9,7 @@
 
 <head>
 	
-<title>Insert title here</title>
+<title>listContents.jsp</title>
 </head>
 <body>
 <%

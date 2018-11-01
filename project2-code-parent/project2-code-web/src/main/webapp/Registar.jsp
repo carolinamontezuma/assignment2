@@ -4,15 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Registar.jsp</title>
 </head>
 <body>
 <p>Registar</p>
-	<form action="PlayersTallerThan">
-  		Name: <input type="text" name="fname"><br>
-  		Email: <input type="text" name="fmail"><br>
-  		Credit card: <input type="text" name="fcard"><br>
- 		Password: <input type="text" name="fpass"><br>
+	<form action="PlayersTallerThan" method="post">
+  		Name: <input type="text" name="fname" placeholder="Name" required><br>
+  		Email: <input type="email" name="fmail" placeholder="example@email.com" required><br>
+  		Password: <input type="password" name="fpass" placeholder="Password" required><br>
+  		Credit card: <input type="number" name="fcard" placeholder="COLOCAR UM PLACEHOLDER" required><br>
   		<input type="submit" name="registar" value="Submit">
 	</form>
 </body>

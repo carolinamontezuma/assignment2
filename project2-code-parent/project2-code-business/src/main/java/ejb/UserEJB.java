@@ -3,6 +3,7 @@ package ejb;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import data.Manager;
@@ -14,7 +15,7 @@ import data.User;
 @Stateless
 @LocalBean
 public class UserEJB implements UserEJBRemote {
-
+	@PersistenceContext(name = "Users")
 	EntityManager em;
 
 	/**
@@ -26,8 +27,8 @@ public class UserEJB implements UserEJBRemote {
 
 	// adicionar informação pessoal de um novo utilizador (=criar conta)
 	@Override
-	public void addAccount(String username, String email, String creditCard) {
-		User user = new User(username, email, creditCard);
+	public void addAccount(String username, String password, String email, String creditCard) {
+		User user = new User(username, password, email, creditCard);
 
 		em.persist(user);
 	}
@@ -53,9 +54,18 @@ public class UserEJB implements UserEJBRemote {
 	}
 
 	@Override
+	public boolean validateLogin(String email, String password) {
+		Query query = em.createQuery("SELECT u FROM User u WHERE u.email = :email AND u.password = :password")
+				.setParameter("email", email).setParameter("password", password);
+
+		return query.getResultList().size() == 1; // True se apenas houver 1 user, False caso contrário
+	}
+
+	@Override
 	public void populate() {
-		User[] users = { new User("Carolina", "carolina", "sdjhsd"),
-				new User("Joao", "carolina", "sdjhsd"), new User("Cesar", "carolina", "sdjhsd") };
+		User[] users = { new User("Carolina", "carolina", "carolina@mail.com", "123456789"),
+				new User("Joao", "joao", "joao@mail.com", "123456789"),
+				new User("Cesar", "cesar", "cesar@mail.com", "123456789") };
 
 		for (User u : users)
 			em.persist(u);

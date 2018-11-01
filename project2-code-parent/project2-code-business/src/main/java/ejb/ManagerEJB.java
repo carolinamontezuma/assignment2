@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import data.Content;
@@ -17,7 +18,7 @@ import data.User;
 @Stateless
 @LocalBean
 public class ManagerEJB implements ManagerEJBRemote {
-
+	@PersistenceContext(name = "Managers")
 	EntityManager em;
 
 	/**
@@ -39,6 +40,16 @@ public class ManagerEJB implements ManagerEJBRemote {
 	@Override
 	public void deleteAccount(int managerID) {
 		em.remove(em.find(Manager.class, managerID));
+	}
+	
+	@Override
+	public boolean validateLogin(String username, String password)
+	{
+		Query query = em.createQuery("SELECT m FROM Manager m WHERE m.username = :username AND m.password = :password")
+				.setParameter("username", username)
+				.setParameter("password", password);
+		
+		return query.getResultList().size() == 1; //True se apenas houver 1 manager, False caso contrário
 	}
 
 	// Adicionar novo Content à aplicação
@@ -72,7 +83,7 @@ public class ManagerEJB implements ManagerEJBRemote {
 	
 	@Override
 	public void populate() {
-		Manager[] managers = { new Manager("admin", "admin") };
+		Manager[] managers = { new Manager("admin@admin.com", "admin") };
 
 		for (Manager m : managers)
 			em.persist(m);
