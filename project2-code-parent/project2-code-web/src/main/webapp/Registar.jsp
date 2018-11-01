@@ -7,23 +7,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<p>Registar</p>
-	<div class="container">
-    <label for="uname"><b>Email</b></label>
-    <input type="text" placeholder="Enter email" name="email" required>
-    
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter username" name="user" required>
-     
-    <label for="psw"><b>Cartão de Crédito</b></label>
-    <input type="password" placeholder="Enter credit card" name="credit" required>
-    
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-
-    <button type="submit">Login</button>
-    <label>
-      <input type="checkbox" checked="checked" name="remember"> Remember me
-    </label>
+<p>Registar</p>
+	<form action="PlayersTallerThan">
+  		Name: <input type="text" name="fname"><br>
+  		Email: <input type="text" name="fmail"><br>
+  		Credit card: <input type="text" name="fcard"><br>
+ 		Password: <input type="text" name="fpass"><br>
+  		<input type="submit" name="registar" value="Submit">
+	</form>
 </body>
 </html>

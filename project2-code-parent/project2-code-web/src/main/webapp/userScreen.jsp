@@ -8,17 +8,26 @@
 </head>
 <body>
 	<p>Welcome, user!</p>
-	<!--  <a href="Login.jsp">Edit personal information</a>
-	<a href="listContents.jsp">Search for all the content</a>
-	<a href="listContents.jsp">Search for all the content of a given category</a>
-	<a href="listContents.jsp">Search for all the content of a given director</a>
-	<a href="listContents.jsp">Search for all the content within a range of years</a>
-	<a href="listContents.jsp">See my watch list</a>
-	<a href="index.jsp">Delete my account</a>	-->
+	
+	<p>Suggested Content</p>
+	
+	
 	
 	<form action="PlayersTallerThan" method="get"> 
-    	Item's name : <input type="text" name="director" id="director"><br>
-    <input type="submit" value="Register">
+   		<input type="submit" name="listWatchList" id ="listWatchList" value="See my watch list">
  	</form>
+ 	
+ 	<form action="PlayersTallerThan" method="get"> 
+    	<input type="submit" name="search" id ="search" value="Search for contents">
+ 	</form>
+ 	
+ 	<form action="PlayersTallerThan" method="get"> 
+    	<input type="submit" name="listAll" id ="listAll"  value="List contents">
+ 	</form>
+ 	
+ 	<form action="PlayersTallerThan" method="get"> 
+   		<input type="submit" name="editPersonal" id="editPersonal" value="Edit my personal information">
+ 	</form>
+ 	
 </body>
 </html>

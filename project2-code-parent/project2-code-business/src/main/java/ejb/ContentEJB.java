@@ -83,13 +83,35 @@ public class ContentEJB implements ContentEJBRemote {
 
 	// listar todos os Content
 	@Override
-	public List<ContentDTO> seeAllContent() {
+	public List<ContentDTO> seeAllContent(int ordem) {
 		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
-		Query query = em.createQuery("FROM Content");
-		c = query.getResultList();
-		for (Content con : c) {
-			cd.add(new ContentDTO(con));
+		Query query;
+		switch(ordem) {
+		//Sem ordem
+		case 1:
+			query = em.createQuery("FROM Content");
+			c = query.getResultList();
+			for (Content con : c) {
+				cd.add(new ContentDTO(con));
+			}
+			
+			break;
+		//Ordem descendente
+		case 2:
+			query = em.createQuery("FROM Content c ORDER BY c.title DESC");
+			c = query.getResultList();
+			for (Content con : c) {
+				cd.add(new ContentDTO(con));
+			}
+			break;
+		case 3:
+			query = em.createQuery("FROM Content c ORDER BY c.title ASC");
+			c = query.getResultList();
+			for (Content con : c) {
+				cd.add(new ContentDTO(con));
+			}
+			break;
 		}
 		return cd;
 	}
@@ -134,4 +156,58 @@ public class ContentEJB implements ContentEJBRemote {
 		}
 		return cd;
 	}
+	
+	// Devolve todos os nomes dos directores 
+	
+	public List<String> getDirectorName(int ordem){
+		List<String> result = new ArrayList<String>();
+		Query query;
+		
+		switch(ordem) {
+		//Sem ordem
+		case 1:
+			query = em.createQuery("SELECT DISTINCT director FROM Content");
+			result = query.getResultList();
+			
+			break;
+		//Ordem descendente
+		case 2:
+			query = em.createQuery("SELECT DISTINCT c.director FROM Content c ORDER BY c.director ASC");
+			result = query.getResultList();
+
+			break;
+		case 3:
+			query = em.createQuery("SELECT DISTINCT c.director FROM Content c ORDER BY c.director DESC");
+			result = query.getResultList();
+			break;
+		}
+		return result;
+	}
+	
+	//Devolve todas as categorias 
+	public List<String> getCategories(int ordem){
+		List<String> result = new ArrayList<String>();
+		Query query;
+		
+		switch(ordem) {
+		//Sem ordem
+		case 1:
+			query = em.createQuery("SELECT DISTINCT category FROM Content");
+			result = query.getResultList();
+			
+			break;
+		//Ordem descendente
+		case 2:
+			query = em.createQuery("SELECT DISTINCT c.category FROM Content c ORDER BY c.category ASC");
+			result = query.getResultList();
+
+			break;
+		case 3:
+			query = em.createQuery("SELECT DISTINCT c.category FROM Content c ORDER BY c.category DESC");
+			result = query.getResultList();
+			break;
+		}
+		return result;
+	}
+	
 }
