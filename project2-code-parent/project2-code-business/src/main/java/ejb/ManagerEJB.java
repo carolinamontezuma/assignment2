@@ -54,14 +54,21 @@ public class ManagerEJB implements ManagerEJBRemote {
 
 	// Adicionar novo Content à aplicação
 	@Override
-	public void addNewContent(String title, String director, int year, String category) {
-		Content newContent = new Content();
-		newContent.setTitle(title);
-		newContent.setDirector(director);
-		newContent.setYear(year);
-		newContent.setCategory(category);
-
-		em.persist(newContent);
+	public int addNewContent(String title, String director, int year, String category) {
+		Query q = em.createQuery("SELECT COUNT(c.title) FROM Content c WHERE c.title =:title")
+				.setParameter("title", title);
+		long count = (long)q.getSingleResult();
+		if(count==0) {
+			Content newContent = new Content();
+			newContent.setTitle(title);
+			newContent.setDirector(director);
+			newContent.setYear(year);
+			newContent.setCategory(category);
+	
+			em.persist(newContent);
+			return 1;
+		}
+		return 0;
 	}
 
 	@Override

@@ -17,10 +17,6 @@ Object ob = request.getAttribute("action");
 String action = ob.toString();
 %>
 
-
-
-
-<p>ALO </p>
 <!--  APRESENTAÇÃO INICIAL DOS CONTEUÚDOS TODOS COM A HIPÓTESE DE ALTERAR ORDENAÇÃO -->
 
 
@@ -36,14 +32,23 @@ String action = ob.toString();
  </form>
 <% 
  ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("allContents");
-// print the information about every category of the list
 for(ContentDTO content : list) {
     out.println(content.getTitle());
-    out.println("");
-    out.println(content.getYear());
-    out.println("");
-    out.println(content.getCategory());
-    out.println("");
+    String director = content.Director();
+    String category = content.getCategory();
+    int year = content.getYear();
+    %>
+     <form action="PlayersTallerThan" method="get"> 
+     <input type="hidden" name="content_director" value="<%=director%>">    
+    	<input type="hidden" name="content_year" value="<%=year%>">    
+       	<input type="hidden" name="content_category" value="<%=category%>"> 
+    <input type="submit" name="details" id ="details"  value="View details">
+ 	</form>
+ 	<form action="PlayersTallerThan" method="get"> 
+    	    		
+        <input type="submit" name="remove" id ="remove"  value="Remove">
+        </form>
+    <% 
 }
 %>
 
@@ -108,9 +113,34 @@ for(ContentDTO content : list) {
    
 </c:if>
 
+<!--  EDITAR CONTEUDO [MANAGER] -->
 
-
-
+<c:if test= "${action == 'edit'}">
+  
+   <%  
+   ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("allContents");
+   for(ContentDTO content : list) {
+	    String title = content.getTitle();
+	    out.println(title);
+	   String director = content.Director();
+	    int year = content.getYear();
+	    String category=content.getCategory();
+	    int id = content.getID();
+	    %>
+	    <br>
+	     <form action="PlayersTallerThan" method="get"> 
+	     	<input type="hidden" name="content_title" value="<%=title%>">    
+	     	<input type="hidden" name="content_director" value="<%=director%>">     
+	    	<input type="hidden" name="content_year" value="<%=year%>">    
+	       	<input type="hidden" name="content_category" value="<%=category%>"> 
+	       	<input type="hidden" name="content_id" value="<%=id%>"> 
+	    	<input type="submit" name="buttonEdit" id ="buttonEdit" value="Edit">
+	 	</form>
+	    <% 
+   }
+	%>
+   
+</c:if>
 
 
 <!-- /////  -->
@@ -159,6 +189,46 @@ for(ContentDTO content : list) {
 	}
 %>
 </c:if>
+
+<c:if test= "${action == 'category'}">
+    <% 
+    out.println("Category");
+
+ 	ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("listCategory");
+	for(ContentDTO content : list) {
+    	out.println(content.getTitle());
+   	 	out.println(content.getYear());
+    out.println(content.getCategory());
+}
+%>
+</c:if>
+
+
+
+<c:if test= "${action == 'details'}">
+    <% 
+    out.println("DETAILS");
+    %>
+    <br>
+    <% 
+    out.println("Director:");
+    String director = request.getParameter("content_director");
+	out.println(director);
+	%>
+	<br>
+	<% 
+	out.println("Category:");
+	String category = request.getParameter("content_category");
+	out.println(category);
+	%>
+	<br>
+	<%
+	out.println("Year:");
+	int year = Integer.parseInt(request.getParameter("content_year"));
+	out.println(year);
+	%>
+</c:if>
+
 
 
 

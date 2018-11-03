@@ -3,6 +3,7 @@ package main.java.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -185,6 +186,15 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 		}
+		
+		//apresentar os detalhes dos contents
+		if (request.getParameter("details") != null) {
+			request.setAttribute("action", "details");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+			
+
+		}
 
 		// -------------------- EDITAR INFORMAÇÃO PESSOAL
 		// -------------------------------//
@@ -195,6 +205,119 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher = request.getRequestDispatcher("/editPersonal.jsp");
 			dispatcher.forward(request, response);
 		}
+		//Listar a Watch List
+		if (request.getParameter("listWatchList") != null) {
+			//List<ContentDTO> content = ejbremote.seeWatchList(id);
+			request.setAttribute("action", "watchlist");
+			//request.setAttribute("watchList", content);
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+		}
+		
+		
+		//------------------- FUNÇÕES DO MANAGER ---------------
+		if(request.getParameter("managerscreen")!=null) {
+			request.setAttribute("action", "newcontent");
+			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+			dispatcher.forward(request, response);
+		}
+		//--------- ADICIONAR UM CONTEUDO -------
+		if (request.getParameter("newContent") != null) {
+			dispatcher = request.getRequestDispatcher("/addContent.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("addContent") != null) {
+			 String title = request.getParameter("ftitle");
+			 String director = request.getParameter("fdirector");
+			 String category = request.getParameter("fcategory");
+			 int year = Integer.parseInt(request.getParameter("fyear"));
+			 int valor =ejbmanager.addNewContent(title, director,year, category);
+			 request.setAttribute("action", "teste");
+			 request.setAttribute("valor", valor);
+			 dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+			 dispatcher.forward(request, response);
+		}
+		if(request.getParameter("continueManager") != null) {
+			request.setAttribute("action", "newcontent");
+			 dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+			 dispatcher.forward(request, response);
+		}
+		// ----- APAGAR UM CONTEUDO --------
+		if(request.getParameter("deleteContent") != null) {
+			List<ContentDTO> content = ejbremote.seeAllContent(2);
+			request.setAttribute("list", content);
+			 dispatcher = request.getRequestDispatcher("/removeContent.jsp");
+			 dispatcher.forward(request, response);
+		}
+		if(request.getParameter("remove") != null) {
+			int id= Integer.parseInt(request.getParameter("user_id"));
+			ejbremote.removeContent(id);
+			request.setAttribute("action", "newcontent");
+			 dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+			 dispatcher.forward(request, response);
+		}
+		//----------EDITAR UM CONTEUDO -------------
+		if(request.getParameter("editContent") != null) {
+			request.setAttribute("action", "edit");
+			List<ContentDTO> content = ejbremote.seeAllContent(1);
+			request.setAttribute("allContents", content);
+			 dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			 dispatcher.forward(request, response);
+		}
+		if(request.getParameter("buttonEdit") != null) {
+			request.setAttribute("action", "selectEdit");
+			dispatcher = request.getRequestDispatcher("/editContent.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("editTitle") != null) {
+			request.setAttribute("action", "edittitle");
+			dispatcher = request.getRequestDispatcher("/editContent.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("editDirector") != null) {
+			request.setAttribute("action", "editdirector");
+			dispatcher = request.getRequestDispatcher("/editContent.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("editCategory") != null) {
+			request.setAttribute("action", "editcategory");
+			dispatcher = request.getRequestDispatcher("/editContent.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("editYear") != null) {
+			request.setAttribute("action", "edityear");
+			dispatcher = request.getRequestDispatcher("/editContent.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("editarTitulo")!=null) {
+			int opcao = Integer.parseInt(request.getParameter("opcaoEdit"));
+			String newT = request.getParameter("newT");
+			int id = Integer.parseInt(request.getParameter("id"));
+			ejbremote.editContent(opcao, id, newT);
+		}
+		if(request.getParameter("editarDirector")!=null) {
+			int opcao = Integer.parseInt(request.getParameter("opcaoEdit"));
+			String newT = request.getParameter("newD");
+			int id = Integer.parseInt(request.getParameter("id"));
+			ejbremote.editContent(opcao, id, newT);
+		}
+		if(request.getParameter("editarCategoria")!=null) {
+			int opcao = Integer.parseInt(request.getParameter("opcaoEdit"));
+			String newT = request.getParameter("newC");
+			int id = Integer.parseInt(request.getParameter("id"));
+			ejbremote.editContent(opcao, id, newT);
+		}
+		if(request.getParameter("editarAno")!=null) {
+			int opcao = Integer.parseInt(request.getParameter("opcaoEdit"));
+			String newT = request.getParameter("newY");
+			int id = Integer.parseInt(request.getParameter("id"));
+			ejbremote.editContent(opcao, id, newT);
+		}
+		
+		
+		
+		
+		
 	}
 
 	/**

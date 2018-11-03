@@ -10,7 +10,7 @@ public interface ManagerEJBRemote {
 	
 	public boolean validateLogin(String username, String password);
 	
-	public void addNewContent(String title, String director, int year, String category);
+	public int addNewContent(String title, String director, int year, String category);
 	
 	public void removeContent(int contentID);
 

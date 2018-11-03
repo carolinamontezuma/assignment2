@@ -66,6 +66,10 @@ public class ContentEJB implements ContentEJBRemote {
 
 		em.merge(user);
 	}
+	public void removeContent(int id) {
+		em.remove(em.find(Content.class, id));
+
+	}
 
 	// listar watchList de um user
 	@Override
@@ -156,6 +160,40 @@ public class ContentEJB implements ContentEJBRemote {
 		}
 		return cd;
 	}
+	//Listar a watch list de um determinado utilizador
+	public List<ContentDTO> seeWatchList(int id){
+		List<Content> c = new ArrayList<Content>();
+		List<ContentDTO> cd = new ArrayList<ContentDTO>();
+		Query query = em.createQuery("SELECT c.watchList FROM User u where c.id =:id")
+				.setParameter("id", id);
+		c = query.getResultList();
+		for (Content con : c) {
+			cd.add(new ContentDTO(con));
+		}
+		return cd;
+	}
+	
+	//Editar conteudo 
+	public void editContent(int opcao, int id, String info) {
+		Query query = em.createQuery("SELECT c FROM Content c WHERE c.id = :id")
+				.setParameter("id", id);
+		Content content = (Content) query.getSingleResult();
+		if(opcao == 1) {
+			content.setTitle(info);
+		}
+		if(opcao == 2) {
+			content.setDirector(info);
+		}
+		if(opcao == 3) {
+			content.setCategory(info);
+		}
+		if(opcao == 4) {
+			int year = Integer.parseInt(info);
+			content.setYear(year);
+		}
+		
+		em.merge(content);
+	}
 	
 	// Devolve todos os nomes dos directores 
 	
@@ -166,7 +204,7 @@ public class ContentEJB implements ContentEJBRemote {
 		switch(ordem) {
 		//Sem ordem
 		case 1:
-			query = em.createQuery("SELECT DISTINCT director FROM Content");
+			query = em.createQuery("SELECT DISTINCT c.director FROM Content c");
 			result = query.getResultList();
 			
 			break;
@@ -192,7 +230,7 @@ public class ContentEJB implements ContentEJBRemote {
 		switch(ordem) {
 		//Sem ordem
 		case 1:
-			query = em.createQuery("SELECT DISTINCT category FROM Content");
+			query = em.createQuery("SELECT DISTINCT c.category FROM Content c");
 			result = query.getResultList();
 			
 			break;

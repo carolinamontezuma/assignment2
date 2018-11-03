@@ -18,4 +18,7 @@ public interface ContentEJBRemote {
 	public void removeContentFromWatchList(int contentID, int userID);
 	public List<String> getDirectorName(int ordem);
 	public List<String> getCategories(int ordem);
+	public List<ContentDTO> seeWatchList(int id);
+	public void removeContent(int id);
+	public void editContent(int opcao, int id, String info);
 }
