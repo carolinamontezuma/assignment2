@@ -64,7 +64,7 @@ for(ContentDTO content : list) {
  </form>
  
  <form action="PlayersTallerThan" method="get"> 
-    <input type="submit" name="filtroY" id ="desc"  value="Years">
+    <input type="submit" name="filtroY" id ="desc"  value="Year">
  </form>
  </c:if>
  

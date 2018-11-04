@@ -313,6 +313,13 @@ public class PlayersTallerThan extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));
 			ejbremote.editContent(opcao, id, newT);
 		}
+		/*if() {
+			List<ContentDTO> content = ejbremote.seeAllContent(1);
+			request.setAttribute("allContents", content);
+			 dispatcher = request.getRequestDispatcher("/Preferences.jsp");
+			 dispatcher.forward(request, response);
+		}*/
+		
 		
 		
 		

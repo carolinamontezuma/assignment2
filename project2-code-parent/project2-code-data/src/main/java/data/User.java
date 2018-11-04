@@ -23,6 +23,8 @@ public class User implements Serializable {
 
 	@OneToMany
 	private List<Content> watchList;
+	@OneToMany
+	private List<Content> preferencias;
 
 	public User() {
 		super();
