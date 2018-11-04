@@ -20,6 +20,7 @@ public class User implements Serializable {
 	private String password;
 	private String email;
 	private String creditCard;
+	private int loginCount;
 
 	@OneToMany
 	private List<Content> watchList;
@@ -35,6 +36,22 @@ public class User implements Serializable {
 		this.email = email;
 		this.creditCard = creditCard;
 		this.watchList = new ArrayList<>();
+		this.loginCount = 0;
+	}
+	
+	public void updateLoginCount()
+	{
+		this.loginCount += 1;
+	}
+	
+	public int getLoginCount()
+	{
+		return this.loginCount;
+	}
+	
+	public boolean hasLoggedInSinceRegister()
+	{
+		return this.loginCount > 0;
 	}
 
 	public int getID() {

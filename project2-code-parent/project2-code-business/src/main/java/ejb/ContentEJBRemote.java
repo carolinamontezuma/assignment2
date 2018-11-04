@@ -9,6 +9,8 @@ import dto.ContentDTO;
 @Remote
 public interface ContentEJBRemote {
 	public void populate();
+	void addNewContent(String title, String director, int year, String category);
+	void removeContent(int contentID);
 	public List<ContentDTO> seeAllContent(int ordem);
 	public List<ContentDTO> seeContentFromCategory(String category);
 	public List<ContentDTO> seeContentFromYears(int year1, int year2);

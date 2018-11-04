@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import data.Content;
 import data.Manager;
 import data.User;
+import dto.ManagerDTO;
 
 /**
  * Session Bean implementation class UserEJB
@@ -27,11 +28,19 @@ public class ManagerEJB implements ManagerEJBRemote {
 	public ManagerEJB() {
 
 	}
+	
+	@Override
+	public void populate() {
+		Manager[] managers = { new Manager("Admin", "admin", "admin@admin.com") };
+
+		for (Manager m : managers)
+			em.persist(m);
+	}
 
 	// adicionar informação de um novo manager (=criar conta)
 	@Override
-	public void addAccount(String username, String password) {
-		Manager manager = new Manager(username, password);
+	public void addAccount(String username, String password, String email) {
+		Manager manager = new Manager(username, password, email);
 
 		em.persist(manager);
 	}
@@ -43,50 +52,30 @@ public class ManagerEJB implements ManagerEJBRemote {
 	}
 	
 	@Override
-	public boolean validateLogin(String username, String password)
+	public boolean validateLogin(String email, String password)
 	{
-		Query query = em.createQuery("SELECT m FROM Manager m WHERE m.username = :username AND m.password = :password")
-				.setParameter("username", username)
+		Query query = em.createQuery("SELECT m FROM Manager m WHERE m.email = :email AND m.password = :password")
+				.setParameter("email", email)
 				.setParameter("password", password);
 		
 		return query.getResultList().size() == 1; //True se apenas houver 1 manager, False caso contrário
 	}
-
-	// Adicionar novo Content à aplicação
+	
 	@Override
-	public void addNewContent(String title, String director, int year, String category) {
-		Content newContent = new Content();
-		newContent.setTitle(title);
-		newContent.setDirector(director);
-		newContent.setYear(year);
-		newContent.setCategory(category);
-
-		em.persist(newContent);
-	}
-
-	@Override
-	public void removeContent(int contentID)
+	public ManagerDTO getManagerByID(int managerID)
 	{
-		Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id").setParameter("id", contentID);
-		Content content = (Content) queryContent.getSingleResult();
-		Query queryUsers = em.createQuery("SELECT u FROM User WHERE :content MEMBER OF u.watchList").setParameter("content", content);
-		List<User> users = queryUsers.getResultList();
+		Query query = em.createQuery("SELECT m FROM Manager m WHERE m.id = :id").setParameter("id", managerID);
+		Manager manager = (Manager) query.getSingleResult();
 		
-		for(User u : users)
-		{
-			u.getWatchList().remove(content);
-			em.persist(u);
-		}
-		
-		em.remove(em.find(Content.class, content.getID()));
+		return new ManagerDTO(manager);
 	}
 	
 	@Override
-	public void populate() {
-		Manager[] managers = { new Manager("admin@admin.com", "admin") };
-
-		for (Manager m : managers)
-			em.persist(m);
+	public ManagerDTO getManagerByEmail(String email)
+	{
+		Query query = em.createQuery("SELECT m FROM Manager m WHERE m.email = :email").setParameter("email", email);
+		Manager manager = (Manager) query.getSingleResult();
+		
+		return new ManagerDTO(manager);
 	}
-
 }

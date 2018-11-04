@@ -7,6 +7,7 @@
 <title>managerScreen.jsp</title>
 </head>
 <body>
-
+	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>
+ 	
 </body>
 </html>

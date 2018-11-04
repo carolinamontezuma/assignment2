@@ -40,6 +40,35 @@ public class ContentEJB implements ContentEJBRemote {
 			em.persist(c);
 
 	}
+	
+	// Adicionar novo Content à aplicação
+		@Override
+		public void addNewContent(String title, String director, int year, String category) {
+			Content newContent = new Content();
+			newContent.setTitle(title);
+			newContent.setDirector(director);
+			newContent.setYear(year);
+			newContent.setCategory(category);
+
+			em.persist(newContent);
+		}
+
+		@Override
+		public void removeContent(int contentID)
+		{
+			Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id").setParameter("id", contentID);
+			Content content = (Content) queryContent.getSingleResult();
+			Query queryUsers = em.createQuery("SELECT u FROM User WHERE :content MEMBER OF u.watchList").setParameter("content", content);
+			List<User> users = queryUsers.getResultList();
+			
+			for(User u : users)
+			{
+				u.getWatchList().remove(content);
+				em.persist(u);
+			}
+			
+			em.remove(em.find(Content.class, content.getID()));
+		}
 
 	// adicionar um Content à watchList de um user
 	@Override

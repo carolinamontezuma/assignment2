@@ -8,11 +8,13 @@ import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.ContentDTO;
+import dto.ManagerDTO;
 import ejb.ContentEJBRemote;
 import ejb.ManagerEJBRemote;
 import dto.UserDTO;
@@ -34,7 +36,7 @@ public class PlayersTallerThan extends HttpServlet {
 	UserEJBRemote ejbuser;
 	@EJB
 	ManagerEJBRemote ejbmanager;
-
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -46,6 +48,25 @@ public class PlayersTallerThan extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	
+	///////////////// Métodos para verificar login /////////////////
+	private Integer getLoginToken(HttpServletRequest request)
+	{
+		return (Integer)request.getSession().getAttribute("loginToken");
+	}
+	
+	private boolean loginIsAdmin(HttpServletRequest request)
+	{
+		Integer loginToken = getLoginToken(request);
+		return loginToken == null? false : (boolean)request.getSession().getAttribute("loginIsAdmin");
+	}
+	
+	private boolean sessionHasLogin(HttpServletRequest request)
+	{
+		return getLoginToken(request) != null;
+	}
+	////////////////////////////////////////////////////////////////
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
@@ -57,6 +78,15 @@ public class PlayersTallerThan extends HttpServlet {
 			ejbmanager.populate();
 			out.println("<h1>Populate Content: OK!</h1>");
 		}
+		
+//		///// Verificar autenticação /////
+//		if (!sessionHasLogin(request))
+//		{
+//			//Se não estiver autenticado, é reencaminhado para a página de login
+//			dispatcher = request.getRequestDispatcher("/Login.jsp");
+//			dispatcher.forward(request, response);
+//		}
+//		//////////////////////////////////
 
 		// -------------------- USER SCREEN -------------------------------//
 		// Listar a watch list do utilizador
@@ -76,7 +106,6 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		// Editar a informação do utilizador
 		if (request.getParameter("editPersonal") != null) {
-
 			dispatcher = request.getRequestDispatcher("/editPersonal.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -185,16 +214,7 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 		}
-
-		// -------------------- EDITAR INFORMAÇÃO PESSOAL
-		// -------------------------------//
-		if (request.getParameter("editPersonal") != null) {
-			// List<String> content = ejbremote.getCategories(3);
-			// request.setAttribute("allContents", content);
-			// request.setAttribute("action","listDirectors");
-			dispatcher = request.getRequestDispatcher("/editPersonal.jsp");
-			dispatcher.forward(request, response);
-		}
+		
 	}
 
 	/**
@@ -207,41 +227,82 @@ public class PlayersTallerThan extends HttpServlet {
 		RequestDispatcher dispatcher;
 
 		// Registar (criar conta)
-		if (request.getParameter("registar") != null) {
+		if (request.getParameter("registar") != null && !sessionHasLogin(request)) {
 			String name = request.getParameter("fname");
 			String pass = request.getParameter("fpass");
 			String email = request.getParameter("fmail");
-			String card = request.getParameter("fcard");
-			ejbuser.addAccount(name, pass, email, card);
-			request.setAttribute("user", name);
-			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
-			dispatcher.forward(request, response);
-		}
-
-		// Login
-		if (request.getParameter("login") != null) {
-			String fmail = request.getParameter("fmail");
-			String pass = request.getParameter("fpass");
-			boolean hasUser = ejbuser.validateLogin(fmail, pass);
-			boolean hasManager = ejbmanager.validateLogin(fmail, pass);
+			String card1 = request.getParameter("fcard1");
+			String card2 = request.getParameter("fcard2");
+			String card3 = request.getParameter("fcard3");
+			String card4 = request.getParameter("fcard4");
 			
-			if(hasUser && !hasManager)
+			if(ejbuser.canRegister(name, email))
 			{
-				//TODO: login como user
-			}
-			else if(!hasUser && hasManager)
-			{
-				//TODO: login como manager
+				ejbuser.addAccount(name, pass, email, card1 + card2 + card3 + card4);
+				dispatcher = request.getRequestDispatcher("/Login.jsp");
+				dispatcher.forward(request, response);
 			}
 			else
 			{
-				//TODO: NOPE ->não pode haver user e manager com o mesmo login
+				//TODO: notificar que este email já está a ser usado
+				out.println("ERROR: Este login já está em uso");
+			}
+		}
+
+		// Login
+		if (request.getParameter("login") != null && !sessionHasLogin(request)) {
+			String email = request.getParameter("fmail");
+			String pass = request.getParameter("fpass");
+			boolean hasUser = ejbuser.validateLogin(email, pass);
+			boolean hasManager = ejbmanager.validateLogin(email, pass);
+			
+			if(hasUser && !hasManager)
+			{
+				UserDTO user = ejbuser.getUserByEmail(email);
+				request.getSession().setMaxInactiveInterval(10);
+				request.getSession().setAttribute("loginName", user.getUsername());
+				request.getSession().setAttribute("loginToken", user.getID());
+				request.getSession().setAttribute("loginIsAdmin", hasManager);
+				ejbuser.userLoggedIn(user.getID());
+				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+				dispatcher.forward(request, response);
+			}
+			else if(!hasUser && hasManager)
+			{
+				ManagerDTO manager = ejbmanager.getManagerByEmail(email);
+				request.getSession().setMaxInactiveInterval(10);
+				request.getSession().setAttribute("loginName", manager.getUsername());				
+				request.getSession().setAttribute("loginToken", manager.getID());
+				request.getSession().setAttribute("loginIsAdmin", hasManager);
+				dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+				dispatcher.forward(request, response);
+			}
+			else if(hasUser && hasManager)
+			{
+				out.println("ERROR: can't have users and managers with the same login");
+			}
+			else
+			{
+				//TODO: não existe user nem manager com este login
+				out.println("O login não existe!");
 			}
 			
-			// ejbuser.addAccount(name, pass, email, card);
-			// request.setAttribute("user", name);
-			// dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
-			// dispatcher.forward(request, response);
+		}
+		
+		// Logout
+		if (request.getParameter("logout") != null) {
+			if(sessionHasLogin(request))
+			{
+				request.getSession().invalidate();
+				
+				dispatcher = request.getRequestDispatcher("/index.jsp");
+				dispatcher.forward(request, response);
+			}
+			else
+			{
+				dispatcher = request.getRequestDispatcher("/Login.jsp");
+				dispatcher.forward(request, response);
+			}
 		}
 	}
 }

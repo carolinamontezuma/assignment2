@@ -16,6 +16,7 @@ public class UserDTO implements Serializable {
 	private String username;
 	private String email;
 	private String creditCard;
+	private int loginCount;
 
 	private List<Content> watchList;
 
@@ -24,23 +25,34 @@ public class UserDTO implements Serializable {
 	}
 
 	public UserDTO(User u) {
-		this(u.getID(), u.getUserame(), u.getEmail(), u.getCreditCard());
+		this(u.getID(), u.getUserame(), u.getEmail(), u.getCreditCard(), u.getLoginCount());
 	}
 
-	public UserDTO(int ID, String username, String email, String creditCard) {
+	public UserDTO(int ID, String username, String email, String creditCard, int loginCount) {
 		super();
 		this.id = ID;
 		this.username = username;
 		this.email = email;
 		this.creditCard = creditCard;
 		this.watchList = new ArrayList<>();
+		this.loginCount = loginCount;
+	}
+	
+	public int getLoginCount()
+	{
+		return this.loginCount;
+	}
+	
+	public boolean hasLoggedInSinceRegister()
+	{
+		return this.loginCount > 0;
 	}
 
 	public int getID() {
 		return this.id;
 	}
 
-	public String getUserame() {
+	public String getUsername() {
 		return username;
 	}
 
