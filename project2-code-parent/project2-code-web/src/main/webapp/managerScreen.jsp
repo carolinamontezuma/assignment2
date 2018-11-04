@@ -9,6 +9,8 @@
 <title>managerScreen.jsp</title>
 </head>
 <body>
+	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>
+ 	
 <c:if test= "${action == 'newcontent'}">
 
 	<form action="PlayersTallerThan" method="get"> 
@@ -33,6 +35,5 @@
  		<p>The content already exists!</p>
  	</c:if>
  </c:if>
- 
 </body>
 </html>

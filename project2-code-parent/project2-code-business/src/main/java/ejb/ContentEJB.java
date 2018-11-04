@@ -40,6 +40,64 @@ public class ContentEJB implements ContentEJBRemote {
 			em.persist(c);
 
 	}
+	
+	// Adicionar novo Content à aplicação
+	@Override
+	public int addNewContent(String title, String director, int year, String category) {
+		Query q = em.createQuery("SELECT COUNT(c.title) FROM Content c WHERE c.title =:title")
+				.setParameter("title", title);
+		long count = (long)q.getSingleResult();
+		if(count==0) {
+			Content newContent = new Content();
+			newContent.setTitle(title);
+			newContent.setDirector(director);
+			newContent.setYear(year);
+			newContent.setCategory(category);
+	
+			em.persist(newContent);
+			return 1;
+		}
+		return 0;
+	}
+
+	@Override
+	public void removeContent(int contentID)
+	{
+		Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id").setParameter("id", contentID);
+		Content content = (Content) queryContent.getSingleResult();
+		Query queryUsers = em.createQuery("SELECT u FROM User WHERE :content MEMBER OF u.watchList").setParameter("content", content);
+		List<User> users = queryUsers.getResultList();
+		
+		for(User u : users)
+		{
+			u.getWatchList().remove(content);
+			em.persist(u);
+		}
+		
+		em.remove(em.find(Content.class, content.getID()));
+	}
+		
+	//Editar conteudo 
+	public void editContent(int opcao, int id, String info) {
+		Query query = em.createQuery("SELECT c FROM Content c WHERE c.id = :id")
+				.setParameter("id", id);
+		Content content = (Content) query.getSingleResult();
+		if(opcao == 1) {
+			content.setTitle(info);
+		}
+		if(opcao == 2) {
+			content.setDirector(info);
+		}
+		if(opcao == 3) {
+			content.setCategory(info);
+		}
+		if(opcao == 4) {
+			int year = Integer.parseInt(info);
+			content.setYear(year);
+		}
+		
+		em.merge(content);
+	}
 
 	// adicionar um Content à watchList de um user
 	@Override
@@ -66,23 +124,18 @@ public class ContentEJB implements ContentEJBRemote {
 
 		em.merge(user);
 	}
-	public void removeContent(int id) {
-		em.remove(em.find(Content.class, id));
-
-	}
-
-	// listar watchList de um user
-	@Override
-	public List<ContentDTO> seeUserWatchList(int userID) {
-		Query queryUser = em.createQuery("SELECT u FROM User u WHERE u.id = :id").setParameter("id", userID);
-		User user = (User) queryUser.getSingleResult();
-
-		List<Content> originalContent = user.getWatchList();
-		List<ContentDTO> dtoContent = new ArrayList<>();
-		for (Content c : originalContent)
-			dtoContent.add(new ContentDTO(c));
-
-		return dtoContent;
+	
+	//Listar a watch list de um determinado utilizador
+	public List<ContentDTO> seeWatchList(int id){
+		List<Content> c = new ArrayList<Content>();
+		List<ContentDTO> cd = new ArrayList<ContentDTO>();
+		Query query = em.createQuery("SELECT c.watchList FROM User u where c.id =:id")
+				.setParameter("id", id);
+		c = query.getResultList();
+		for (Content con : c) {
+			cd.add(new ContentDTO(con));
+		}
+		return cd;
 	}
 
 	// listar todos os Content
@@ -159,40 +212,6 @@ public class ContentEJB implements ContentEJBRemote {
 			cd.add(new ContentDTO(con));
 		}
 		return cd;
-	}
-	//Listar a watch list de um determinado utilizador
-	public List<ContentDTO> seeWatchList(int id){
-		List<Content> c = new ArrayList<Content>();
-		List<ContentDTO> cd = new ArrayList<ContentDTO>();
-		Query query = em.createQuery("SELECT c.watchList FROM User u where c.id =:id")
-				.setParameter("id", id);
-		c = query.getResultList();
-		for (Content con : c) {
-			cd.add(new ContentDTO(con));
-		}
-		return cd;
-	}
-	
-	//Editar conteudo 
-	public void editContent(int opcao, int id, String info) {
-		Query query = em.createQuery("SELECT c FROM Content c WHERE c.id = :id")
-				.setParameter("id", id);
-		Content content = (Content) query.getSingleResult();
-		if(opcao == 1) {
-			content.setTitle(info);
-		}
-		if(opcao == 2) {
-			content.setDirector(info);
-		}
-		if(opcao == 3) {
-			content.setCategory(info);
-		}
-		if(opcao == 4) {
-			int year = Integer.parseInt(info);
-			content.setYear(year);
-		}
-		
-		em.merge(content);
 	}
 	
 	// Devolve todos os nomes dos directores 

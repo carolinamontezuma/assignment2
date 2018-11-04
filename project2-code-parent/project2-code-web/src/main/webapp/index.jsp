@@ -16,7 +16,5 @@
  	
 <a href="Login.jsp">Login</a>
 <a href="Registar.jsp">Registar</a>
- 
-
 </body>
 </html>
