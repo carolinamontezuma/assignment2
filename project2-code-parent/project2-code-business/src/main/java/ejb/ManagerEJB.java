@@ -1,16 +1,12 @@
 package ejb;
 
-import java.util.List;
-
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import data.Content;
 import data.Manager;
-import data.User;
 import dto.ManagerDTO;
 
 /**
@@ -60,7 +56,7 @@ public class ManagerEJB implements ManagerEJBRemote {
 		
 		return query.getResultList().size() == 1; //True se apenas houver 1 manager, False caso contrário
 	}
-	
+
 	@Override
 	public ManagerDTO getManagerByID(int managerID)
 	{

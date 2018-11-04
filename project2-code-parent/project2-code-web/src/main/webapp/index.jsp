@@ -10,6 +10,10 @@
 
 <p>Hello</p>
 <a href="userScreen.jsp">Testes (userScreen.jsp)</a> <br>
+<form action="PlayersTallerThan" method="get"> 
+   	<input type="submit" name="managerscreen" id ="managerscreen" value="Manager Screen">
+ </form>
+ 	
 <a href="Login.jsp">Login</a>
 <a href="Registar.jsp">Registar</a>
 </body>
