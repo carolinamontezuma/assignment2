@@ -3,13 +3,11 @@ package main.java.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -102,23 +100,31 @@ public class PlayersTallerThan extends HttpServlet {
 			return;
 		}
 		//////////////////////////////////
-		
 		// -------------------- USER SCREEN -------------------------------//
 		// Listar a watch list do utilizador
 		if (request.getParameter("listWatchList") != null) {
-			//List<ContentDTO> content = ejbremote.seeWatchList(id);
+			int idUser = getLoginToken(request);
+			List<ContentDTO> content = ejbcontent.seeWatchList(idUser);
 			request.setAttribute("action", "watchlist");
-			//request.setAttribute("watchList", content);
+			request.setAttribute("watchList", content);
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 		}
+		//Adicionar conteudo a watchlist do utilizador
+		if(request.getParameter("addtowl") != null) {
+			int idUser = getLoginToken(request);
+			int idContent = Integer.parseInt(request.getParameter("content_id"));
+			ejbcontent.addContentToWatchList(idContent, idUser);
+			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+			dispatcher.forward(request, response);
 
-		// Listar todo o conteúdo da aplicação
-		if (request.getParameter("listAll") != null) {
-			List<ContentDTO> content = ejbcontent.seeAllContent(1);
-			request.setAttribute("allContents", content);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+		}
+		//Remover conteudo da watchlist
+		if(request.getParameter("removeFromWL") != null) {
+			int idUser = getLoginToken(request);
+			int idContent = Integer.parseInt(request.getParameter("content_id"));
+			ejbcontent.removeContentFromWatchList(idContent, idUser);
+			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 			dispatcher.forward(request, response);
 		}
 		// Editar a informação do utilizador
@@ -128,117 +134,31 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		// -------------------- LIST CONTENTS -------------------------------//
-
-		// ORDENAR
-		if (request.getParameter("ascAll") != null) {
-			List<ContentDTO> content = ejbcontent.seeAllContent(3);
+		
+		// Listar todo o conteúdo da aplicação
+		if (request.getParameter("listAll") != null) {
+			List<ContentDTO> content = ejbcontent.seeAllContent(1);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
 			request.setAttribute("allContents", content);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 		}
-		if (request.getParameter("descAll") != null) {
-			List<ContentDTO> content = ejbcontent.seeAllContent(2);
-			request.setAttribute("allContents", content);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-		if (request.getParameter("ascDirector") != null) {
-			List<String> content = ejbcontent.getDirectorName(2);
-			request.setAttribute("allContents", content);
-			request.setAttribute("action", "listDirectors");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-		if (request.getParameter("descDirector") != null) {
-			List<String> content = ejbcontent.getDirectorName(3);
-			request.setAttribute("allContents", content);
-			request.setAttribute("action", "listDirectors");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-		if (request.getParameter("ascCategory") != null) {
-			List<String> content = ejbcontent.getCategories(2);
-			request.setAttribute("allContents", content);
-			request.setAttribute("action", "listDirectors");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-		if (request.getParameter("descCategory") != null) {
-			List<String> content = ejbcontent.getCategories(3);
-			request.setAttribute("allContents", content);
-			request.setAttribute("action", "listDirectors");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-
-		// ----- FILTRAR ---
-		// Por director
-		if (request.getParameter("filtroD") != null) {
-			List<String> names = ejbcontent.getDirectorName(1);
-			request.setAttribute("allContents", names);
-			request.setAttribute("action", "listDirectors");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-		// Por categoria
-		if (request.getParameter("filtroC") != null) {
-			List<String> content = ejbcontent.getCategories(1);
-			request.setAttribute("allContents", content);
-			request.setAttribute("action", "listCategories");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-		if (request.getParameter("filtroY") != null) {
-			List<ContentDTO> content = ejbcontent.seeAllContent(2);
-			request.setAttribute("allContents", content);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-
-		// Listar todo o conteúdo de um determinado director
-		if (request.getParameter("listDirector") != null) {
-			String directorName = request.getParameter("director");
-			List<ContentDTO> content = ejbcontent.seeContentFromDirector(directorName);
-			// definir a ação
-			request.setAttribute("action", "director");
-
-			request.setAttribute("listDirector", content);
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-		// Listar todo o conteúdo de um determinado director
-		if (request.getParameter("listCategory") != null) {
-			String category = request.getParameter("category");
-			List<ContentDTO> content = ejbcontent.seeContentFromCategory(category);
-			// definir a ação
-			request.setAttribute("action", "category");
-
-			request.setAttribute("listCategory", content);
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}
-		// Listar todo o conteúdo de um determinado director
-		if (request.getParameter("listYears") != null) {
-			int year1 = Integer.parseInt(request.getParameter("year"));
-			int year2 = Integer.parseInt(request.getParameter("year"));
-			List<ContentDTO> content = ejbcontent.seeContentFromYears(year1, year2);
-			// definir a ação
-			request.setAttribute("action", "years");
-
-			request.setAttribute("listYears", content);
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+		//Aplicar os filtros - nome diretor/ categoria/ anos
+		if(request.getParameter("filtrar")!=null) {
+			String diretor = request.getParameter("directorName");
+			String categoria = request.getParameter("categoryName");
+			//List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria);
+			//request.setAttribute("allContents", content);
+			//request.setAttribute("action", "allContents");
+			out.print(diretor +"    "+categoria);
+			//dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			//dispatcher.forward(request, response);
 		}
 		
-		//apresentar os detalhes dos contents
-		if (request.getParameter("details") != null) {
-			request.setAttribute("action", "details");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
-		}		
 		
 		//------------------- FUNÇÕES DO MANAGER ---------------
 		if(request.getParameter("managerScreen")!=null) {
@@ -337,7 +257,8 @@ public class PlayersTallerThan extends HttpServlet {
 			String newT = request.getParameter("newY");
 			int id = Integer.parseInt(request.getParameter("id"));
 			ejbcontent.editContent(opcao, id, newT);
-		}
+		}		
+		
 	}
 
 	/**
@@ -382,7 +303,7 @@ public class PlayersTallerThan extends HttpServlet {
 			if(hasUser && !hasManager)
 			{
 				UserDTO user = ejbuser.getUserByEmail(email);
-				request.getSession().setMaxInactiveInterval(9999);
+				request.getSession().setMaxInactiveInterval(60);
 				request.getSession().setAttribute("loginName", user.getUsername());
 				request.getSession().setAttribute("loginToken", user.getID());
 				request.getSession().setAttribute("loginIsAdmin", hasManager);
@@ -393,7 +314,7 @@ public class PlayersTallerThan extends HttpServlet {
 			else if(!hasUser && hasManager)
 			{
 				ManagerDTO manager = ejbmanager.getManagerByEmail(email);
-				request.getSession().setMaxInactiveInterval(9999);
+				request.getSession().setMaxInactiveInterval(60);
 				request.getSession().setAttribute("loginName", manager.getUsername());				
 				request.getSession().setAttribute("loginToken", manager.getID());
 				request.getSession().setAttribute("loginIsAdmin", hasManager);

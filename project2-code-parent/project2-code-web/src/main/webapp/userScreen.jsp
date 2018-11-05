@@ -11,14 +11,13 @@
 if(request.getSession().getAttribute("loginToken") == null)
 	request.getRequestDispatcher("/Login.jsp").forward(request, response);
 %>
-	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>
+	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %> !</p>
+		<% int idUser = (Integer)request.getSession().getAttribute("loginToken"); %>	
 	
 	<p>Suggested Content</p>
 	
-	
-	
 	<form action="PlayersTallerThan" method="get"> 
-   		<input type="submit" name="listWatchList" id ="listWatchList" value="Ver watchlist">
+   		<input type="submit" name="listWatchList" id ="listWatchList" value="See watchlist">
  	</form>
  	
  	<form action="PlayersTallerThan" method="get"> 
@@ -27,6 +26,7 @@ if(request.getSession().getAttribute("loginToken") == null)
  	
  	<form action="PlayersTallerThan" method="get"> 
     	<input type="submit" name="listAll" id ="listAll"  value="Listar conteúdos">
+        <input type="hidden" name="idUser" value="<%=idUser%>">     	
  	</form>
  	
  	<form action="PlayersTallerThan" method="get"> 
