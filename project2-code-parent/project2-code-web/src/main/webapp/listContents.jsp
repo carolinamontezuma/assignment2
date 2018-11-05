@@ -13,6 +13,11 @@
 </head>
 <body>
 <%
+if(request.getSession().getAttribute("loginToken") == null)
+	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+
+boolean isAdmin = (boolean)request.getSession().getAttribute("loginIsAdmin");
+
 Object ob = request.getAttribute("action");
 String action = ob.toString();
 %>

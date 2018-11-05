@@ -7,6 +7,12 @@
 <title>Registar.jsp</title>
 </head>
 <body>
+
+<%
+if(request.getSession().getAttribute("loginToken") != null)
+	request.getRequestDispatcher("/index.jsp").forward(request, response);
+%>
+
 <p>Registar</p>
 	<form action="PlayersTallerThan" method="post">
   		Nome: <input type="text" name="fname" placeholder="Name" required><br>

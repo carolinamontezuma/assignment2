@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import data.Manager;
 import dto.ManagerDTO;
+import utils.PasswordHasher;
 
 /**
  * Session Bean implementation class UserEJB
@@ -27,7 +28,7 @@ public class ManagerEJB implements ManagerEJBRemote {
 	
 	@Override
 	public void populate() {
-		Manager[] managers = { new Manager("Admin", "admin", "admin@admin.com") };
+		Manager[] managers = { new Manager("Admin", PasswordHasher.plainTextToHash("admin"), "admin@admin.com") };
 
 		for (Manager m : managers)
 			em.persist(m);

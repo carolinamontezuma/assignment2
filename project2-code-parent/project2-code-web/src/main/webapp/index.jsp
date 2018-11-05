@@ -7,14 +7,24 @@
 <title>index.jsp</title>
 </head>
 <body>
+<%
+if(request.getSession().getAttribute("loginToken") == null)
+	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+%>
 
 <p>Hello</p>
-<a href="userScreen.jsp">Testes (userScreen.jsp)</a> <br>
 <form action="PlayersTallerThan" method="get"> 
-   	<input type="submit" name="managerscreen" id ="managerscreen" value="Manager Screen">
+   	<input type="submit" name="userScreen" id ="userScreen" value="User Screen">
  </form>
- 	
-<a href="Login.jsp">Login</a>
-<a href="Registar.jsp">Registar</a>
+<form action="PlayersTallerThan" method="get"> 
+   	<input type="submit" name="managerScreen" id ="managerscreen" value="Manager Screen">
+</form>
+<form action="PlayersTallerThan" method="get"> 
+   	<input type="submit" name="Login" id ="Login" value="Login">
+ </form>
+ 
+ <form action="PlayersTallerThan" method="get"> 
+   	<input type="submit" name="Registar" id ="Registar" value="Registar">
+ </form> 	
 </body>
 </html>

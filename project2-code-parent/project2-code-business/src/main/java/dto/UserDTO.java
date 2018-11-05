@@ -14,6 +14,7 @@ public class UserDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private String username;
+	private String password;
 	private String email;
 	private String creditCard;
 	private int loginCount;
@@ -25,13 +26,14 @@ public class UserDTO implements Serializable {
 	}
 
 	public UserDTO(User u) {
-		this(u.getID(), u.getUserame(), u.getEmail(), u.getCreditCard(), u.getLoginCount());
+		this(u.getID(), u.getUserame(), u.getPassword(), u.getEmail(), u.getCreditCard(), u.getLoginCount());
 	}
 
-	public UserDTO(int ID, String username, String email, String creditCard, int loginCount) {
+	public UserDTO(int ID, String username, String password, String email, String creditCard, int loginCount) {
 		super();
 		this.id = ID;
 		this.username = username;
+		this.password = password;
 		this.email = email;
 		this.creditCard = creditCard;
 		this.watchList = new ArrayList<>();
@@ -58,6 +60,14 @@ public class UserDTO implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getEmail() {

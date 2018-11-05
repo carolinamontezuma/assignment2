@@ -7,6 +7,10 @@
 <title>userScreen.jsp</title>
 </head>
 <body>
+<%
+if(request.getSession().getAttribute("loginToken") == null)
+	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+%>
 	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>
 	
 	<p>Suggested Content</p>
