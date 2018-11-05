@@ -22,10 +22,13 @@ public class User implements Serializable {
 	private String creditCard;
 	private int loginCount;
 
-	@OneToMany
+	@ManyToMany
+	 @JoinTable(name="user_has_contents", joinColumns=
+ {@JoinColumn(name="user_id")}, inverseJoinColumns=
+   {@JoinColumn(name="content_id")})
 	private List<Content> watchList;
-	@OneToMany
-	private List<Content> preferencias;
+	
+	//private List<String> preferencias;
 
 	public User() {
 		super();

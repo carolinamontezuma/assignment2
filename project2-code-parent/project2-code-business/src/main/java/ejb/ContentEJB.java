@@ -65,7 +65,7 @@ public class ContentEJB implements ContentEJBRemote {
 	{
 		Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id").setParameter("id", contentID);
 		Content content = (Content) queryContent.getSingleResult();
-		Query queryUsers = em.createQuery("SELECT u FROM User WHERE :content MEMBER OF u.watchList").setParameter("content", content);
+		Query queryUsers = em.createQuery("SELECT u FROM User u WHERE :content MEMBER OF u.watchList").setParameter("content", content);
 		List<User> users = queryUsers.getResultList();
 		
 		for(User u : users)
@@ -102,8 +102,10 @@ public class ContentEJB implements ContentEJBRemote {
 	// adicionar um Content à watchList de um user
 	@Override
 	public void addContentToWatchList(int contentID, int userID) {
-		Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id").setParameter("id", contentID);
-		Query queryUser = em.createQuery("SELECT u FROM User u WHERE u.id = :id").setParameter("id", userID);
+		Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id")
+				.setParameter("id", contentID);
+		Query queryUser = em.createQuery("SELECT u FROM User u WHERE u.id = :id")
+				.setParameter("id", userID);
 		User user = (User) queryUser.getSingleResult();
 		Content content = (Content) queryContent.getSingleResult();
 
@@ -129,7 +131,7 @@ public class ContentEJB implements ContentEJBRemote {
 	public List<ContentDTO> seeWatchList(int id){
 		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
-		Query query = em.createQuery("SELECT c.watchList FROM User u where c.id =:id")
+		Query query = em.createQuery("SELECT u.watchList FROM User u where u.id =:id")
 				.setParameter("id", id);
 		c = query.getResultList();
 		for (Content con : c) {
@@ -206,13 +208,42 @@ public class ContentEJB implements ContentEJBRemote {
 		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
 		Query query = em.createQuery("SELECT c FROM Content c where c.year BETWEEN :date1 and :date2")
-				.setParameter("date1", year1).setParameter("date2", year2);
+				.setParameter("date1", year1)
+				.setParameter("date2", year2);
 		c = query.getResultList();
 		for (Content con : c) {
 			cd.add(new ContentDTO(con));
 		}
 		return cd;
 	}
+	//Aplicar os filtros
+	
+	public List<ContentDTO> aplicarFiltros(String diretor, String categoria){
+		List<Content> c = new ArrayList<Content>();
+		List<ContentDTO> cd = new ArrayList<ContentDTO>();
+		Query query;
+		if(diretor.equals("-") && !(categoria.equals("-"))) {
+			query = em.createQuery("SELECT c FROM Content c WHERE c.categoria LIKE:Categoria")
+					.setParameter("Categoria", categoria);
+			c = query.getResultList();
+		}
+		else if(!(diretor.equals("-")) && categoria.equals("-")) {
+			query = em.createQuery("SELECT c FROM Content c WHERE c.diretor LIKE:Diretor")
+					.setParameter("Diretor", diretor);
+			c = query.getResultList();
+		}
+		else if(!(diretor.equals("-")) && !(categoria.equals("-"))) {
+			query = em.createQuery("SELECT c FROM Content c WHERE c.diretor LIKE:Diretor AND c.categoria LIKE:Categoria")
+					.setParameter("Diretor", diretor)
+					.setParameter("Categoria",categoria);
+			c = query.getResultList();
+		}
+		for (Content con : c) {
+			cd.add(new ContentDTO(con));
+		}
+		return cd;
+	}
+	
 	
 	// Devolve todos os nomes dos directores 
 	
@@ -266,5 +297,7 @@ public class ContentEJB implements ContentEJBRemote {
 		}
 		return result;
 	}
+	
+
 	
 }
