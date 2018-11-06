@@ -10,27 +10,24 @@
 <%
 if(request.getSession().getAttribute("loginToken") == null)
 	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+else
+	if((boolean)request.getSession().getAttribute("loginIsAdmin"))
+		request.getRequestDispatcher("/managerScreen.jsp").forward(request, response);
 %>
 	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %> !</p>
-		<% int idUser = (Integer)request.getSession().getAttribute("loginToken"); %>	
 	
 	<p>Suggested Content</p>
 	
 	<form action="PlayersTallerThan" method="get"> 
-   		<input type="submit" name="listWatchList" id ="listWatchList" value="See watchlist">
+   		<input type="submit" name="listWatchList" id ="listWatchList" value="My watchlist">
  	</form>
  	
  	<form action="PlayersTallerThan" method="get"> 
-    	<input type="submit" name="search" id ="search" value="Pesquisar conteúdos">
+    	<input type="submit" name="listAll" id ="listAll"  value="List content">    	
  	</form>
  	
  	<form action="PlayersTallerThan" method="get"> 
-    	<input type="submit" name="listAll" id ="listAll"  value="Listar conteúdos">
-        <input type="hidden" name="idUser" value="<%=idUser%>">     	
- 	</form>
- 	
- 	<form action="PlayersTallerThan" method="get"> 
-   		<input type="submit" name="editPersonal" id="editPersonal" value="Editar conta">
+   		<input type="submit" name="editPersonal" id="editPersonal" value="Edit account">
  	</form>
  	
  	<form action="PlayersTallerThan" method="post"> 

@@ -46,7 +46,11 @@ String action = ob.toString();
 <% 
 ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("allContents");
 ArrayList<String> diretores = (ArrayList<String>) request.getAttribute("diretores");
-ArrayList<String> categorias = (ArrayList<String>) request.getAttribute("categorias");%>
+ArrayList<String> categorias = (ArrayList<String>) request.getAttribute("categorias");
+
+String lastDirectorName = (String)request.getAttribute("lastDirectorName");
+String lastCategoryName = (String)request.getAttribute("lastCategoryName");
+%>
 <p>Ordenar por:</p>
 
 
@@ -61,7 +65,7 @@ ArrayList<String> categorias = (ArrayList<String>) request.getAttribute("categor
   </tr>
   
   
-<% 
+<%
 if(list.size()==0){
 	out.println("Não existem dados!");
 }
@@ -85,7 +89,7 @@ for(ContentDTO content : list) {
 <option><%out.println("-"); %></option>
   <%
 	for(String diretor : diretores){
-		%><option value="<%= diretor %>">
+		%><option value="<%= diretor %>" <% if(lastDirectorName != null && lastDirectorName.equals(diretor)) {%> selected <%} %>>
   		<%out.println(diretor);
   		diretorName = diretor;%></option>
 	<% } %>
@@ -96,11 +100,10 @@ for(ContentDTO content : list) {
 <option><%out.println("-"); %> </option>
   <%
 	for(String categoria : categorias){
-		%><option value="<%= categoria %>">
+		%><option value="<%= categoria %>" <% if(lastCategoryName != null && lastCategoryName.equals(categoria)) {%> selected <%} %>>
   		<%out.println(categoria);%></option>
 	<% } %>
 </select>
-
 <button type="submit" name="filtrar" id="filtrar">Filtrar</button>
 </form>
 
