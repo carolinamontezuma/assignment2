@@ -3,6 +3,7 @@ package main.java.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Comparator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -78,6 +79,8 @@ public class PlayersTallerThan extends HttpServlet {
 			ejbmanager.populate();
 		}
 		
+		request.setAttribute("source", "servlet");
+		
 		if (request.getParameter("Login") != null) {
 			dispatcher = request.getRequestDispatcher("/Login.jsp");
 			dispatcher.forward(request, response);
@@ -98,6 +101,13 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 			return;
 		}
+		
+		if (request.getParameter("Home") != null) {
+			dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}
+		
 		//////////////////////////////////
 		// -------------------- USER SCREEN -------------------------------//
 		if(request.getParameter("userScreen")!=null) {
@@ -257,7 +267,6 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		
 		
-		
 		//------------------- FUNÇÕES DO MANAGER ---------------
 		if(request.getParameter("managerScreen")!=null) {
 			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
@@ -265,6 +274,9 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		//--------- ADICIONAR UM CONTEUDO -------
 		if (request.getParameter("newContent") != null) {
+			List<String> categories = ejbcontent.getAvailableCategories();
+			categories.sort(Comparator.naturalOrder());
+			request.setAttribute("categories", categories);
 			dispatcher = request.getRequestDispatcher("/addContent.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -287,7 +299,7 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("remove") != null) {
-			int id= getLoginToken(request);
+			int id= Integer.parseInt(request.getParameter("content_id"));
 			ejbcontent.removeContent(id);
 			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
 			dispatcher.forward(request, response);
@@ -363,6 +375,8 @@ public class PlayersTallerThan extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 		RequestDispatcher dispatcher;
+		
+		request.setAttribute("source", "servlet");
 
 		// Registar (criar conta)
 		if (request.getParameter("registar") != null && !sessionHasLogin(request)) {
@@ -431,7 +445,7 @@ public class PlayersTallerThan extends HttpServlet {
 		if (request.getParameter("logout") != null) {
 			if(sessionHasLogin(request))
 				request.getSession().invalidate();
-			
+			request.setAttribute("source", "servlet");
 			dispatcher = request.getRequestDispatcher("/Login.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -473,6 +487,7 @@ public class PlayersTallerThan extends HttpServlet {
 		if (request.getParameter("deleteAccount") != null && sessionHasLogin(request)) {
 			ejbuser.deleteAccount(getLoginToken(request));
 			request.getSession().invalidate();
+			request.setAttribute("source", "servlet");
 			dispatcher = request.getRequestDispatcher("/index.jsp");
 			dispatcher.forward(request, response);
 

@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 public class Content implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static final String[] Categories = { "Comedy", "Sci-Fi", "Horror", "Romance", "Action", "Thriller", "Drama",
+	public static final String[] Categories = { "Comedy", "Science fiction", "Horror", "Romance", "Action", "Thriller", "Drama",
 			"Mistery", "Crime", "Animation", "Adventure", "Fantasy", "Romantic comedy", "Action comedy", "Superhero",
 			"History", "Documentary", "Musical", "Sport", "Family", "Biography", "War", "Western" };
 

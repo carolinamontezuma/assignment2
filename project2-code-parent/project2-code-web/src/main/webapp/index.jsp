@@ -10,21 +10,25 @@
 <%
 if(request.getSession().getAttribute("loginToken") == null)
 	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+
+boolean isAdmin = (boolean)request.getSession().getAttribute("loginIsAdmin");
 %>
 
 <p>Hello</p>
+ <% if(!isAdmin){ %>
 <form action="PlayersTallerThan" method="get"> 
    	<input type="submit" name="userScreen" id ="userScreen" value="User Screen">
  </form>
+ <% } %>
+  
+ <% if(isAdmin){ %>
 <form action="PlayersTallerThan" method="get"> 
    	<input type="submit" name="managerScreen" id ="managerscreen" value="Manager Screen">
+   	
 </form>
-<form action="PlayersTallerThan" method="get"> 
-   	<input type="submit" name="Login" id ="Login" value="Login">
- </form>
- 
- <form action="PlayersTallerThan" method="get"> 
-   	<input type="submit" name="Registar" id ="Registar" value="Registar">
+ <% } %>
+<form action="PlayersTallerThan" method="post"> 
+   	<input type="submit" name="logout" id ="Logout" value="Logout">
  </form> 	
 </body>
 </html>

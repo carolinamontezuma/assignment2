@@ -28,9 +28,9 @@ if(request.getSession().getAttribute("loginToken") != null)
 		</div>
 	</form>
 	<br>
-	Ainda não tem conta?
+	Don't have an account yet?
 	 <form action="PlayersTallerThan" method="get"> 
-   	<input type="submit" name="Registar" id ="Registar" value="Registe-se">
+   	<input type="submit" name="Registar" id ="Registar" value="Register">
  </form> 
 </body>
 </html>

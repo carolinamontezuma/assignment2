@@ -8,6 +8,17 @@
 <meta charset="UTF-8">
 </head>
 <body>
+<%
+if(request.getAttribute("source")  == null)
+	request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+if(request.getSession().getAttribute("loginToken") == null)
+	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+else
+	if((boolean)request.getSession().getAttribute("loginIsAdmin"))
+		request.getRequestDispatcher("/managerScreen.jsp").forward(request, response);
+%>
+
 	<form action="PlayersTallerThan" method="get"> 
    		<input type="submit" name="changeEmail" id="changeEmail" value="Change E-mail">
  	</form>
