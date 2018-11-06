@@ -153,14 +153,9 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.seeAllContent(1);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
 			request.setAttribute("allContents", content);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
-
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -169,19 +164,26 @@ public class PlayersTallerThan extends HttpServlet {
 		if(request.getParameter("filtrar")!=null) {
 			String diretor = request.getParameter("directorName");
 			String categoria = request.getParameter("categoryName");
-			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria);
+			int anoMin = -1;
+			int anoMax = -1;
+			if(request.getParameter("minYear").matches("[0-9]+")) {
+				anoMin = Integer.parseInt(request.getParameter("minYear"));
+			}
+			if(request.getParameter("maxYear").matches("[0-9]+")) {
+				anoMax = Integer.parseInt(request.getParameter("maxYear"));
+			}
+			if(anoMin > anoMax) {
+				anoMin=-1;
+			}
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
 			request.setAttribute("action", "allContents");
 			request.setAttribute("lastDirectorName", diretor);
 			request.setAttribute("lastCategoryName", categoria);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -190,13 +192,9 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(1,1);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -205,13 +203,9 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(1,2);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -220,13 +214,9 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(2,1);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -234,14 +224,10 @@ public class PlayersTallerThan extends HttpServlet {
 		if(request.getParameter("OrderCategoryDesc")!=null) {
 			List<ContentDTO> content = ejbcontent.orderTable(2,2);
 			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
+			List<String> categorias = ejbcontent.getCategories(1);	
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -250,12 +236,8 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(3,1);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
 			request.setAttribute("allContents", content);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
@@ -265,12 +247,8 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(3,2);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
 			request.setAttribute("allContents", content);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
@@ -280,12 +258,8 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(4,1);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
 			request.setAttribute("allContents", content);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
@@ -295,12 +269,8 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(4,2);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			int yearMin = ejbcontent.minMaxYear(1);
-			int yearMax = ejbcontent.minMaxYear(2);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
-			request.setAttribute("yearMin", yearMin);
-			request.setAttribute("yearMax", yearMax);
 			request.setAttribute("allContents", content);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
