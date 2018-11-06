@@ -64,8 +64,7 @@ public class ContentEJB implements ContentEJBRemote {
 	@Override
 	public void removeContent(int contentID)
 	{
-		Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id").setParameter("id", contentID);
-		Content content = (Content) queryContent.getSingleResult();
+		Content content = em.find(Content.class, contentID);
 		Query queryUsers = em.createQuery("SELECT u FROM User u WHERE :content MEMBER OF u.watchList").setParameter("content", content);
 		List<User> users = queryUsers.getResultList();
 		
@@ -75,14 +74,13 @@ public class ContentEJB implements ContentEJBRemote {
 			em.persist(u);
 		}
 		
-		em.remove(em.find(Content.class, content.getID()));
+		//em.remove(em.find(Content.class, content.getID()));
+		em.remove(content);
 	}
 		
 	//Editar conteudo 
 	public void editContent(int opcao, int id, String info) {
-		Query query = em.createQuery("SELECT c FROM Content c WHERE c.id = :id")
-				.setParameter("id", id);
-		Content content = (Content) query.getSingleResult();
+		Content content = em.find(Content.class, id);
 		if(opcao == 1) {
 			content.setTitle(info);
 		}
@@ -97,45 +95,35 @@ public class ContentEJB implements ContentEJBRemote {
 			content.setYear(year);
 		}
 		
-		em.merge(content);
+		//em.merge(content);
 	}
 
 	// adicionar um Content à watchList de um user
 	@Override
 	public void addContentToWatchList(int contentID, int userID) {
-		Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id")
-				.setParameter("id", contentID);
-		Query queryUser = em.createQuery("SELECT u FROM User u WHERE u.id = :id")
-				.setParameter("id", userID);
-		User user = (User) queryUser.getSingleResult();
-		Content content = (Content) queryContent.getSingleResult();
+		User user = em.find(User.class, userID);
+		Content content = em.find(Content.class, contentID);
 
 		user.getWatchList().add(content);
 
-		em.merge(user);
+		//em.merge(user);
 	}
 
 	// remover um Content da watchList de um user
 	@Override
 	public void removeContentFromWatchList(int contentID, int userID) {
-		Query queryContent = em.createQuery("SELECT c FROM Content c WHERE c.id = :id").setParameter("id", contentID);
-		Query queryUser = em.createQuery("SELECT u FROM User u WHERE u.id = :id").setParameter("id", userID);
-		User user = (User) queryUser.getSingleResult();
-		Content content = (Content) queryContent.getSingleResult();
+		User user = em.find(User.class, userID);
+		Content content = em.find(Content.class, contentID);
 
 		user.getWatchList().remove(content);
 
-		em.merge(user);
+		//em.merge(user);
 	}
 	
 	//Listar a watch list de um determinado utilizador
 	public List<ContentDTO> seeWatchList(int id){
-		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
-		Query query = em.createQuery("SELECT u.watchList FROM User u where u.id =:id")
-				.setParameter("id", id);
-		c = query.getResultList();
-		for (Content con : c) {
+		for (Content con : em.find(User.class, id).getWatchList()) {
 			cd.add(new ContentDTO(con));
 		}
 		return cd;
