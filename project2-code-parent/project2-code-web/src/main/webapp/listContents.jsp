@@ -43,25 +43,6 @@ String action = ob.toString();
 
 
 <c:if test= "${action == 'allContents'}">
-<p>Ordenar por:</p>
-
-<form action="PlayersTallerThan" method="get"> 
-    <input type="submit" name="ascAll" id ="asc"  value="Ordem ascendente">
- </form>
- 
- <form action="PlayersTallerThan" method="get"> 
-    <input type="submit" name="descAll" id ="desc"  value="Ordem descendente">
- </form>
-
-    <table id="myTable">
-  <tr>
-    <th>Title</th>
-    <th>Category</th>
-    <th>Director</th>
-    <th>Year</th>
-  </tr>
-  
-  
 <% 
 ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("allContents");
 ArrayList<String> diretores = (ArrayList<String>) request.getAttribute("diretores");
@@ -69,7 +50,22 @@ ArrayList<String> categorias = (ArrayList<String>) request.getAttribute("categor
 
 String lastDirectorName = (String)request.getAttribute("lastDirectorName");
 String lastCategoryName = (String)request.getAttribute("lastCategoryName");
+%>
+<p>Ordenar por:</p>
 
+
+
+    <table id="myTable">
+  <tr>
+  
+    <th>Title 	 <form action="PlayersTallerThan" method="get">	<input type="submit" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc"><input type="submit" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc"> </form></th>
+    <th>Category 	 <form action="PlayersTallerThan" method="get">	<input type="submit" name="OrderCategoryAsc" id ="OrderCategoryAsc" value="Asc"><input type="submit" name="OrderCategoryDesc" id ="OrderCategoryDesc" value="Desc"> </form></th>
+    <th>Director	   <form action="PlayersTallerThan" method="get"> <input type="submit" name="OrderDirectorAsc" id ="OrderDirectorAsc" value="Asc"><input type="submit" name="OrderDirectorDesc" id ="OrderDirectorDesc" value="Desc"> </form></th>
+    <th>Year <form action="PlayersTallerThan" method="get">	<input type="submit" name="OrderYearAsc" id ="OrderYearAsc" value="Asc"><input type="submit" name="OrderYearDesc" id ="OrderYearDesc" value="Desc"> </form></th>
+  </tr>
+  
+  
+<%
 if(list.size()==0){
 	out.println("Não existem dados!");
 }

@@ -249,6 +249,66 @@ public class ContentEJB implements ContentEJBRemote {
 		return cd;
 	}
 	
+	public List<ContentDTO> orderTable(int opcaoFiltro, int opcaoOrdena) {
+		List<Content> c = new ArrayList<Content>();
+		List<ContentDTO> cd = new ArrayList<ContentDTO>();
+		Query query;
+		//Vai ordenar de forma ascendente
+		if(opcaoOrdena == 1) {
+			//TITULO
+			if(opcaoFiltro==1) {
+				query = em.createQuery("SELECT c FROM Content c ORDER BY c.title ASC");
+				c = query.getResultList();
+			}
+			//CATEGORIA
+			if(opcaoFiltro==2) {
+				query = em.createQuery("SELECT c FROM Content c ORDER BY c.category ASC");
+				c = query.getResultList();
+			}
+			//DIRETOR
+			if(opcaoFiltro==3) {
+				query = em.createQuery("SELECT c FROM Content c ORDER BY c.director ASC");
+				c = query.getResultList();
+			}
+			//YEAR
+			if(opcaoFiltro==4) {
+				query = em.createQuery("SELECT c FROM Content c ORDER BY c.year ASC");
+				c = query.getResultList();
+			}
+		}
+		else if(opcaoOrdena == 2) {
+			//Ordenar por titulo
+			if(opcaoFiltro==1) {
+				query = em.createQuery("SELECT c FROM Content c ORDER BY c.title DESC");
+				c = query.getResultList();
+			}
+			if(opcaoFiltro==2) {
+				query = em.createQuery("SELECT c FROM Content c ORDER BY c.category DESC");
+				c = query.getResultList();
+			}
+			//CATEGORIA
+			if(opcaoFiltro==3) {
+				query = em.createQuery("SELECT c FROM Content c ORDER BY c.director DESC");
+				c = query.getResultList();
+			}
+			//DIRETOR
+			if(opcaoFiltro==4) {
+				query = em.createQuery("SELECT c FROM Content c ORDER BY c.year DESC");
+				c = query.getResultList();
+			}
+		}
+		else {
+			query = em.createQuery("SELECT FROM Content");
+
+		}
+		for (Content con : c) {
+			cd.add(new ContentDTO(con));
+		}
+		
+		return cd;
+	}
+
+	
 	
 	// Devolve todos os nomes dos directores 
 	

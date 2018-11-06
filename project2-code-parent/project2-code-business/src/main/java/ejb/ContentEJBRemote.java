@@ -7,7 +7,7 @@ import javax.ejb.Remote;
 import dto.ContentDTO;
 
 @Remote
-public interface ContentEJBRemote {
+public interface ContentEJBRemote {	
 	void populate();
 	int addNewContent(String title, String director, int year, String category);
 	void editContent(int opcao, int id, String info);
@@ -22,5 +22,6 @@ public interface ContentEJBRemote {
 	List<String> getCategories(int ordem);
 	List<ContentDTO> seeWatchList(int id);
 	List<ContentDTO> aplicarFiltros(String diretor, String categoria);
+	List<ContentDTO> orderTable(int opcaoFiltro, int opcaoOrdena);
 	List<String> getAvailableCategories();
 }

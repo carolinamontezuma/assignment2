@@ -78,13 +78,13 @@ public class PlayersTallerThan extends HttpServlet {
 			ejbmanager.populate();
 		}
 		
-		if (request.getParameter("Login") != null && !sessionHasLogin(request)) {
+		if (request.getParameter("Login") != null) {
 			dispatcher = request.getRequestDispatcher("/Login.jsp");
 			dispatcher.forward(request, response);
 			return;
 		}
 		
-		if (request.getParameter("Registar") != null && !sessionHasLogin(request)) {
+		if (request.getParameter("Registar") != null) {
 			dispatcher = request.getRequestDispatcher("/Registar.jsp");
 			dispatcher.forward(request, response);
 			return;
@@ -157,15 +157,105 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
-			request.setAttribute("allContents", content);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
+			request.setAttribute("allContents", content);
 			request.setAttribute("action", "allContents");
 			request.setAttribute("lastDirectorName", diretor);
 			request.setAttribute("lastCategoryName", categoria);
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 		}
+		
+		if(request.getParameter("OrderTitleAsc")!=null) {
+			List<ContentDTO> content = ejbcontent.orderTable(1,1);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("allContents", content);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("OrderTitleDesc")!=null) {
+			List<ContentDTO> content = ejbcontent.orderTable(1,2);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("allContents", content);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("OrderCategoryAsc")!=null) {
+			List<ContentDTO> content = ejbcontent.orderTable(2,1);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("allContents", content);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("OrderCategoryDesc")!=null) {
+			List<ContentDTO> content = ejbcontent.orderTable(2,2);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("allContents", content);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("OrderDirectorAsc")!=null) {
+			List<ContentDTO> content = ejbcontent.orderTable(3,1);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("allContents", content);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("OrderDirectorDesc")!=null) {
+			List<ContentDTO> content = ejbcontent.orderTable(3,2);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("allContents", content);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("OrderYearAsc")!=null) {
+			List<ContentDTO> content = ejbcontent.orderTable(4,1);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("allContents", content);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("OrderYearDesc")!=null) {
+			List<ContentDTO> content = ejbcontent.orderTable(4,2);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("allContents", content);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
+		}
+		
 		
 		
 		//------------------- FUNÇÕES DO MANAGER ---------------
@@ -258,6 +348,10 @@ public class PlayersTallerThan extends HttpServlet {
 			String newT = request.getParameter("newY");
 			int id = Integer.parseInt(request.getParameter("id"));
 			ejbcontent.editContent(opcao, id, newT);
+		}
+		if(request.getParameter("continueManager") != null) {
+			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 
