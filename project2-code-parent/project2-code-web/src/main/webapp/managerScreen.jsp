@@ -15,14 +15,12 @@ if(request.getSession().getAttribute("loginToken") == null)
 	request.getRequestDispatcher("/Login.jsp").forward(request, response);
 else
 	if(!((boolean)request.getSession().getAttribute("loginIsAdmin")))
-		request.getRequestDispatcher("/index.jsp").forward(request, response);
+		request.getRequestDispatcher("/userScreen.jsp").forward(request, response);
 %>
 
 	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>
- 
-<c:if test= "${action == 'newcontent'}">
-
-	<form action="PlayersTallerThan" method="get"> 
+ 	
+ 	<form action="PlayersTallerThan" method="get"> 
    		<input type="submit" name="newContent" id ="newContent" value="Add new content">
  	</form>
  	<form action="PlayersTallerThan" method="get"> 
@@ -32,10 +30,14 @@ else
  	<form action="PlayersTallerThan" method="get"> 
     	<input type="submit" name="deleteContent" id ="deleteContent" value="Delete content">
  	</form>
- </c:if>
+ 	
+ 	<form action="PlayersTallerThan" method="post"> 
+   		<input type="submit" name="logout" id="logout" value="Logout">
+ 	</form>
+
  <c:if test= "${action == 'teste'}"> 
  	<c:if test= "${valor == 1}"> 
-	<p> Success creating new content!</p>
+	<p> Sucess creating new content!</p>
 	<form action="PlayersTallerThan" method="get"> 
     	<input type="submit" name="continueManager" id ="continueManager" value="Continue">
  	</form>
@@ -44,5 +46,6 @@ else
  		<p>The content already exists!</p>
  	</c:if>
  </c:if>
+
 </body>
 </html>

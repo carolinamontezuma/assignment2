@@ -76,16 +76,15 @@ public class PlayersTallerThan extends HttpServlet {
 			ejbcontent.populate();
 			ejbuser.populate();
 			ejbmanager.populate();
-			out.println("<h1>Populate Content: OK!</h1>");
 		}
 		
-		if (request.getParameter("Login") != null) {
+		if (request.getParameter("Login") != null && !sessionHasLogin(request)) {
 			dispatcher = request.getRequestDispatcher("/Login.jsp");
 			dispatcher.forward(request, response);
 			return;
 		}
 		
-		if (request.getParameter("Registar") != null) {
+		if (request.getParameter("Registar") != null && !sessionHasLogin(request)) {
 			dispatcher = request.getRequestDispatcher("/Registar.jsp");
 			dispatcher.forward(request, response);
 			return;
@@ -101,6 +100,10 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		//////////////////////////////////
 		// -------------------- USER SCREEN -------------------------------//
+		if(request.getParameter("userScreen")!=null) {
+			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+			dispatcher.forward(request, response);
+		}
 		// Listar a watch list do utilizador
 		if (request.getParameter("listWatchList") != null) {
 			int idUser = getLoginToken(request);
@@ -151,18 +154,22 @@ public class PlayersTallerThan extends HttpServlet {
 		if(request.getParameter("filtrar")!=null) {
 			String diretor = request.getParameter("directorName");
 			String categoria = request.getParameter("categoryName");
-			//List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria);
-			//request.setAttribute("allContents", content);
-			//request.setAttribute("action", "allContents");
-			out.print(diretor +"    "+categoria);
-			//dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			//dispatcher.forward(request, response);
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria);
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("allContents", content);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("action", "allContents");
+			request.setAttribute("lastDirectorName", diretor);
+			request.setAttribute("lastCategoryName", categoria);
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
 		}
 		
 		
 		//------------------- FUNÇÕES DO MANAGER ---------------
 		if(request.getParameter("managerScreen")!=null) {
-			request.setAttribute("action", "newcontent");
 			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -182,32 +189,26 @@ public class PlayersTallerThan extends HttpServlet {
 			 dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
 			 dispatcher.forward(request, response);
 		}
-		if(request.getParameter("continueManager") != null) {
-			request.setAttribute("action", "newcontent");
-			 dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
-			 dispatcher.forward(request, response);
-		}
 		// ----- APAGAR UM CONTEUDO --------
 		if(request.getParameter("deleteContent") != null) {
 			List<ContentDTO> content = ejbcontent.seeAllContent(2);
 			request.setAttribute("list", content);
-			 dispatcher = request.getRequestDispatcher("/removeContent.jsp");
-			 dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher("/removeContent.jsp");
+			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("remove") != null) {
 			int id= getLoginToken(request);
 			ejbcontent.removeContent(id);
-			request.setAttribute("action", "newcontent");
-			 dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
-			 dispatcher.forward(request, response);
-		}
+			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+			dispatcher.forward(request, response);
+			}
 		//----------EDITAR UM CONTEUDO -------------
 		if(request.getParameter("editContent") != null) {
 			request.setAttribute("action", "edit");
 			List<ContentDTO> content = ejbcontent.seeAllContent(1);
 			request.setAttribute("allContents", content);
-			 dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			 dispatcher.forward(request, response);
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("buttonEdit") != null) {
 			request.setAttribute("action", "selectEdit");
@@ -257,8 +258,7 @@ public class PlayersTallerThan extends HttpServlet {
 			String newT = request.getParameter("newY");
 			int id = Integer.parseInt(request.getParameter("id"));
 			ejbcontent.editContent(opcao, id, newT);
-		}		
-		
+		}
 	}
 
 	/**
@@ -336,17 +336,10 @@ public class PlayersTallerThan extends HttpServlet {
 		// Logout
 		if (request.getParameter("logout") != null) {
 			if(sessionHasLogin(request))
-			{
 				request.getSession().invalidate();
-				
-				dispatcher = request.getRequestDispatcher("/index.jsp");
-				dispatcher.forward(request, response);
-			}
-			else
-			{
-				dispatcher = request.getRequestDispatcher("/Login.jsp");
-				dispatcher.forward(request, response);
-			}
+			
+			dispatcher = request.getRequestDispatcher("/Login.jsp");
+			dispatcher.forward(request, response);
 		}
 		
 		// Editar conta

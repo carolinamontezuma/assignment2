@@ -75,4 +75,30 @@ public class ManagerEJB implements ManagerEJBRemote {
 		
 		return new ManagerDTO(manager);
 	}
+	
+	@Override
+	public boolean isUsernameValid(String username)
+	{
+		return username != null && username.length() >= 4;
+	}
+	
+	@Override
+	public boolean isPasswordValid(String password)
+	{
+		return password != null && password.length() >= 4;
+	}
+	
+	@Override
+	public boolean isEmailValid(String email)
+	{
+		if(email == null || email.isEmpty())
+			return false;
+		
+		String[] parts = email.split("@");
+		if(parts.length != 2)
+			return false;
+		
+		Query query = em.createQuery("SELECT m FROM Manager m WHERE m.email LIKE :email").setParameter("email", email);
+		return query.getResultList().isEmpty();
+	}
 }

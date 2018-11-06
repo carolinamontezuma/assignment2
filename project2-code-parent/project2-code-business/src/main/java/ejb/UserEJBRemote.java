@@ -6,15 +6,15 @@ import dto.UserDTO;
 
 @Remote
 public interface UserEJBRemote {
-	public void populate();
+	void populate();
 	
-	public void addAccount(String username, String password, String email, String creditCard);
+	void addAccount(String username, String password, String email, String creditCard);
 
-	public void editPersonalInformation(int userID, String username, String password, String email, String creditCard);
+	void editPersonalInformation(int userID, String username, String password, String email, String creditCard);
 
-	public void deleteAccount(int userID);
+	void deleteAccount(int userID);
 	
-	public boolean validateLogin(String email, String password);
+	boolean validateLogin(String email, String password);
 
 	UserDTO getUserByID(int userID);
 
@@ -23,4 +23,12 @@ public interface UserEJBRemote {
 	boolean canRegister(String username, String email);
 
 	void userLoggedIn(int userID);
+	
+	boolean isUsernameValid(String username);
+	
+	boolean isPasswordValid(String password);
+
+	boolean isEmailValid(String email);
+
+	boolean isCreditCardValid(String creditCard);
 }

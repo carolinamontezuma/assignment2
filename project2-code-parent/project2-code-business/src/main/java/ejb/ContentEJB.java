@@ -1,6 +1,7 @@
 package ejb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -32,7 +33,7 @@ public class ContentEJB implements ContentEJBRemote {
 	// Adicionar Contents à BD - função do professor
 	@Override
 	public void populate() {
-		Content[] contents = { new Content("Breaking Bad", "John", 1996, "Comedy, claramente"),
+		Content[] contents = { new Content("Breaking Bad", "John", 1996, "Comedy"),
 				new Content("Suits", "Peter", 2000, "Comedy"),
 				new Content("Game Of Thrones", "Henry", 2005, "Action") };
 
@@ -223,19 +224,23 @@ public class ContentEJB implements ContentEJBRemote {
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
 		Query query;
 		if(diretor.equals("-") && !(categoria.equals("-"))) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.categoria LIKE:Categoria")
+			query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria")
 					.setParameter("Categoria", categoria);
 			c = query.getResultList();
 		}
 		else if(!(diretor.equals("-")) && categoria.equals("-")) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.diretor LIKE:Diretor")
+			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor")
 					.setParameter("Diretor", diretor);
 			c = query.getResultList();
 		}
 		else if(!(diretor.equals("-")) && !(categoria.equals("-"))) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.diretor LIKE:Diretor AND c.categoria LIKE:Categoria")
+			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria")
 					.setParameter("Diretor", diretor)
 					.setParameter("Categoria",categoria);
+			c = query.getResultList();
+		}
+		else {
+			query = em.createQuery("FROM Content");
 			c = query.getResultList();
 		}
 		for (Content con : c) {
@@ -298,6 +303,10 @@ public class ContentEJB implements ContentEJBRemote {
 		return result;
 	}
 	
-
+	@Override
+	public List<String> getAvailableCategories()
+	{
+		return Arrays.asList(Content.Categories);
+	}
 	
 }

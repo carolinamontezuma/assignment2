@@ -6,15 +6,21 @@ import dto.ManagerDTO;
 
 @Remote
 public interface ManagerEJBRemote {
-	public void populate();
+	void populate();
 	
-	public void addAccount(String username, String email, String password);
+	void addAccount(String username, String email, String password);
 
-	public void deleteAccount(int managerID);
+	void deleteAccount(int managerID);
 	
-	public boolean validateLogin(String username, String password);
+	boolean validateLogin(String username, String password);
 
 	ManagerDTO getManagerByID(int managerID);
 
 	ManagerDTO getManagerByEmail(String email);
+
+	boolean isUsernameValid(String username);
+
+	boolean isPasswordValid(String password);
+
+	boolean isEmailValid(String email);
 }

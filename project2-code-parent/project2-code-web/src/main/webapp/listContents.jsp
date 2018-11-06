@@ -66,6 +66,10 @@ String action = ob.toString();
 ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("allContents");
 ArrayList<String> diretores = (ArrayList<String>) request.getAttribute("diretores");
 ArrayList<String> categorias = (ArrayList<String>) request.getAttribute("categorias");
+
+String lastDirectorName = (String)request.getAttribute("lastDirectorName");
+String lastCategoryName = (String)request.getAttribute("lastCategoryName");
+
 if(list.size()==0){
 	out.println("Não existem dados!");
 }
@@ -85,37 +89,27 @@ for(ContentDTO content : list) {
 <!--  PARTE DOS FILTROS -->
 <!--  SELECT BOX PARA APARECEREM TODOS OS DIRETORES -->
 <form action="PlayersTallerThan" method="get"> 
-<select id="id_of_director">
+<select id="id_of_director" name="directorName">
 <option><%out.println("-"); %></option>
   <%
 	for(String diretor : diretores){
-		%><option value="diretor">
+		%><option value="<%= diretor %>" <% if(lastDirectorName != null && lastDirectorName.equals(diretor)) {%> selected <%} %>>
   		<%out.println(diretor);
   		diretorName = diretor;%></option>
 	<% } %>
 </select>
 
 <!--  SELECT BOX PARA APARECEREM TODAS AS CATEGORIAS -->
-<select id="id_of_category">
+<select id="id_of_category" name="categoryName">
 <option><%out.println("-"); %> </option>
   <%
 	for(String categoria : categorias){
-		%><option value="categoria">
+		%><option value="<%= categoria %>" <% if(lastCategoryName != null && lastCategoryName.equals(categoria)) {%> selected <%} %>>
   		<%out.println(categoria);%></option>
 	<% } %>
 </select>
-<button type="submit" name="filtrar" id="filtrar" onclick="myFunction()">Filtrar</button>
-<input type="hidden" name="directorName" id="directorName" value="" />
-<input type="hidden" name="categoryName" id="categoryName" value="" />
+<button type="submit" name="filtrar" id="filtrar">Filtrar</button>
 </form>
-<script>
-function myFunction() {
-    var x = document.getElementById("id_of_category").value;
-    var y =document.getElementById("id_of_director").value;
-}
-document.getElementById('directorName').value = x;
-document.getElementById('categoryName').value = y;
-</script>
 
 
 </c:if>

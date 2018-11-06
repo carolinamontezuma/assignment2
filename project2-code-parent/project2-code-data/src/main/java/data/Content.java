@@ -12,6 +12,10 @@ import javax.persistence.ManyToOne;
 public class Content implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static final String[] Categories = { "Comedy", "Sci-Fi", "Horror", "Romance", "Action", "Thriller", "Drama",
+			"Mistery", "Crime", "Animation", "Adventure", "Fantasy", "Romantic comedy", "Action comedy", "Superhero",
+			"History", "Documentary", "Musical", "Sport", "Family", "Biography", "War", "Western" };
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
@@ -20,9 +24,6 @@ public class Content implements Serializable {
 	private String director;
 	private int year;
 	private String category;
-	@ManyToOne()
-    @JoinColumn(name="user_id")
-    private User user;
 
 	public Content() {
 		super();
@@ -51,7 +52,6 @@ public class Content implements Serializable {
 	public String Director() {
 		return director;
 	}
-	
 
 	public void setDirector(String director) {
 		this.director = director;
@@ -78,7 +78,7 @@ public class Content implements Serializable {
 		return " title = " + this.title + " director = " + this.director + " year = " + this.year + "category = "
 				+ this.category;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -52,7 +52,7 @@ public class UserEJB implements UserEJBRemote {
 	public void editPersonalInformation(int userID, String username, String password, String email, String creditCard) {
 		Query query = em.createQuery("SELECT u FROM User u WHERE u.id = :id").setParameter("id", userID);
 		User user = (User) query.getSingleResult();
-
+		
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setEmail(email);
@@ -112,5 +112,37 @@ public class UserEJB implements UserEJBRemote {
 		User user = (User) query.getSingleResult();
 		
 		return new UserDTO(user);
+	}
+	
+	@Override
+	public boolean isUsernameValid(String username)
+	{
+		return username != null && username.length() >= 4;
+	}
+	
+	@Override
+	public boolean isPasswordValid(String password)
+	{
+		return password != null && password.length() >= 4;
+	}
+	
+	@Override
+	public boolean isEmailValid(String email)
+	{
+		if(email == null || email.isEmpty())
+			return false;
+		
+		String[] parts = email.split("@");
+		if(parts.length != 2)
+			return false;
+		
+		Query query = em.createQuery("SELECT u FROM User u WHERE u.email LIKE :email").setParameter("email", email);
+		return query.getResultList().isEmpty();
+	}
+	
+	@Override
+	public boolean isCreditCardValid(String creditCard)
+	{
+		return creditCard != null && creditCard.matches("[0-9]+") && creditCard.length() == 16;
 	}
 }
