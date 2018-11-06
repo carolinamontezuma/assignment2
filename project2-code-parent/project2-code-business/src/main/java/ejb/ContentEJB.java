@@ -307,7 +307,23 @@ public class ContentEJB implements ContentEJBRemote {
 		
 		return cd;
 	}
-
+	
+	public int minMaxYear(int opcao) {
+		int result;
+		Query query;
+		if(opcao==1) {
+			query = em.createQuery("SELECT c.year HAVING =(SELECT MIN(year) FROM Content WHERE year=c.year");
+			result = query.getFirstResult();	
+		}
+		else {
+			query = em.createQuery("SELECT c.year HAVING =(SELECT MAX(year) FROM Content WHERE year=c.year");
+			result = query.getFirstResult();
+		}
+		
+		return result;
+		
+	}
+	
 	
 	
 	// Devolve todos os nomes dos directores 

@@ -50,6 +50,10 @@ ArrayList<String> categorias = (ArrayList<String>) request.getAttribute("categor
 
 String lastDirectorName = (String)request.getAttribute("lastDirectorName");
 String lastCategoryName = (String)request.getAttribute("lastCategoryName");
+
+int yearMin = Integer.parseInt(request.getParameter("yearMin"));
+int yearMax = Integer.parseInt(request.getParameter("yearMax"));
+out.println(yearMin+"  dhsfdkjd"+yearMax);
 %>
 <p>Ordenar por:</p>
 
@@ -109,8 +113,30 @@ for(ContentDTO content : list) {
 
 
 </c:if>
-
-
+<script>
+ $( function() {
+    $( "#slider-range" ).slider({
+      range: true,
+      min: 0,
+      max: 500,
+      values: [ 75, 300 ],
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+      " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+  } );
+  </script>
+</head>
+<body>
+ 
+<p>
+  <label for="amount">Price range:</label>
+  <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+</p>
+ 
+<div id="slider-range"></div>
 
  
 
