@@ -18,6 +18,10 @@ else
 	
 	<p>Suggested Content</p>
 	
+ 	<form action="PlayersTallerThan" method="get"> 
+   		<input type="submit" name="Home" id ="Home" value="Home">
+ 	</form>
+	
 	<form action="PlayersTallerThan" method="get"> 
    		<input type="submit" name="listWatchList" id ="listWatchList" value="My watchlist">
  	</form>

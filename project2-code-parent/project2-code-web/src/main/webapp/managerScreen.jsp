@@ -21,6 +21,10 @@ else
 	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>
  	
  	<form action="PlayersTallerThan" method="get"> 
+   		<input type="submit" name="Home" id ="Home" value="Home">
+ 	</form>
+ 	
+ 	<form action="PlayersTallerThan" method="get"> 
    		<input type="submit" name="newContent" id ="newContent" value="Add new content">
  	</form>
  	<form action="PlayersTallerThan" method="get"> 

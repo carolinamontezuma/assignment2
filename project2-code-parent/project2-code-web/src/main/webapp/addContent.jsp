@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.List"%>
     
 <!DOCTYPE html>
 <html>
@@ -7,22 +8,33 @@
 <meta charset="UTF-8">
 </head>
 <body>
+<%
+if(request.getAttribute("source")  == null)
+	request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+if(request.getSession().getAttribute("loginToken") == null)
+	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+else
+	if(!((boolean)request.getSession().getAttribute("loginIsAdmin")))
+		request.getRequestDispatcher("/userScreen.jsp").forward(request, response);
+%>
+
+<%
+List<String> categories = (List<String>) request.getAttribute("categories");
+%>
+
 	<form action="PlayersTallerThan" method="get">
   		Tile: <input type="text" name="ftitle" placeholder="Title" required><br>
   		Director: <input type="text" name="fdirector" placeholder="Director" required><br>
   		Category: 
-		<select name="fcategory" required>
-  			<option value="Action">Action</option>
-  			<option value="Comedy">Comedy</option>
-  			<option value="Crime">Crime</option>
-  			<option value="Drama">Drama</option>
-  			<option value="Fantasy">Fantasy</option>
-  			<option value="Historical">Historical</option>
-  			<option value="Science fiction">Science fiction</option>
-  			<option value="Thriller">Thriller</option>
-		</select>  		
+  		<select name="fcategory">
+			  <%for(String category : categories){
+					%><option value="<%= category %>">
+			  		<%out.println(category);%></option>
+				<% } %>
+		</select> 		
 		<br>
-		  Year: <input type="text" name="fyear" placeholder="Year" required><br>
+		  Year: <input type="number" name="fyear" placeholder="Year" required><br>
 		 <input type="submit" name="addContent" id ="addContent" value="Confirm">
 		
 	</form>
