@@ -21,8 +21,7 @@ public interface ContentEJBRemote {
 	List<String> getDirectorName(int ordem);
 	List<String> getCategories(int ordem);
 	List<ContentDTO> seeWatchList(int id);
-	List<ContentDTO> aplicarFiltros(String diretor, String categoria);
 	List<ContentDTO> orderTable(int opcaoFiltro, int opcaoOrdena);
 	List<String> getAvailableCategories();
-	public int minMaxYear(int opcao);
+	List<ContentDTO> aplicarFiltros(String diretor, String categoria, int minYear, int maxYear);
 }
