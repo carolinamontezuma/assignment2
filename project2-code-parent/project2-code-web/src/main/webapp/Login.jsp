@@ -8,6 +8,11 @@
 </head>
 <body>
 
+<%
+if(request.getSession().getAttribute("loginToken") != null)
+	request.getRequestDispatcher("/index.jsp").forward(request, response);
+%>
+
 	<p>Login</p>
 	<form action="PlayersTallerThan" method="post">
 		<div class="container">
@@ -22,7 +27,10 @@
 			</label>
 		</div>
 	</form>
-	
-	<p> Ainda não tem conta? <a href="Registar.jsp">Registe-se</a> </p>
+	<br>
+	Ainda não tem conta?
+	 <form action="PlayersTallerThan" method="get"> 
+   	<input type="submit" name="Registar" id ="Registar" value="Registe-se">
+ </form> 
 </body>
 </html>

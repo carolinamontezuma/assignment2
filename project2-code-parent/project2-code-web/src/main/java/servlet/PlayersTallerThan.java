@@ -18,6 +18,7 @@ import ejb.ContentEJBRemote;
 import ejb.ManagerEJBRemote;
 import dto.UserDTO;
 import ejb.UserEJBRemote;
+import utils.PasswordHasher;
 
 /**
  * Servlet implementation class PlayersTallerThan
@@ -78,15 +79,27 @@ public class PlayersTallerThan extends HttpServlet {
 			out.println("<h1>Populate Content: OK!</h1>");
 		}
 		
-		// Verificar autenticação 
-//		if (!sessionHasLogin(request))
-//	{
-		//Se não estiver autenticado, é reencaminhado para a página de login
-//		dispatcher = request.getRequestDispatcher("/Login.jsp");
-//		dispatcher.forward(request, response);
-//	}
-//		//////////////////////////////////
-
+		if (request.getParameter("Login") != null) {
+			dispatcher = request.getRequestDispatcher("/Login.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}
+		
+		if (request.getParameter("Registar") != null) {
+			dispatcher = request.getRequestDispatcher("/Registar.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}
+		
+		///// Verificar autenticação /////
+		if (!sessionHasLogin(request))
+		{
+			//Se não estiver autenticado, é reencaminhado para a página de login
+			dispatcher = request.getRequestDispatcher("/Login.jsp");
+			dispatcher.forward(request, response);
+			return;
+		}
+		//////////////////////////////////
 		// -------------------- USER SCREEN -------------------------------//
 		// Listar a watch list do utilizador
 		if (request.getParameter("listWatchList") != null) {
@@ -116,6 +129,7 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		// Editar a informação do utilizador
 		if (request.getParameter("editPersonal") != null) {
+			request.setAttribute("userDTO", ejbuser.getUserByID(getLoginToken(request)));
 			dispatcher = request.getRequestDispatcher("/editPersonal.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -241,7 +255,7 @@ public class PlayersTallerThan extends HttpServlet {
 		
 		
 		//------------------- FUNÇÕES DO MANAGER ---------------
-		if(request.getParameter("managerscreen")!=null) {
+		if(request.getParameter("managerScreen")!=null) {
 			request.setAttribute("action", "newcontent");
 			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
 			dispatcher.forward(request, response);
@@ -275,7 +289,7 @@ public class PlayersTallerThan extends HttpServlet {
 			 dispatcher.forward(request, response);
 		}
 		if(request.getParameter("remove") != null) {
-			int id= Integer.parseInt(request.getParameter("user_id"));
+			int id= getLoginToken(request);
 			ejbcontent.removeContent(id);
 			request.setAttribute("action", "newcontent");
 			 dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
@@ -362,7 +376,7 @@ public class PlayersTallerThan extends HttpServlet {
 			
 			if(ejbuser.canRegister(name, email))
 			{
-				ejbuser.addAccount(name, pass, email, card1 + card2 + card3 + card4);
+				ejbuser.addAccount(name, PasswordHasher.plainTextToHash(pass), email, card1 + card2 + card3 + card4);
 				dispatcher = request.getRequestDispatcher("/Login.jsp");
 				dispatcher.forward(request, response);
 			}
@@ -377,13 +391,13 @@ public class PlayersTallerThan extends HttpServlet {
 		if (request.getParameter("login") != null && !sessionHasLogin(request)) {
 			String email = request.getParameter("fmail");
 			String pass = request.getParameter("fpass");
-			boolean hasUser = ejbuser.validateLogin(email, pass);
-			boolean hasManager = ejbmanager.validateLogin(email, pass);
+			boolean hasUser = ejbuser.validateLogin(email, PasswordHasher.plainTextToHash(pass));
+			boolean hasManager = ejbmanager.validateLogin(email, PasswordHasher.plainTextToHash(pass));
 			
 			if(hasUser && !hasManager)
 			{
 				UserDTO user = ejbuser.getUserByEmail(email);
-				request.getSession().setMaxInactiveInterval(9999);
+				request.getSession().setMaxInactiveInterval(60);
 				request.getSession().setAttribute("loginName", user.getUsername());
 				request.getSession().setAttribute("loginToken", user.getID());
 				request.getSession().setAttribute("loginIsAdmin", hasManager);
@@ -427,6 +441,48 @@ public class PlayersTallerThan extends HttpServlet {
 				dispatcher = request.getRequestDispatcher("/Login.jsp");
 				dispatcher.forward(request, response);
 			}
+		}
+		
+		// Editar conta
+		if (request.getParameter("saveEdit") != null && sessionHasLogin(request)) {
+			String name = request.getParameter("fname");
+			String pass = request.getParameter("fpass");
+			String email = request.getParameter("fmail");
+			String card1 = request.getParameter("fcard1");
+			String card2 = request.getParameter("fcard2");
+			String card3 = request.getParameter("fcard3");
+			String card4 = request.getParameter("fcard4");
+			String card3_hidden = request.getParameter("fcard3_hidden");
+			String card4_hidden = request.getParameter("fcard4_hidden");
+			
+			//TODO: check if user can use these new values (email not in use, etc)
+			if(card3.isEmpty() || card4.isEmpty())
+			{
+				ejbuser.editPersonalInformation(getLoginToken(request), name, PasswordHasher.plainTextToHash(pass), email, card1+card2+card3_hidden+card4_hidden);
+				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+				dispatcher.forward(request, response);
+			}
+			else
+			{
+				ejbuser.editPersonalInformation(getLoginToken(request), name, PasswordHasher.plainTextToHash(pass), email, card1+card2+card3+card4);
+				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+				dispatcher.forward(request, response);
+			}
+		}
+		
+		// Cancelar editar conta
+		if (request.getParameter("cancelEdit") != null && sessionHasLogin(request)) {
+			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+			dispatcher.forward(request, response);
+		}
+		
+		// Apagar conta
+		if (request.getParameter("deleteAccount") != null && sessionHasLogin(request)) {
+			ejbuser.deleteAccount(getLoginToken(request));
+			request.getSession().invalidate();
+			dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+
 		}
 	}
 }

@@ -9,8 +9,17 @@
 <title>managerScreen.jsp</title>
 </head>
 <body>
+
+<%
+if(request.getSession().getAttribute("loginToken") == null)
+	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+else
+	if(!((boolean)request.getSession().getAttribute("loginIsAdmin")))
+		request.getRequestDispatcher("/index.jsp").forward(request, response);
+%>
+
 	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>
- 	
+ 
 <c:if test= "${action == 'newcontent'}">
 
 	<form action="PlayersTallerThan" method="get"> 
@@ -26,7 +35,7 @@
  </c:if>
  <c:if test= "${action == 'teste'}"> 
  	<c:if test= "${valor == 1}"> 
-	<p> Sucess creating new content!</p>
+	<p> Success creating new content!</p>
 	<form action="PlayersTallerThan" method="get"> 
     	<input type="submit" name="continueManager" id ="continueManager" value="Continue">
  	</form>

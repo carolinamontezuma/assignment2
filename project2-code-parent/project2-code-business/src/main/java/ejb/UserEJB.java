@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import data.Manager;
 import data.User;
 import dto.UserDTO;
+import utils.PasswordHasher;
 
 /**
  * Session Bean implementation class UserEJB
@@ -30,9 +31,9 @@ public class UserEJB implements UserEJBRemote {
 	
 	@Override
 	public void populate() {
-		User[] users = { new User("Carolina", "carolina", "carolina@mail.com", "123456789"),
-				new User("João", "joao", "joao@mail.com", "123456789"),
-				new User("Cesar", "cesar", "cesar@mail.com", "123456789") };
+		User[] users = { new User("Carolina", PasswordHasher.plainTextToHash("carolina"), "carolina@mail.com", "1234123412341234"),
+				new User("João", PasswordHasher.plainTextToHash("joao"), "joao@mail.com", "2345234523452345"),
+				new User("Cesar", PasswordHasher.plainTextToHash("cesar"), "cesar@mail.com", "3456345634563456") };
 
 		for (User u : users)
 			em.persist(u);
@@ -48,19 +49,19 @@ public class UserEJB implements UserEJBRemote {
 
 	// editar a informação pessoal de um utilizador
 	@Override
-	public void editPersonalInformation(int userID, String username, String email, String creditCard) {
+	public void editPersonalInformation(int userID, String username, String password, String email, String creditCard) {
 		Query query = em.createQuery("SELECT u FROM User u WHERE u.id = :id").setParameter("id", userID);
 		User user = (User) query.getSingleResult();
 
 		user.setUsername(username);
+		user.setPassword(password);
 		user.setEmail(email);
 		user.setCreditCard(creditCard);
 
 		em.merge(user);
 	}
 
-	// apagar conta -> SERÁ QUE ISTO CHEGA? O RUGU SÓ TINHA ESTAS LINHAS +OU- (com a
-	// adição de uns try-catch)
+	// apagar conta
 	@Override
 	public void deleteAccount(int userID) {
 		em.remove(em.find(User.class, userID));
