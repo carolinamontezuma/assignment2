@@ -74,7 +74,7 @@ public class PlayersTallerThan extends HttpServlet {
 		RequestDispatcher dispatcher;
 		// Adicionar elementos à BD
 		if (request.getParameter("fill") != null) {
-			//ejbcontent.populate();
+			ejbcontent.populate();
 			ejbuser.populate();
 			ejbmanager.populate();
 		}

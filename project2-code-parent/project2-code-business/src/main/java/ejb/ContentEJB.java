@@ -31,8 +31,8 @@ public class ContentEJB implements ContentEJBRemote {
 	}
 
 	// Adicionar Contents à BD - função do professor
-	
-	/*public void populate() {
+	@Override
+	public void populate() {
 		Content[] contents = { new Content("Breaking Bad", "John", 1996, "Comedy"),
 				new Content("Suits", "Peter", 2000, "Comedy"),
 				new Content("Game Of Thrones", "Henry", 2005, "Action") };
@@ -40,7 +40,7 @@ public class ContentEJB implements ContentEJBRemote {
 		for (Content c : contents)
 			em.persist(c);
 
-	}*/
+	}
 	
 	// Adicionar novo Content à aplicação
 	@Override
