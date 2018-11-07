@@ -81,6 +81,30 @@ public class PlayersTallerThan extends HttpServlet {
 		
 		request.setAttribute("source", "servlet");
 		
+		if (request.getParameter("nullSource") != null) {
+			if (!sessionHasLogin(request))
+			{
+				dispatcher = request.getRequestDispatcher("/Login.jsp");
+				dispatcher.forward(request, response);
+			}
+			else
+			{
+				if(loginIsAdmin(request))
+				{
+					dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+					dispatcher.forward(request, response);
+				}
+				else
+				{
+					List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+					request.setAttribute("suggestedContent", suggestedContent);
+					dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+					dispatcher.forward(request, response);
+				}
+			}
+			return;
+		}
+		
 		if (request.getParameter("Login") != null) {
 			dispatcher = request.getRequestDispatcher("/Login.jsp");
 			dispatcher.forward(request, response);
@@ -111,6 +135,8 @@ public class PlayersTallerThan extends HttpServlet {
 		//////////////////////////////////
 		// -------------------- USER SCREEN -------------------------------//
 		if(request.getParameter("userScreen")!=null) {
+			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+			request.setAttribute("suggestedContent", suggestedContent);
 			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -128,6 +154,7 @@ public class PlayersTallerThan extends HttpServlet {
 			int idUser = getLoginToken(request);
 			int idContent = Integer.parseInt(request.getParameter("content_id"));
 			ejbcontent.addContentToWatchList(idContent, idUser);
+
 			List<ContentDTO> content = ejbcontent.seeAllContent(1);
 			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			List<String> diretores = ejbcontent.getDirectorName(1);
@@ -138,6 +165,10 @@ public class PlayersTallerThan extends HttpServlet {
 			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
+
+			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+			request.setAttribute("suggestedContent", suggestedContent);
+			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 			dispatcher.forward(request, response);
 
 		}
@@ -146,6 +177,8 @@ public class PlayersTallerThan extends HttpServlet {
 			int idUser = getLoginToken(request);
 			int idContent = Integer.parseInt(request.getParameter("content_id"));
 			ejbcontent.removeContentFromWatchList(idContent, idUser);
+			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+			request.setAttribute("suggestedContent", suggestedContent);
 			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -438,6 +471,8 @@ public class PlayersTallerThan extends HttpServlet {
 				request.getSession().setAttribute("loginToken", user.getID());
 				request.getSession().setAttribute("loginIsAdmin", hasManager);
 				ejbuser.userLoggedIn(user.getID());
+				List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+				request.setAttribute("suggestedContent", suggestedContent);
 				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 				dispatcher.forward(request, response);
 			}
@@ -488,12 +523,16 @@ public class PlayersTallerThan extends HttpServlet {
 			if(card3.isEmpty() || card4.isEmpty())
 			{
 				ejbuser.editPersonalInformation(getLoginToken(request), name, PasswordHasher.plainTextToHash(pass), email, card1+card2+card3_hidden+card4_hidden);
+				List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+				request.setAttribute("suggestedContent", suggestedContent);
 				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 				dispatcher.forward(request, response);
 			}
 			else
 			{
 				ejbuser.editPersonalInformation(getLoginToken(request), name, PasswordHasher.plainTextToHash(pass), email, card1+card2+card3+card4);
+				List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+				request.setAttribute("suggestedContent", suggestedContent);
 				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 				dispatcher.forward(request, response);
 			}
@@ -501,6 +540,8 @@ public class PlayersTallerThan extends HttpServlet {
 		
 		// Cancelar editar conta
 		if (request.getParameter("cancelEdit") != null && sessionHasLogin(request)) {
+			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+			request.setAttribute("suggestedContent", suggestedContent);
 			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 			dispatcher.forward(request, response);
 		}

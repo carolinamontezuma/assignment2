@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.List"%>
+<%@ page import = "dto.ContentDTO"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,15 +10,17 @@
 </head>
 <body>
 <%
-if(request.getSession().getAttribute("loginToken") == null)
-	request.getRequestDispatcher("/Login.jsp").forward(request, response);
-else
-	if((boolean)request.getSession().getAttribute("loginIsAdmin"))
-		request.getRequestDispatcher("/managerScreen.jsp").forward(request, response);
+if(request.getAttribute("source")  == null)
+	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
 %>
 	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %> !</p>
 	
 	<p>Suggested Content</p>
+	<%
+		List<ContentDTO> suggestedContent = (List<ContentDTO>)request.getAttribute("suggestedContent");
+		for(ContentDTO c : suggestedContent)
+			out.println("<p>" + c.getTitle() + "</p>");
+	%>
 	
  	<form action="PlayersTallerThan" method="get"> 
    		<input type="submit" name="Home" id ="Home" value="Home">

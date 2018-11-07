@@ -10,13 +10,7 @@
 <body>
 <%
 if(request.getAttribute("source")  == null)
-	request.getRequestDispatcher("/index.jsp").forward(request, response);
-
-if(request.getSession().getAttribute("loginToken") == null)
-	request.getRequestDispatcher("/Login.jsp").forward(request, response);
-else
-	if(!((boolean)request.getSession().getAttribute("loginIsAdmin")))
-		request.getRequestDispatcher("/userScreen.jsp").forward(request, response);
+	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
 %>
 
 <%

@@ -11,11 +11,8 @@
 <body>
 
 <%
-if(request.getSession().getAttribute("loginToken") == null)
-	request.getRequestDispatcher("/Login.jsp").forward(request, response);
-else
-	if(!((boolean)request.getSession().getAttribute("loginIsAdmin")))
-		request.getRequestDispatcher("/userScreen.jsp").forward(request, response);
+if(request.getAttribute("source")  == null)
+	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
 %>
 
 	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>

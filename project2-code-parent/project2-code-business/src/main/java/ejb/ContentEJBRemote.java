@@ -24,4 +24,5 @@ public interface ContentEJBRemote {
 	List<ContentDTO> orderTable(int opcaoFiltro, int opcaoOrdena);
 	List<String> getAvailableCategories();
 	List<ContentDTO> aplicarFiltros(String diretor, String categoria, int minYear, int maxYear);
+	List<ContentDTO> getSuggestedCotent(int userID);
 }
