@@ -2,7 +2,11 @@ package ejb;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -79,6 +83,7 @@ public class ContentEJB implements ContentEJBRemote {
 	}
 		
 	//Editar conteudo 
+	@Override
 	public void editContent(int opcao, int id, String info) {
 		Content content = em.find(Content.class, id);
 		if(opcao == 1) {
@@ -121,6 +126,7 @@ public class ContentEJB implements ContentEJBRemote {
 	}
 	
 	//Listar a watch list de um determinado utilizador
+	@Override
 	public List<ContentDTO> seeWatchList(int id){
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
 		for (Content con : em.find(User.class, id).getWatchList()) {
@@ -179,6 +185,7 @@ public class ContentEJB implements ContentEJBRemote {
 	}
 
 	// listar Content de determinado director
+	@Override
 	public List<ContentDTO> seeContentFromDirector(String director) {
 		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
@@ -192,7 +199,7 @@ public class ContentEJB implements ContentEJBRemote {
 	}
 
 	// listar Content por intervalo
-
+	@Override
 	public List<ContentDTO> seeContentFromYears(int year1, int year2) {
 		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
@@ -270,6 +277,7 @@ public class ContentEJB implements ContentEJBRemote {
 		return cd;
 	}
 	
+	@Override
 	public List<ContentDTO> orderTable(int opcaoFiltro, int opcaoOrdena) {
 		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
@@ -332,7 +340,7 @@ public class ContentEJB implements ContentEJBRemote {
 	
 	
 	// Devolve todos os nomes dos directores 
-	
+	@Override
 	public List<String> getDirectorName(int ordem){
 		List<String> result = new ArrayList<String>();
 		Query query;
@@ -359,6 +367,7 @@ public class ContentEJB implements ContentEJBRemote {
 	}
 	
 	//Devolve todas as categorias 
+	@Override
 	public List<String> getCategories(int ordem){
 		List<String> result = new ArrayList<String>();
 		Query query;
@@ -390,4 +399,58 @@ public class ContentEJB implements ContentEJBRemote {
 		return Arrays.asList(Content.Categories);
 	}
 	
+	@Override
+	public List<ContentDTO> getSuggestedCotent(int userID)
+	{
+		List<ContentDTO> watchList = seeWatchList(userID);
+		List<ContentDTO> suggestedContent = new ArrayList<>();
+		
+		long contentCount = (long) em.createQuery("SELECT COUNT(c.id) FROM Content c").getSingleResult();
+		int count = (int) (contentCount >= 5? 5 : contentCount);
+		
+		if(!watchList.isEmpty())
+		{
+			int rand = new Random().nextInt(count > watchList.size()? watchList.size() : count);
+			Collections.shuffle(watchList);
+			List<ContentDTO> selectedFromWL = watchList.subList(0, rand);
+			Map<String, String> categories = new HashMap<>();
+			for(int i = 0; i < selectedFromWL.size(); i++)
+				categories.put("param" + i, selectedFromWL.get(i).getCategory());
+			String queryString = "SELECT DISTINCT c FROM Content c WHERE ";
+			for(String key : categories.keySet())
+				queryString += " c.category LIKE :" + key + " OR";
+			queryString = queryString.substring(0, queryString.length() - " OR".length());
+			Query query = em.createQuery(queryString);
+			for(String key : categories.keySet())
+				query.setParameter(key, categories.get(key));
+			List<ContentDTO> result = new ArrayList<>();
+			for(Content c : (List<Content>)query.getResultList())
+				result.add(new ContentDTO(c));
+			Collections.shuffle(result);
+			suggestedContent.addAll(result.subList(0, rand > result.size()? result.size() : rand));
+			count -= rand > result.size()? result.size() : rand;
+		}
+		
+		Map<String, Integer> alreadySuggested = new HashMap<>();
+		for(int i = 0; i < suggestedContent.size(); i++)
+			alreadySuggested.put("param" + i, suggestedContent.get(i).getID());
+		String queryString = "SELECT c FROM Content c";
+		if(!alreadySuggested.isEmpty())
+		{
+			queryString += " WHERE ";
+			for(String key : alreadySuggested.keySet())
+				queryString += " c.id != :" + key + " AND";
+			queryString = queryString.substring(0, queryString.length() - " AND".length());
+		}
+		Query query = em.createQuery(queryString);
+		for(String key : alreadySuggested.keySet())
+			query.setParameter(key, alreadySuggested.get(key));
+		List<ContentDTO> notYetSuggested = new ArrayList<>();
+		for(Content c : (List<Content>)query.getResultList())
+			notYetSuggested.add(new ContentDTO(c));
+		Collections.shuffle(notYetSuggested);
+		suggestedContent.addAll(notYetSuggested.subList(0, count > notYetSuggested.size()? notYetSuggested.size() : count));
+		
+		return suggestedContent;
+	}
 }

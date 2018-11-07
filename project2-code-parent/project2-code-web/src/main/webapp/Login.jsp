@@ -9,8 +9,8 @@
 <body>
 
 <%
-if(request.getSession().getAttribute("loginToken") != null)
-	request.getRequestDispatcher("/index.jsp").forward(request, response);
+if(request.getAttribute("source")  == null)
+	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
 %>
 
 	<p>Login</p>

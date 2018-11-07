@@ -10,13 +10,7 @@
 <body>
 <%
 if(request.getAttribute("source")  == null)
-	request.getRequestDispatcher("/index.jsp").forward(request, response);
-
-if(request.getSession().getAttribute("loginToken") == null)
-	request.getRequestDispatcher("/Login.jsp").forward(request, response);
-else
-	if((boolean)request.getSession().getAttribute("loginIsAdmin"))
-		request.getRequestDispatcher("/managerScreen.jsp").forward(request, response);
+	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
 %>
 
 	<form action="PlayersTallerThan" method="get"> 
@@ -44,8 +38,8 @@ else
 </head>
 <body>
 <%
-if(request.getSession().getAttribute("loginToken") == null)
-	request.getRequestDispatcher("/Login.jsp").forward(request, response);
+if(request.getAttribute("source")  == null)
+	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
 
 UserDTO dto = (UserDTO) request.getAttribute("userDTO");
 String card1 = "" + dto.getCreditCard().subSequence(0, 4);
