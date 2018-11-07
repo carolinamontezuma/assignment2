@@ -11,7 +11,7 @@
 if(request.getSession().getAttribute("loginToken") == null)
 	request.getRequestDispatcher("/Login.jsp").forward(request, response);
 
-boolean isAdmin = false; //(boolean)request.getSession().getAttribute("loginIsAdmin");
+boolean isAdmin = (boolean)request.getSession().getAttribute("loginIsAdmin");
 %>
 
 <p>Hello</p>

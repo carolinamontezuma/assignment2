@@ -8,7 +8,7 @@ import dto.ContentDTO;
 
 @Remote
 public interface ContentEJBRemote {	
-	void populate();
+	//void populate();
 	int addNewContent(String title, String director, int year, String category);
 	void editContent(int opcao, int id, String info);
 	void removeContent(int contentID);

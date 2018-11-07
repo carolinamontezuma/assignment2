@@ -52,6 +52,7 @@ ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("allCo
 ArrayList<String> diretores = (ArrayList<String>) request.getAttribute("diretores");
 ArrayList<String> categorias = (ArrayList<String>) request.getAttribute("categorias");
 ArrayList<String> anos = (ArrayList<String>) request.getAttribute("anos");
+ArrayList<ContentDTO> wl = (ArrayList<ContentDTO>) request.getAttribute("wl");
 
 String lastDirectorName = (String)request.getAttribute("lastDirectorName");
 String lastCategoryName = (String)request.getAttribute("lastCategoryName");
@@ -82,10 +83,17 @@ for(ContentDTO content : list) {
     <td><% out.println(content.getTitle()); %></td>
     <td><% out.println(content.getCategory()); %></td>
    	<td><% out.println(content.Director()); %></td>
-    <td><% out.println(content.getYear()); %></td>
+    <td><% out.println(content.getYear()); 
+    	if(!wl.contains(content)){ 
+    	%> <form action="PlayersTallerThan" method="get">  	<input type="hidden" name="content_id" value="<%=content.getID()%>"> <input type="submit" name="addtowl" id ="addtowl" value="Add to WL"></form> 
+    	<%} else{ %> <form action="PlayersTallerThan" method="get">  	<input type="hidden" name="content_id" value="<%=content.getID()%>"> <input type="submit" name="removeFromWL" id ="removeFromWL" value="Remove from WL"></form>
+    	<% } %> </td>
+    	
   </tr>
+  
     <% 
 }
+
 %>
 </table>
 <!--  PARTE DOS FILTROS -->

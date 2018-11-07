@@ -74,7 +74,7 @@ public class PlayersTallerThan extends HttpServlet {
 		RequestDispatcher dispatcher;
 		// Adicionar elementos à BD
 		if (request.getParameter("fill") != null) {
-			ejbcontent.populate();
+			//ejbcontent.populate();
 			ejbuser.populate();
 			ejbmanager.populate();
 		}
@@ -128,7 +128,16 @@ public class PlayersTallerThan extends HttpServlet {
 			int idUser = getLoginToken(request);
 			int idContent = Integer.parseInt(request.getParameter("content_id"));
 			ejbcontent.addContentToWatchList(idContent, idUser);
-			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+			List<ContentDTO> content = ejbcontent.seeAllContent(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("allContents", content);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("wl", wl);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 
 		}
@@ -151,11 +160,13 @@ public class PlayersTallerThan extends HttpServlet {
 		// Listar todo o conteúdo da aplicação
 		if (request.getParameter("listAll") != null) {
 			List<ContentDTO> content = ejbcontent.seeAllContent(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
 			request.setAttribute("allContents", content);
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
