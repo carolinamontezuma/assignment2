@@ -416,10 +416,14 @@ public class ContentEJB implements ContentEJBRemote {
 			Map<String, String> categories = new HashMap<>();
 			for(int i = 0; i < selectedFromWL.size(); i++)
 				categories.put("param" + i, selectedFromWL.get(i).getCategory());
-			String queryString = "SELECT DISTINCT c FROM Content c WHERE ";
-			for(String key : categories.keySet())
-				queryString += " c.category LIKE :" + key + " OR";
-			queryString = queryString.substring(0, queryString.length() - " OR".length());
+			String queryString = "SELECT DISTINCT c FROM Content c";
+			if(!categories.isEmpty())
+			{
+				queryString += " WHERE ";
+				for(String key : categories.keySet())
+					queryString += " c.category LIKE :" + key + " OR";
+				queryString = queryString.substring(0, queryString.length() - " OR".length());
+			}
 			Query query = em.createQuery(queryString);
 			for(String key : categories.keySet())
 				query.setParameter(key, categories.get(key));
