@@ -50,15 +50,14 @@ public class UserEJB implements UserEJBRemote {
 	// editar a informação pessoal de um utilizador
 	@Override
 	public void editPersonalInformation(int userID, String username, String password, String email, String creditCard) {
-		Query query = em.createQuery("SELECT u FROM User u WHERE u.id = :id").setParameter("id", userID);
-		User user = (User) query.getSingleResult();
+		User user = em.find(User.class, userID);
 		
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setEmail(email);
 		user.setCreditCard(creditCard);
 
-		em.merge(user);
+		//em.merge(user);
 	}
 
 	// apagar conta
@@ -88,19 +87,17 @@ public class UserEJB implements UserEJBRemote {
 	@Override
 	public void userLoggedIn(int userID)
 	{
-		Query query = em.createQuery("SELECT u FROM User u WHERE u.id = :id").setParameter("id", userID);
-		User user = (User) query.getSingleResult();
+		User user = em.find(User.class, userID);
 
 		user.updateLoginCount();
 
-		em.merge(user);
+		//em.merge(user);
 	}
 	
 	@Override
 	public UserDTO getUserByID(int userID)
 	{
-		Query query = em.createQuery("SELECT u FROM User u WHERE u.id = :id").setParameter("id", userID);
-		User user = (User) query.getSingleResult();
+		User user = em.find(User.class, userID);
 		
 		return new UserDTO(user);
 	}

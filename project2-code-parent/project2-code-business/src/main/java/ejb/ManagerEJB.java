@@ -61,10 +61,7 @@ public class ManagerEJB implements ManagerEJBRemote {
 	@Override
 	public ManagerDTO getManagerByID(int managerID)
 	{
-		Query query = em.createQuery("SELECT m FROM Manager m WHERE m.id = :id").setParameter("id", managerID);
-		Manager manager = (Manager) query.getSingleResult();
-		
-		return new ManagerDTO(manager);
+		return new ManagerDTO(em.find(Manager.class, managerID));
 	}
 	
 	@Override
