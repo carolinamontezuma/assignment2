@@ -4,7 +4,10 @@ package main.java.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
+
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import data.User;
 import dto.ContentDTO;
 import dto.ManagerDTO;
 import ejb.ContentEJBRemote;
@@ -20,6 +24,7 @@ import ejb.ManagerEJBRemote;
 import dto.UserDTO;
 import ejb.UserEJBRemote;
 import utils.PasswordHasher;
+import java.util.TimerTask;
 
 /**
  * Servlet implementation class PlayersTallerThan
@@ -43,8 +48,34 @@ public class PlayersTallerThan extends HttpServlet {
 	 */
 	public PlayersTallerThan() {
 		super();
+		 
+		new java.util.Timer().schedule(new java.util.TimerTask() {
+	        @Override
+	        public void run() {
+	        	List<UserDTO> user = ejbuser.listAllUsers();
+	        	String body= new String();
+	        	for(UserDTO u : user) {
+	        		Date d = new Date();
+	        		int diffInDays = (int)( (d.getTime() - u.getDate().getTime())/ (1000 * 60 * 60 * 24)); 
+	        		if(diffInDays==0) {
+	        			Random rand = new Random();
+	        			int randomNum = rand.nextInt((9 - 0) + 1) + 0;
+	        			if(randomNum<=5) {
+	        				body="Sucesso ao efetuar pagamento";
+	        			}
+	        			else {
+	        				body="Erro ao efetuar pagamento";
+	        			}
+	        			ejbuser.send(u.getEmail(),"pagamento",body);
+	        		}
+	        		else {
+	        			continue;
+	        		}
+	        	}
+	        }
+		}, 60000);
 	}
-
+		
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -75,7 +106,7 @@ public class PlayersTallerThan extends HttpServlet {
 		// Adicionar elementos à BD
 		if (request.getParameter("fill") != null) {
 			ejbcontent.populate();
-			ejbuser.populate();
+			//ejbuser.populate();
 			ejbmanager.populate();
 		}
 		
@@ -122,12 +153,6 @@ public class PlayersTallerThan extends HttpServlet {
 		{
 			//Se não estiver autenticado, é reencaminhado para a página de login
 			dispatcher = request.getRequestDispatcher("/Login.jsp");
-			dispatcher.forward(request, response);
-			return;
-		}
-		
-		if (request.getParameter("Home") != null) {
-			dispatcher = request.getRequestDispatcher("/index.jsp");
 			dispatcher.forward(request, response);
 			return;
 		}
@@ -233,7 +258,20 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		
 		if(request.getParameter("OrderTitleAsc")!=null) {
-			List<ContentDTO> content = ejbcontent.orderTable(1,1);
+			String diretor = request.getParameter("directorName");
+			String categoria = request.getParameter("categoryName");
+			int anoMin = -1;
+			int anoMax = -1;
+			if(request.getParameter("minYear").matches("[0-9]+")) {
+				anoMin = Integer.parseInt(request.getParameter("minYear"));
+			}
+			if(request.getParameter("maxYear").matches("[0-9]+")) {
+				anoMax = Integer.parseInt(request.getParameter("maxYear"));
+			}
+			if(anoMin > anoMax) {
+				anoMin=-1;
+			}
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,3,true);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
 			request.setAttribute("diretores", diretores);
@@ -244,7 +282,20 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("OrderTitleDesc")!=null) {
-			List<ContentDTO> content = ejbcontent.orderTable(1,2);
+			String diretor = request.getParameter("directorName");
+			String categoria = request.getParameter("categoryName");
+			int anoMin = -1;
+			int anoMax = -1;
+			if(request.getParameter("minYear").matches("[0-9]+")) {
+				anoMin = Integer.parseInt(request.getParameter("minYear"));
+			}
+			if(request.getParameter("maxYear").matches("[0-9]+")) {
+				anoMax = Integer.parseInt(request.getParameter("maxYear"));
+			}
+			if(anoMin > anoMax) {
+				anoMin=-1;
+			}
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,3,false);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
 			request.setAttribute("diretores", diretores);
@@ -255,7 +306,20 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("OrderCategoryAsc")!=null) {
-			List<ContentDTO> content = ejbcontent.orderTable(2,1);
+			String diretor = request.getParameter("directorName");
+			String categoria = request.getParameter("categoryName");
+			int anoMin = -1;
+			int anoMax = -1;
+			if(request.getParameter("minYear").matches("[0-9]+")) {
+				anoMin = Integer.parseInt(request.getParameter("minYear"));
+			}
+			if(request.getParameter("maxYear").matches("[0-9]+")) {
+				anoMax = Integer.parseInt(request.getParameter("maxYear"));
+			}
+			if(anoMin > anoMax) {
+				anoMin=-1;
+			}
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,5,true);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
 			request.setAttribute("diretores", diretores);
@@ -266,7 +330,20 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("OrderCategoryDesc")!=null) {
-			List<ContentDTO> content = ejbcontent.orderTable(2,2);
+			String diretor = request.getParameter("directorName");
+			String categoria = request.getParameter("categoryName");
+			int anoMin = -1;
+			int anoMax = -1;
+			if(request.getParameter("minYear").matches("[0-9]+")) {
+				anoMin = Integer.parseInt(request.getParameter("minYear"));
+			}
+			if(request.getParameter("maxYear").matches("[0-9]+")) {
+				anoMax = Integer.parseInt(request.getParameter("maxYear"));
+			}
+			if(anoMin > anoMax) {
+				anoMin=-1;
+			}
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,5,false);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);	
 			request.setAttribute("diretores", diretores);
@@ -277,7 +354,20 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("OrderDirectorAsc")!=null) {
-			List<ContentDTO> content = ejbcontent.orderTable(3,1);
+			String diretor = request.getParameter("directorName");
+			String categoria = request.getParameter("categoryName");
+			int anoMin = -1;
+			int anoMax = -1;
+			if(request.getParameter("minYear").matches("[0-9]+")) {
+				anoMin = Integer.parseInt(request.getParameter("minYear"));
+			}
+			if(request.getParameter("maxYear").matches("[0-9]+")) {
+				anoMax = Integer.parseInt(request.getParameter("maxYear"));
+			}
+			if(anoMin > anoMax) {
+				anoMin=-1;
+			}
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,2,true);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
 			request.setAttribute("diretores", diretores);
@@ -288,7 +378,20 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("OrderDirectorDesc")!=null) {
-			List<ContentDTO> content = ejbcontent.orderTable(3,2);
+			String diretor = request.getParameter("directorName");
+			String categoria = request.getParameter("categoryName");
+			int anoMin = -1;
+			int anoMax = -1;
+			if(request.getParameter("minYear").matches("[0-9]+")) {
+				anoMin = Integer.parseInt(request.getParameter("minYear"));
+			}
+			if(request.getParameter("maxYear").matches("[0-9]+")) {
+				anoMax = Integer.parseInt(request.getParameter("maxYear"));
+			}
+			if(anoMin > anoMax) {
+				anoMin=-1;
+			}
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,2,false);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
 			request.setAttribute("diretores", diretores);
@@ -299,7 +402,20 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("OrderYearAsc")!=null) {
-			List<ContentDTO> content = ejbcontent.orderTable(4,1);
+			String diretor = request.getParameter("directorName");
+			String categoria = request.getParameter("categoryName");
+			int anoMin = -1;
+			int anoMax = -1;
+			if(request.getParameter("minYear").matches("[0-9]+")) {
+				anoMin = Integer.parseInt(request.getParameter("minYear"));
+			}
+			if(request.getParameter("maxYear").matches("[0-9]+")) {
+				anoMax = Integer.parseInt(request.getParameter("maxYear"));
+			}
+			if(anoMin > anoMax) {
+				anoMin=-1;
+			}
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,4,true);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
 			request.setAttribute("diretores", diretores);
@@ -310,7 +426,20 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("OrderYearDesc")!=null) {
-			List<ContentDTO> content = ejbcontent.orderTable(4,2);
+			String diretor = request.getParameter("directorName");
+			String categoria = request.getParameter("categoryName");
+			int anoMin = -1;
+			int anoMax = -1;
+			if(request.getParameter("minYear").matches("[0-9]+")) {
+				anoMin = Integer.parseInt(request.getParameter("minYear"));
+			}
+			if(request.getParameter("maxYear").matches("[0-9]+")) {
+				anoMax = Integer.parseInt(request.getParameter("maxYear"));
+			}
+			if(anoMin > anoMax) {
+				anoMin=-1;
+			}
+			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,4,false);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
 			request.setAttribute("diretores", diretores);
@@ -418,6 +547,23 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		if(request.getParameter("continueManager") != null) {
 			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("backUser") != null) {
+			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+			request.setAttribute("suggestedContent", suggestedContent);
+			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+			dispatcher.forward(request, response);
+		}
+		if(request.getParameter("botaoTitulo")!=null) {
+			String multimedia =request.getParameter("multimedia");
+			StringBuilder sb = new StringBuilder();
+			sb.append(multimedia);
+			String pathImage = sb.toString()+".png";
+			String pathMovie = sb.toString()+".mp4";
+			request.setAttribute("pathImage", pathImage);
+			request.setAttribute("pathMovie", pathMovie);
+			dispatcher = request.getRequestDispatcher("/multimedia.jsp");
 			dispatcher.forward(request, response);
 		}
 	}
@@ -551,7 +697,7 @@ public class PlayersTallerThan extends HttpServlet {
 			ejbuser.deleteAccount(getLoginToken(request));
 			request.getSession().invalidate();
 			request.setAttribute("source", "servlet");
-			dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher = request.getRequestDispatcher("/Login.jsp");
 			dispatcher.forward(request, response);
 
 		}

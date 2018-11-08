@@ -1,6 +1,10 @@
 package dto;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import data.Content;
 
@@ -14,6 +18,8 @@ public class ContentDTO implements Serializable {
 	private String director;
 	private int year;
 	private String category;
+	private String nomeMultimedia;
+
 
 	public ContentDTO() {
 		super();
@@ -66,6 +72,12 @@ public class ContentDTO implements Serializable {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	public void setMultimedia(String nomeMultimedia) {
+		this.nomeMultimedia=nomeMultimedia;
+	}
+	public String getMultimedia() {
+		return nomeMultimedia;
 	}
 
 	@Override

@@ -2,7 +2,11 @@ package dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import data.User;
 import data.Content;
@@ -18,7 +22,8 @@ public class UserDTO implements Serializable {
 	private String email;
 	private String creditCard;
 	private int loginCount;
-
+	@Temporal(TemporalType.DATE)
+	private Date registerDate;
 	private List<Content> watchList;
 
 	public UserDTO() {
@@ -26,10 +31,10 @@ public class UserDTO implements Serializable {
 	}
 
 	public UserDTO(User u) {
-		this(u.getID(), u.getUserame(), u.getPassword(), u.getEmail(), u.getCreditCard(), u.getLoginCount());
+		this(u.getID(), u.getUserame(), u.getPassword(), u.getEmail(), u.getCreditCard(), u.getLoginCount(),u.getDate());
 	}
 
-	public UserDTO(int ID, String username, String password, String email, String creditCard, int loginCount) {
+	public UserDTO(int ID, String username, String password, String email, String creditCard, int loginCount,Date registerDate) {
 		super();
 		this.id = ID;
 		this.username = username;
@@ -38,6 +43,7 @@ public class UserDTO implements Serializable {
 		this.creditCard = creditCard;
 		this.watchList = new ArrayList<>();
 		this.loginCount = loginCount;
+		this.registerDate=registerDate;
 	}
 	
 	public int getLoginCount()
@@ -97,6 +103,13 @@ public class UserDTO implements Serializable {
 	@Override
 	public String toString() {
 		return " id = " + this.id + " user = " + this.username + " email = " + this.email;
+	}
+	
+	public void setDate(Date date) {
+		this.registerDate=date;
+	}
+	public Date getDate() {
+		return registerDate;
 	}
 
 	@Override

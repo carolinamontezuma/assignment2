@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>managerScreen.jsp</title>
+<link rel="stylesheet" href="index.css">
 </head>
 <body>
 
@@ -18,29 +19,29 @@ if(request.getAttribute("source")  == null)
 	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>
  	
  	<form action="PlayersTallerThan" method="get"> 
-   		<input type="submit" name="Home" id ="Home" value="Home">
+   		<input class="botoes" type="submit" name="Home" id ="Home" value="Home">
  	</form>
  	
  	<form action="PlayersTallerThan" method="get"> 
-   		<input type="submit" name="newContent" id ="newContent" value="Add new content">
+   		<input class="botoes" type="submit" name="newContent" id ="newContent" value="Add new content">
  	</form>
  	<form action="PlayersTallerThan" method="get"> 
-    	<input type="submit" name="editContent" id ="editContent" value="Edit content">
+    	<input class="botoes" type="submit" name="editContent" id ="editContent" value="Edit content">
  	</form>
  	
  	<form action="PlayersTallerThan" method="get"> 
-    	<input type="submit" name="deleteContent" id ="deleteContent" value="Delete content">
+    	<input class="botoes" type="submit" name="deleteContent" id ="deleteContent" value="Delete content">
  	</form>
  	
  	<form action="PlayersTallerThan" method="post"> 
-   		<input type="submit" name="logout" id="logout" value="Logout">
+   		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
  	</form>
 
  <c:if test= "${action == 'teste'}"> 
  	<c:if test= "${valor == 1}"> 
 	<p> Sucess creating new content!</p>
 	<form action="PlayersTallerThan" method="get"> 
-    	<input type="submit" name="continueManager" id ="continueManager" value="Continue">
+    	<input class="botoes" type="submit" name="continueManager" id ="continueManager" value="Continue">
  	</form>
  	</c:if>
  	<c:if test= "${valor == 0}"> 

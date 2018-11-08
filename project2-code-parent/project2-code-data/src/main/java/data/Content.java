@@ -24,6 +24,7 @@ public class Content implements Serializable {
 	private String director;
 	private int year;
 	private String category;
+	private String nomeMultimedia;
 
 	public Content() {
 		super();
@@ -72,6 +73,14 @@ public class Content implements Serializable {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	
+	public void setMultimedia(String nomeMultimedia) {
+		this.nomeMultimedia=nomeMultimedia;
+	}
+	public String getMultimedia() {
+		return nomeMultimedia;
+	}
+	
 
 	@Override
 	public String toString() {
