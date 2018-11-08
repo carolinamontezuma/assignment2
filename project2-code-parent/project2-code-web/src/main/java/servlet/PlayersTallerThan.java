@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import dto.ContentDTO;
 import dto.ManagerDTO;
-import ejb.ContentEJBRemote;
-import ejb.ManagerEJBRemote;
+import ejb.ContentEJBLocal;
+import ejb.ManagerEJBLocal;
 import dto.UserDTO;
-import ejb.UserEJBRemote;
+import ejb.UserEJBLocal;
 import utils.PasswordHasher;
 
 /**
@@ -32,11 +32,11 @@ import utils.PasswordHasher;
 public class PlayersTallerThan extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@EJB
-	ContentEJBRemote ejbcontent;
+	ContentEJBLocal ejbcontent;
 	@EJB
-	UserEJBRemote ejbuser;
+	UserEJBLocal ejbuser;
 	@EJB
-	ManagerEJBRemote ejbmanager;
+	ManagerEJBLocal ejbmanager;
 	
 	/**
 	 * @see HttpServlet#HttpServlet()

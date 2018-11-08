@@ -18,7 +18,7 @@ import utils.PasswordHasher;
  */
 @Stateless
 @LocalBean
-public class UserEJB implements UserEJBRemote {
+public class UserEJB implements UserEJBLocal {
 	@PersistenceContext(name = "Users")
 	EntityManager em;
 

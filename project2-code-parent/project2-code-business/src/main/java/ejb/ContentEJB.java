@@ -23,7 +23,7 @@ import dto.ContentDTO;
  */
 @Stateless
 @LocalBean
-public class ContentEJB implements ContentEJBRemote {
+public class ContentEJB implements ContentEJBLocal {
 	@PersistenceContext(name = "Contents")
 	EntityManager em;
 
