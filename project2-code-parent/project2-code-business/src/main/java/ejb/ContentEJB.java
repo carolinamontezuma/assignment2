@@ -264,7 +264,9 @@ public class ContentEJB implements ContentEJBRemote {
 		}
 		if(diretor.equals("-") && !(categoria.equals("-")) ) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
-
+					.setParameter("Categoria", categoria)
+					.setParameter("yearMin", minYear)
+					.setParameter("yearMax", maxYear);
 		
 		boolean dir = !diretor.equals("-");
 		boolean cat = !categoria.equals("-");
@@ -279,9 +281,14 @@ public class ContentEJB implements ContentEJBRemote {
 
 		else if(!(diretor.equals("-")) && categoria.equals("-")) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
+					.setParameter("Diretor", diretor)
+					.setParameter("yearMin", minYear)
+					.setParameter("yearMax", maxYear);
+			c = query.getResultList();
+		}
 
 		else if(dir && !cat) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax")
+			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax"+order)
 					.setParameter("Diretor", diretor)
 					.setParameter("yearMin", minYear)
 					.setParameter("yearMax", maxYear);
@@ -290,6 +297,12 @@ public class ContentEJB implements ContentEJBRemote {
 
 		else if(!(diretor.equals("-")) && !(categoria.equals("-"))) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
+					.setParameter("Diretor", diretor)
+					.setParameter("Categoria", categoria)
+					.setParameter("yearMin", minYear)
+					.setParameter("yearMax", maxYear);
+					c = query.getResultList();
+		}
 
 		else if(dir && cat) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax")
@@ -303,6 +316,10 @@ public class ContentEJB implements ContentEJBRemote {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
 					.setParameter("Diretor", diretor)
 					.setParameter("Categoria",categoria)
+					.setParameter("yearMin", minYear)
+					.setParameter("yearMax", maxYear);
+				c = query.getResultList();
+		}
 		else {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.year BETWEEN :yearMin AND :yearMax")
 					.setParameter("yearMin", minYear)
