@@ -2,11 +2,11 @@ package ejb;
 
 import java.util.List;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 import dto.ContentDTO;
 
-@Remote
+@Local
 public interface ContentEJBRemote {	
 	void populate();
 	int addNewContent(String title, String director, int year, String category);

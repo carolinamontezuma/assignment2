@@ -1,10 +1,10 @@
 package ejb;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 import dto.UserDTO;
 
-@Remote
+@Local
 public interface UserEJBRemote {
 	void populate();
 	
@@ -20,7 +20,7 @@ public interface UserEJBRemote {
 
 	UserDTO getUserByEmail(String email);
 
-	boolean canRegister(String username, String email);
+	boolean canRegister(String email);
 
 	void userLoggedIn(int userID);
 	

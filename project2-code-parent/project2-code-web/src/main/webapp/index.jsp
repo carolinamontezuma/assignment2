@@ -16,7 +16,7 @@ boolean isAdmin = (boolean)request.getSession().getAttribute("loginIsAdmin");
 
 <p>Hello</p>
  <% if(!isAdmin){ %>
-<form action="PlayersTallerThan" method="get"> 
+<form action="PlayersTallerThan" method="get">
    	<input type="submit" name="userScreen" id ="userScreen" value="User Screen">
  </form>
  <% } %>

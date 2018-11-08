@@ -48,17 +48,16 @@ String action = ob.toString();
 ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("allContents");
 ArrayList<String> diretores = (ArrayList<String>) request.getAttribute("diretores");
 ArrayList<String> categorias = (ArrayList<String>) request.getAttribute("categorias");
-ArrayList<String> anos = (ArrayList<String>) request.getAttribute("anos");
 ArrayList<ContentDTO> wl = (ArrayList<ContentDTO>) request.getAttribute("wl");
 
 String lastDirectorName = (String)request.getAttribute("lastDirectorName");
 String lastCategoryName = (String)request.getAttribute("lastCategoryName");
+String lastMinYear = (String)request.getAttribute("lastMinYear");
+lastMinYear = lastMinYear == null? "" : lastMinYear;
+String lastMaxYear = (String)request.getAttribute("lastMaxYear");
+lastMaxYear = lastMaxYear == null? "" : lastMaxYear;
 
 %>
-<p>Ordenar por:</p>
-
-
-
     <table id="myTable">
   <tr>
   
@@ -116,8 +115,8 @@ for(ContentDTO content : list) {
 	<% } %>
 </select>
 <!--  TEXT BOX PARA ESCOLHER O RANGE DE YEARS -->
-<input type="number" placeholder="Year" name="minYear" required>
-<input type="number" placeholder="Year" name="maxYear" required>
+<input type="number" placeholder="Year" name="minYear" value="<%= lastMinYear %>">
+<input type="number" placeholder="Year" name="maxYear" value="<%= lastMaxYear %>">
 <button type="submit" name="filtrar" id="filtrar">Filtrar</button>
 
 </form> 

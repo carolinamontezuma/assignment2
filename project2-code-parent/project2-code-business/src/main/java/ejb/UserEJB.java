@@ -52,10 +52,14 @@ public class UserEJB implements UserEJBRemote {
 	public void editPersonalInformation(int userID, String username, String password, String email, String creditCard) {
 		User user = em.find(User.class, userID);
 		
-		user.setUsername(username);
-		user.setPassword(password);
-		user.setEmail(email);
-		user.setCreditCard(creditCard);
+		if(username != null)
+			user.setUsername(username);
+		if(password != null)
+			user.setPassword(password);
+		if(email != null)
+			user.setEmail(email);
+		if(creditCard != null)
+			user.setCreditCard(creditCard);
 
 		//em.merge(user);
 	}
@@ -67,10 +71,9 @@ public class UserEJB implements UserEJBRemote {
 	}
 	
 	@Override
-	public boolean canRegister(String username, String email)
+	public boolean canRegister(String email)
 	{
-		Query query = em.createQuery("SELECT u FROM User u WHERE u.username = :username AND u.email = :email")
-				.setParameter("username", username)
+		Query query = em.createQuery("SELECT u FROM User u WHERE u.email = :email")
 				.setParameter("email", email);
 		
 		return query.getResultList().size() == 0;

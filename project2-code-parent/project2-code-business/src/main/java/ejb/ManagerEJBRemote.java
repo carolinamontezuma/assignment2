@@ -1,10 +1,10 @@
 package ejb;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 import dto.ManagerDTO;
 
-@Remote
+@Local
 public interface ManagerEJBRemote {
 	void populate();
 	

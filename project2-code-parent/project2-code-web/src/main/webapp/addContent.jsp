@@ -11,9 +11,7 @@
 <%
 if(request.getAttribute("source")  == null)
 	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
-%>
 
-<%
 List<String> categories = (List<String>) request.getAttribute("categories");
 %>
 

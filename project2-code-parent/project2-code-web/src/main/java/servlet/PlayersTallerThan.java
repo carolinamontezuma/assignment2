@@ -165,10 +165,6 @@ public class PlayersTallerThan extends HttpServlet {
 			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-
-			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
-			request.setAttribute("suggestedContent", suggestedContent);
-			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 			dispatcher.forward(request, response);
 
 		}
@@ -177,9 +173,17 @@ public class PlayersTallerThan extends HttpServlet {
 			int idUser = getLoginToken(request);
 			int idContent = Integer.parseInt(request.getParameter("content_id"));
 			ejbcontent.removeContentFromWatchList(idContent, idUser);
-			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
-			request.setAttribute("suggestedContent", suggestedContent);
-			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+
+			List<ContentDTO> content = ejbcontent.seeAllContent(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
+			List<String> diretores = ejbcontent.getDirectorName(1);
+			List<String> categorias = ejbcontent.getCategories(1);
+			request.setAttribute("allContents", content);
+			request.setAttribute("diretores", diretores);
+			request.setAttribute("categorias", categorias);
+			request.setAttribute("wl", wl);
+			request.setAttribute("action", "allContents");
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 		}
 		// Editar a informação do utilizador
@@ -216,18 +220,22 @@ public class PlayersTallerThan extends HttpServlet {
 			if(request.getParameter("maxYear").matches("[0-9]+")) {
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
 			}
-			if(anoMin > anoMax) {
+			if(anoMin > anoMax && anoMax != -1) {
 				anoMin=-1;
 			}
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			request.setAttribute("lastDirectorName", diretor);
 			request.setAttribute("lastCategoryName", categoria);
+			request.setAttribute("lastMinYear", (String)request.getParameter("minYear"));
+			request.setAttribute("lastMaxYear", (String)request.getParameter("maxYear"));
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -236,9 +244,11 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(1,1);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -247,9 +257,11 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(1,2);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -258,9 +270,11 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(2,1);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -268,10 +282,12 @@ public class PlayersTallerThan extends HttpServlet {
 		if(request.getParameter("OrderCategoryDesc")!=null) {
 			List<ContentDTO> content = ejbcontent.orderTable(2,2);
 			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);	
+			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -280,9 +296,11 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(3,1);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -291,9 +309,11 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(3,2);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -302,9 +322,11 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(4,1);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -313,9 +335,11 @@ public class PlayersTallerThan extends HttpServlet {
 			List<ContentDTO> content = ejbcontent.orderTable(4,2);
 			List<String> diretores = ejbcontent.getDirectorName(1);
 			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
 			request.setAttribute("diretores", diretores);
 			request.setAttribute("categorias", categorias);
 			request.setAttribute("allContents", content);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -384,6 +408,9 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		if(request.getParameter("editCategory") != null) {
 			request.setAttribute("action", "editcategory");
+			List<String> categories = ejbcontent.getAvailableCategories();
+			categories.sort(Comparator.naturalOrder());
+			request.setAttribute("categories", categories);
 			dispatcher = request.getRequestDispatcher("/editContent.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -443,16 +470,49 @@ public class PlayersTallerThan extends HttpServlet {
 			String card3 = request.getParameter("fcard3");
 			String card4 = request.getParameter("fcard4");
 			
-			if(ejbuser.canRegister(name, email))
+			if(!ejbuser.isUsernameValid(name))
+				request.setAttribute("message", "Invalid user name");
+			else if(!ejbuser.isPasswordValid(pass))
+				request.setAttribute("message", "Invalid password");
+			else if(!ejbuser.isEmailValid(email))
+				request.setAttribute("message", "Invalid email");
+			else if(!ejbuser.isCreditCardValid(card1+card2+card3+card4))
+				request.setAttribute("message", "Invalid credit card number");
+			
+			if(request.getAttribute("message") != null)
+			{
+				request.setAttribute("usedName", name);
+				request.setAttribute("usedEmail", email);
+				request.setAttribute("usedPassword", pass);
+				request.setAttribute("usedCard1", card1);
+				request.setAttribute("usedCard2", card2);
+				request.setAttribute("usedCard3", card3);
+				request.setAttribute("usedCard4", card4);
+				dispatcher = request.getRequestDispatcher("/Registar.jsp");
+				dispatcher.forward(request, response);
+				return;
+			}
+			
+			if(ejbuser.canRegister(email))
 			{
 				ejbuser.addAccount(name, PasswordHasher.plainTextToHash(pass), email, card1 + card2 + card3 + card4);
-				dispatcher = request.getRequestDispatcher("/Login.jsp");
+				
+				UserDTO user = ejbuser.getUserByEmail(email);
+				request.getSession().setMaxInactiveInterval(60);
+				request.getSession().setAttribute("loginName", user.getUsername());
+				request.getSession().setAttribute("loginToken", user.getID());
+				request.getSession().setAttribute("loginIsAdmin", false);
+				ejbuser.userLoggedIn(user.getID());
+				List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+				request.setAttribute("suggestedContent", suggestedContent);
+				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 				dispatcher.forward(request, response);
 			}
 			else
 			{
-				//TODO: notificar que este email já está a ser usado
-				out.println("ERROR: Este login já está em uso");
+				request.setAttribute("message", "Email already in use");
+				dispatcher = request.getRequestDispatcher("/Login.jsp");
+				dispatcher.forward(request, response);
 			}
 		}
 
@@ -488,14 +548,16 @@ public class PlayersTallerThan extends HttpServlet {
 			}
 			else if(hasUser && hasManager)
 			{
-				out.println("ERROR: can't have users and managers with the same login");
+				request.setAttribute("message", "ERROR: can't have users and managers with the same login");
+				dispatcher = request.getRequestDispatcher("/Login.jsp");
+				dispatcher.forward(request, response);
 			}
 			else
 			{
-				//TODO: não existe user nem manager com este login
-				out.println("O login não existe!");
+				request.setAttribute("message", "Login does not exist");
+				dispatcher = request.getRequestDispatcher("/Login.jsp");
+				dispatcher.forward(request, response);
 			}
-			
 		}
 		
 		// Logout
@@ -508,41 +570,53 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		
 		// Editar conta
-		if (request.getParameter("saveEdit") != null && sessionHasLogin(request)) {
+		if (request.getParameter("editName") != null && sessionHasLogin(request))
+		{
 			String name = request.getParameter("fname");
-			String pass = request.getParameter("fpass");
+			if(ejbuser.isUsernameValid(name))
+				ejbuser.editPersonalInformation(getLoginToken(request), name, null, null, null);
+			else
+				request.setAttribute("message", "Invalid user name");
+			UserDTO user = ejbuser.getUserByID(getLoginToken(request));
+			request.setAttribute("userDTO", user);
+			request.getSession().setAttribute("loginName", user.getUsername());
+			dispatcher = request.getRequestDispatcher("/editPersonal.jsp");
+			dispatcher.forward(request, response);
+		}
+		if (request.getParameter("editMail") != null && sessionHasLogin(request))
+		{
 			String email = request.getParameter("fmail");
+			if(ejbuser.isEmailValid(email))
+				ejbuser.editPersonalInformation(getLoginToken(request), null, null, email, null);
+			else
+				request.setAttribute("message", "Invalid email");
+			request.setAttribute("userDTO", ejbuser.getUserByID(getLoginToken(request)));
+			dispatcher = request.getRequestDispatcher("/editPersonal.jsp");
+			dispatcher.forward(request, response);
+		}
+		if (request.getParameter("editPass") != null && sessionHasLogin(request))
+		{
+			String pass = request.getParameter("fpass");
+			if(ejbuser.isPasswordValid(pass))
+				ejbuser.editPersonalInformation(getLoginToken(request), null, PasswordHasher.plainTextToHash(pass), null, null);
+			else
+				request.setAttribute("message", "Invalid password");
+			request.setAttribute("userDTO", ejbuser.getUserByID(getLoginToken(request)));
+			dispatcher = request.getRequestDispatcher("/editPersonal.jsp");
+			dispatcher.forward(request, response);
+		}
+		if (request.getParameter("editCredit") != null && sessionHasLogin(request))
+		{
 			String card1 = request.getParameter("fcard1");
 			String card2 = request.getParameter("fcard2");
 			String card3 = request.getParameter("fcard3");
 			String card4 = request.getParameter("fcard4");
-			String card3_hidden = request.getParameter("fcard3_hidden");
-			String card4_hidden = request.getParameter("fcard4_hidden");
-			
-			//TODO: check if user can use these new values (email not in use, etc)
-			if(card3.isEmpty() || card4.isEmpty())
-			{
-				ejbuser.editPersonalInformation(getLoginToken(request), name, PasswordHasher.plainTextToHash(pass), email, card1+card2+card3_hidden+card4_hidden);
-				List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
-				request.setAttribute("suggestedContent", suggestedContent);
-				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
-				dispatcher.forward(request, response);
-			}
+			if(ejbuser.isCreditCardValid(card1+card2+card3+card4))
+				ejbuser.editPersonalInformation(getLoginToken(request), null, null, null, card1+card2+card3+card4);
 			else
-			{
-				ejbuser.editPersonalInformation(getLoginToken(request), name, PasswordHasher.plainTextToHash(pass), email, card1+card2+card3+card4);
-				List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
-				request.setAttribute("suggestedContent", suggestedContent);
-				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
-				dispatcher.forward(request, response);
-			}
-		}
-		
-		// Cancelar editar conta
-		if (request.getParameter("cancelEdit") != null && sessionHasLogin(request)) {
-			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
-			request.setAttribute("suggestedContent", suggestedContent);
-			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+				request.setAttribute("message", "Invalid credit card number");
+			request.setAttribute("userDTO", ejbuser.getUserByID(getLoginToken(request)));
+			dispatcher = request.getRequestDispatcher("/editPersonal.jsp");
 			dispatcher.forward(request, response);
 		}
 		
@@ -551,7 +625,7 @@ public class PlayersTallerThan extends HttpServlet {
 			ejbuser.deleteAccount(getLoginToken(request));
 			request.getSession().invalidate();
 			request.setAttribute("source", "servlet");
-			dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher = request.getRequestDispatcher("/Login.jsp");
 			dispatcher.forward(request, response);
 
 		}
