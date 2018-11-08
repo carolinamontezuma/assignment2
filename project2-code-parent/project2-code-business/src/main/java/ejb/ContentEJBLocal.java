@@ -23,6 +23,7 @@ public interface ContentEJBLocal {
 	List<ContentDTO> seeWatchList(int id);
 	List<ContentDTO> orderTable(int opcaoFiltro, int opcaoOrdena);
 	List<String> getAvailableCategories();
+	List<ContentDTO> aplicarFiltros(String diretor, String categoria, int minYear, int maxYear, int opcao, boolean asc);
 	List<ContentDTO> aplicarFiltros(String diretor, String categoria, int minYear, int maxYear);
 	List<ContentDTO> getSuggestedCotent(int userID);
 }

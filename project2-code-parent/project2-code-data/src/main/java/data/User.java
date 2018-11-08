@@ -3,6 +3,7 @@ package data;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -16,6 +17,8 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	@Temporal(TemporalType.DATE)
+	private Date registerDate;
 	private String username;
 	private String password;
 	private String email;
@@ -32,7 +35,7 @@ public class User implements Serializable {
 		super();
 	}
 
-	public User(String username, String password, String email, String creditCard) {
+	public User(String username, String password, String email, String creditCard,Date date) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -40,6 +43,7 @@ public class User implements Serializable {
 		this.creditCard = creditCard;
 		this.watchList = new ArrayList<>();
 		this.loginCount = 0;
+		this.registerDate=date;
 	}
 	
 	public void updateLoginCount()
@@ -103,6 +107,12 @@ public class User implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public void setDate(Date date) {
+		this.registerDate=date;
+	}
+	public Date getDate() {
+		return registerDate;
 	}
 
 	@Override

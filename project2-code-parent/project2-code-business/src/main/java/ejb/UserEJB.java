@@ -1,15 +1,27 @@
 package ejb;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import data.Content;
 import data.Manager;
 import data.User;
+import dto.ContentDTO;
 import dto.UserDTO;
 import utils.PasswordHasher;
 
@@ -21,6 +33,9 @@ import utils.PasswordHasher;
 public class UserEJB implements UserEJBLocal {
 	@PersistenceContext(name = "Users")
 	EntityManager em;
+	
+	@Resource(name="java:jboss/mail/gmail")
+	private Session session;
 
 	/**
 	 * Default constructor.
@@ -29,21 +44,11 @@ public class UserEJB implements UserEJBLocal {
 
 	}
 	
-	@Override
-	public void populate() {
-		User[] users = { new User("Carolina", PasswordHasher.plainTextToHash("carolina"), "carolina@mail.com", "1234123412341234"),
-				new User("João", PasswordHasher.plainTextToHash("joao"), "joao@mail.com", "2345234523452345"),
-				new User("Cesar", PasswordHasher.plainTextToHash("cesar"), "cesar@mail.com", "3456345634563456") };
-
-		for (User u : users)
-			em.persist(u);
-	}
-	
 	// adicionar informação pessoal de um novo utilizador (=criar conta)
 	@Override
 	public void addAccount(String username, String password, String email, String creditCard) {
-		User user = new User(username, password, email, creditCard);
-
+		Date date = new Date();
+		User user = new User(username, password, email, creditCard,date);
 		em.persist(user);
 	}
 
@@ -145,4 +150,37 @@ public class UserEJB implements UserEJBLocal {
 	{
 		return creditCard != null && creditCard.matches("[0-9]+") && creditCard.length() == 16;
 	}
+	
+	
+	//Função do tutorial para enviar emails
+	@Override
+	public void send(String to,String subject,String body) {
+		try {
+				Message message =new MimeMessage(session);
+				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+				message.setSubject(subject);
+				message.setText(body);
+				Transport.send(message);
+				
+		}catch(MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//Função para listar todos os utilizadores
+	@Override
+	public List<UserDTO> listAllUsers(){
+		List<User> c = new ArrayList<User>();
+		List<UserDTO> cd = new ArrayList<UserDTO>();
+		
+		Query query=em.createQuery("FROM User");
+		c = query.getResultList();
+		
+		for (User con : c) {
+			cd.add(new UserDTO(con));
+		}
+		return cd;
+	}
+	
+	
 }

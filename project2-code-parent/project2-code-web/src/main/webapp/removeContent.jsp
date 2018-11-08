@@ -8,6 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="index.css">
 </head>
 <body>
 <%
@@ -22,11 +23,14 @@ if(request.getAttribute("source")  == null)
     	int id = content.getID();%>     	
      	<form action="PlayersTallerThan" method="get"> 
     	<input type="hidden" name="content_id" value="<%=id%>">    	
-        <input type="submit" name="remove" id ="remove"  value="Remove">
+        <input class="botoes" type="submit" name="remove" id ="remove"  value="Remove">
         </form>
 		<% 
 		
 	}
 %>
 </body>
+<form action="PlayersTallerThan" method="post"> 
+   		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
+ 	</form>
 </html>
