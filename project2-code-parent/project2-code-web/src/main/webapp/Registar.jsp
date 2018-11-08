@@ -33,28 +33,18 @@ usedCard4 = usedCard4 == null ? "" : usedCard4;
 <p class="Text">Registar</p>
 <div class="Text">
 	<form action="PlayersTallerThan" method="post">
-  		Name <input type="text" name="fname" placeholder="Name" required><br>
-  		Email <input type="email" name="fmail" placeholder="example@email.com" required><br>
-  		Password <input type="password" name="fpass" placeholder="Password" required><br>
-  		Credit Card
-  		<input type="number" name="fcard1" maxlength="1" required>
-  		<input type="number" name="fcard2" maxlength="1" required>
-  		<input type="number" name="fcard3" maxlength="1" required>
-  		<input type="number" name="fcard4" maxlength="1" required><br>
-  		<input class="botoes" type="submit" name="registar" value="Create account">
-	</form>
-</div>
-  		Nome: <input type="text" name="fname" placeholder="Name" value="<%= usedName %>" required><br>
+  		Name: <input type="text" name="fname" placeholder="Name" value="<%= usedName %>" required><br>
   		Email: <input type="email" name="fmail" placeholder="example@email.com" value="<%= usedEmail %>" required><br>
   		Password: <input type="password" name="fpass" placeholder="Password" value="<%= usedName %>" required><br>
-  		Cartão de crédito:
+  		Credit card:
   		<input type="number" id="id_fcard1" name="fcard1" oninput="limitLength('id_fcard1', 4, 'id_fcard2')" value="<%= usedCard1 %>" required>
   		<input type="number" id="id_fcard2" name="fcard2" oninput="limitLength('id_fcard2', 4, 'id_fcard3')" value="<%= usedCard2 %>" required>
   		<input type="number" id="id_fcard3" name="fcard3" oninput="limitLength('id_fcard3', 4, 'id_fcard4')" value="<%= usedCard3 %>" required>
   		<input type="number" id="id_fcard4" name="fcard4" oninput="limitLength('id_fcard4', 4, null)" value="<%= usedCard4 %>" required>
   		<br>
-  		<input type="submit" name="registar" value="Criar conta">
+  		<input class="botoes" type="submit" name="registar" value="Create account">
 	</form>
+</div>
 	
 	<script type="text/javascript">
 	function limitLength(elementID, maxLength, nextElementID)

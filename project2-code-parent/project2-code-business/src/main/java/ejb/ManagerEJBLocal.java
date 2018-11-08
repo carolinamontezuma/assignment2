@@ -5,7 +5,7 @@ import javax.ejb.Local;
 import dto.ManagerDTO;
 
 @Local
-public interface ManagerEJBRemote {
+public interface ManagerEJBLocal {
 	void populate();
 	
 	void addAccount(String username, String email, String password);

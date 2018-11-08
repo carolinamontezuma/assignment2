@@ -24,7 +24,7 @@ import dto.ContentDTO;
  */
 @Stateless
 @LocalBean
-public class ContentEJB implements ContentEJBRemote {
+public class ContentEJB implements ContentEJBLocal {
 	@PersistenceContext(name = "Contents")
 	EntityManager em;
 
@@ -262,22 +262,25 @@ public class ContentEJB implements ContentEJBRemote {
 		else {
 			order="ORDER BY c.category "+(asc?"ASC":"DESC");
 		}
+
 		if(diretor.equals("-") && !(categoria.equals("-")) ) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
 					.setParameter("Categoria", categoria)
 					.setParameter("yearMin", minYear)
 					.setParameter("yearMax", maxYear);
 		
+
 		boolean dir = !diretor.equals("-");
 		boolean cat = !categoria.equals("-");
 		
 		if(!dir && cat) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax")
+			query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
 					.setParameter("Categoria", categoria)
 					.setParameter("yearMin", minYear)
 					.setParameter("yearMax", maxYear);
 			c = query.getResultList();
 		}
+
 
 		else if(!(diretor.equals("-")) && categoria.equals("-")) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
@@ -289,11 +292,16 @@ public class ContentEJB implements ContentEJBRemote {
 
 		else if(dir && !cat) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax"+order)
+
+		else if(dir && !cat) {
+			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax " + order)
+
 					.setParameter("Diretor", diretor)
 					.setParameter("yearMin", minYear)
 					.setParameter("yearMax", maxYear);
 			c = query.getResultList();
 		}
+
 
 		else if(!(diretor.equals("-")) && !(categoria.equals("-"))) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
@@ -304,14 +312,16 @@ public class ContentEJB implements ContentEJBRemote {
 					c = query.getResultList();
 		}
 
+
 		else if(dir && cat) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax")
+			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
 					.setParameter("Diretor", diretor)
 					.setParameter("Categoria",categoria)
 					.setParameter("yearMin", minYear)
 					.setParameter("yearMax", maxYear);
 			c = query.getResultList();
 		}
+
 		else if(diretor.equals("-") && !(categoria.equals("-")) && minYear ==-1) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
 					.setParameter("Diretor", diretor)
@@ -320,8 +330,9 @@ public class ContentEJB implements ContentEJBRemote {
 					.setParameter("yearMax", maxYear);
 				c = query.getResultList();
 		}
+
 		else {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.year BETWEEN :yearMin AND :yearMax")
+			query = em.createQuery("SELECT c FROM Content c WHERE c.year BETWEEN :yearMin AND :yearMax " + order)
 					.setParameter("yearMin", minYear)
 					.setParameter("yearMax", maxYear);
 			c = query.getResultList();

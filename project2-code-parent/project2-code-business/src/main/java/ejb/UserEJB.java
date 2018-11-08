@@ -30,11 +30,12 @@ import utils.PasswordHasher;
  */
 @Stateless
 @LocalBean
-public class UserEJB implements UserEJBRemote {
+public class UserEJB implements UserEJBLocal {
 	@PersistenceContext(name = "Users")
+	EntityManager em;
+	
 	@Resource(name="java:jboss/mail/gmail")
 	private Session session;
-	EntityManager em;
 
 	/**
 	 * Default constructor.
@@ -152,6 +153,7 @@ public class UserEJB implements UserEJBRemote {
 	
 	
 	//Função do tutorial para enviar emails
+	@Override
 	public void send(String to,String subject,String body) {
 		try {
 				Message message =new MimeMessage(session);
@@ -166,6 +168,7 @@ public class UserEJB implements UserEJBRemote {
 	}
 	
 	//Função para listar todos os utilizadores
+	@Override
 	public List<UserDTO> listAllUsers(){
 		List<User> c = new ArrayList<User>();
 		List<UserDTO> cd = new ArrayList<UserDTO>();
