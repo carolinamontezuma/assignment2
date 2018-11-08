@@ -26,12 +26,10 @@ public class User implements Serializable {
 	private int loginCount;
 
 	@ManyToMany
-	 @JoinTable(name="user_content", joinColumns=
- {@JoinColumn(name="user_id")}, inverseJoinColumns=
-   {@JoinColumn(name="content_id")})
+	@JoinTable(name="user_content", joinColumns=
+	{@JoinColumn(name="user_id")}, inverseJoinColumns=
+	{@JoinColumn(name="content_id")})
 	private List<Content> watchList;
-	
-	//private List<String> preferencias;
 
 	public User() {
 		super();

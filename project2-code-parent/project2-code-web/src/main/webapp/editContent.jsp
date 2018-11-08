@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-    
+<%@ page import = "java.util.List"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,6 +12,8 @@
 <%
 if(request.getAttribute("source")  == null)
 	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
+
+List<String> categories = (List<String>) request.getAttribute("categories");
 %>
 
 <%! public int id; %>
@@ -75,16 +77,12 @@ if(request.getAttribute("source")  == null)
 
 <c:if test= "${action == 'editcategory'}">
 	<form action="PlayersTallerThan" method="get">
-  		Category: <select  name="newC" required>
-  			<option value="Action">Action</option>
-  			<option value="Comedy">Comedy</option>
-  			<option value="Crime">Crime</option>
-  			<option value="Drama">Drama</option>
-  			<option value="Fantasy">Fantasy</option>
-  			<option value="Historical">Historical</option>
-  			<option value="Science fiction">Science fiction</option>
-  			<option value="Thriller">Thriller</option>
-		</select>  	
+  		Category: <select name="newC">
+			  <%for(String category : categories){
+					%><option value="<%= category %>">
+			  		<%out.println(category);%></option>
+				<% } %>
+		</select> 	
 		<input type="hidden" name="opcaoEdit" value="<%=3%>"> 
        	<input type="hidden" name="id" value="<%=id%>"> 
         <input type="submit" name="editarCategoria" id ="editarCategoria" value="Confirm">	

@@ -49,11 +49,14 @@ String action = ob.toString();
 ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("allContents");
 ArrayList<String> diretores = (ArrayList<String>) request.getAttribute("diretores");
 ArrayList<String> categorias = (ArrayList<String>) request.getAttribute("categorias");
-ArrayList<String> anos = (ArrayList<String>) request.getAttribute("anos");
 ArrayList<ContentDTO> wl = (ArrayList<ContentDTO>) request.getAttribute("wl");
 
 String lastDirectorName = (String)request.getAttribute("lastDirectorName");
 String lastCategoryName = (String)request.getAttribute("lastCategoryName");
+String lastMinYear = (String)request.getAttribute("lastMinYear");
+lastMinYear = lastMinYear == null? "" : lastMinYear;
+String lastMaxYear = (String)request.getAttribute("lastMaxYear");
+lastMaxYear = lastMaxYear == null? "" : lastMaxYear;
 
 if(list.size()==0){
 	out.println("No contents were found!");
@@ -67,6 +70,8 @@ else{
 %>
 
 <table class="Text" id="myTable">
+
+    <table id="myTable">
   <tr>
   
     <th>Title 	 <form action="PlayersTallerThan" method="get">	<input type="submit" class="botoesOrdem" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc"><input type="submit" class="botoesOrdem" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc"> </form></th>
@@ -129,6 +134,11 @@ for(ContentDTO content : list) {
 <input class="Text" type="number" placeholder="Year" name="minYear" required>
 <input class="Text" type="number" placeholder="Year" name="maxYear" required>
 <button class="botoes" type="submit" name="filtrar" id="filtrar">Filtrar</button>
+
+<input type="number" placeholder="Year" name="minYear" value="<%= lastMinYear %>">
+<input type="number" placeholder="Year" name="maxYear" value="<%= lastMaxYear %>">
+<button type="submit" name="filtrar" id="filtrar">Filtrar</button>
+ 
 
 </form> 
 <%} %>

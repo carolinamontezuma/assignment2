@@ -4,10 +4,12 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
+import javax.ejb.Local;
+
 import data.User;
 import dto.UserDTO;
 
-@Remote
+@Local
 public interface UserEJBRemote {
 	//void populate();
 	
@@ -18,6 +20,9 @@ public interface UserEJBRemote {
 	UserDTO getUserByID(int userID);
 	UserDTO getUserByEmail(String email);
 	boolean canRegister(String username, String email);
+
+	boolean canRegister(String email);
+
 	void userLoggedIn(int userID);
 	boolean isUsernameValid(String username);
 	boolean isPasswordValid(String password);
