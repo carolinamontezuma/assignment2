@@ -50,7 +50,7 @@ public class ContentEJB implements ContentEJBLocal {
 				new Content("Big Bang Theory", "Mike", 2011, "Comedy", "bigbangtheory-mike"),
 				new Content("American Horror Story", "Douglas", 2008, "Horror", "americanhorrorstory-douglas"),
 				new Content("Lord of the Rings", "Richard", 2001, "Fantasy", "lordoftherings-richard"),
-				new Content("Pirates of Caribean", "Henry", 2014, "Adventure", "piratesofcaribean-henry"),
+				new Content("Pirates of the Caribean", "Henry", 2014, "Adventure", "piratesofthecaribean-henry"),
 				new Content("Star Wars", "Mike", 1980, "Science fiction", "starwars-mike"),
 				new Content("Coco", "Pablo", 1960, "Animation", "coco-pablo"),
 				new Content("Zorro", "Mike", 1990, "Romance", "zorro-mike")

@@ -551,7 +551,7 @@ public class PlayersTallerThan extends HttpServlet {
 			if(hasUser && !hasManager)
 			{
 				UserDTO user = ejbuser.getUserByEmail(email);
-				request.getSession().setMaxInactiveInterval(60);
+				request.getSession().setMaxInactiveInterval(60*10);
 				request.getSession().setAttribute("loginName", user.getUsername());
 				request.getSession().setAttribute("loginToken", user.getID());
 				request.getSession().setAttribute("loginIsAdmin", hasManager);
@@ -564,7 +564,7 @@ public class PlayersTallerThan extends HttpServlet {
 			else if(!hasUser && hasManager)
 			{
 				ManagerDTO manager = ejbmanager.getManagerByEmail(email);
-				request.getSession().setMaxInactiveInterval(60);
+				request.getSession().setMaxInactiveInterval(60*10);
 				request.getSession().setAttribute("loginName", manager.getUsername());				
 				request.getSession().setAttribute("loginToken", manager.getID());
 				request.getSession().setAttribute("loginIsAdmin", hasManager);
