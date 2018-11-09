@@ -52,7 +52,7 @@ if(request.getAttribute("source")  == null)
  	  <tr>
  	    <td><% out.println(content.getTitle()); %></td>
  	    <td><% out.println(content.getCategory()); %></td>
- 	   	<td><% out.println(content.Director()); %></td>
+ 	   	<td><% out.println(content.getDirector()); %></td>
  	    <td><% out.println(content.getYear()); 
  	    	%><form action="PlayersTallerThan" method="get"> <input type="hidden" name="content_id" value="<%=content.getID()%>"> <input class="botoes bot_aux removeFromWL_aux3"  type="submit" name="remove" id ="remove" value="Remove"></form>
  	    	<% } %> </td>
@@ -60,8 +60,6 @@ if(request.getAttribute("source")  == null)
  	  </tr>
  	  </table>
  	  <% } %>
-
-	<form action="PlayersTallerThan" method="post"> 
 
 </body>
 <form action="PlayersTallerThan" method="get">	

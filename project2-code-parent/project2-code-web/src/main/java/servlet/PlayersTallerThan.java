@@ -411,9 +411,12 @@ public class PlayersTallerThan extends HttpServlet {
 			 String director = request.getParameter("fdirector");
 			 String category = request.getParameter("fcategory");
 			 int year = Integer.parseInt(request.getParameter("fyear"));
-			 int valor =ejbcontent.addNewContent(title, director,year, category);
-			 request.setAttribute("action", "teste");
-			 request.setAttribute("valor", valor);
+			 String message = "";
+			 if(ejbcontent.addNewContent(title, director,year, category))
+				 message = "Successfully added content \"" + title + "\"";
+			 else
+				 message = "Failed to add content \"" + title + "\"";
+			 request.setAttribute("message", message);
 			 dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
 			 dispatcher.forward(request, response);
 		}
@@ -426,7 +429,12 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		if(request.getParameter("remove") != null) {
 			int id= Integer.parseInt(request.getParameter("content_id"));
-			ejbcontent.removeContent(id);
+			String message = "";
+			//if(ejbcontent.removeContent(id))
+				 message = "Successfully removed content";
+			// else
+			//	 message = "Failed to remove content";
+			 request.setAttribute("message", message);
 			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
 			dispatcher.forward(request, response);
 			}
@@ -439,59 +447,20 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("buttonEdit") != null) {
-			request.setAttribute("action", "selectEdit");
-			dispatcher = request.getRequestDispatcher("/editContent.jsp");
-			dispatcher.forward(request, response);
-		}
-		if(request.getParameter("editTitle") != null) {
-			request.setAttribute("action", "edittitle");
-			dispatcher = request.getRequestDispatcher("/editContent.jsp");
-			dispatcher.forward(request, response);
-		}
-		if(request.getParameter("editDirector") != null) {
-			request.setAttribute("action", "editdirector");
-			dispatcher = request.getRequestDispatcher("/editContent.jsp");
-			dispatcher.forward(request, response);
-		}
-		if(request.getParameter("editCategory") != null) {
-			request.setAttribute("action", "editcategory");
+			int contentID = Integer.parseInt(request.getParameter("content_id"));
+			ContentDTO content = ejbcontent.getContentByID(contentID);
 			List<String> categories = ejbcontent.getAvailableCategories();
+			request.setAttribute("contentDTO", content);
 			categories.sort(Comparator.naturalOrder());
 			request.setAttribute("categories", categories);
 			dispatcher = request.getRequestDispatcher("/editContent.jsp");
 			dispatcher.forward(request, response);
 		}
-		if(request.getParameter("editYear") != null) {
-			request.setAttribute("action", "edityear");
-			dispatcher = request.getRequestDispatcher("/editContent.jsp");
-			dispatcher.forward(request, response);
-		}
-		if(request.getParameter("editarTitulo")!=null) {
-			int opcao = Integer.parseInt(request.getParameter("opcaoEdit"));
-			String newT = request.getParameter("newT");
-			int id = Integer.parseInt(request.getParameter("id"));
-			ejbcontent.editContent(opcao, id, newT);
-		}
-		if(request.getParameter("editarDirector")!=null) {
-			int opcao = Integer.parseInt(request.getParameter("opcaoEdit"));
-			String newT = request.getParameter("newD");
-			int id = Integer.parseInt(request.getParameter("id"));
-			ejbcontent.editContent(opcao, id, newT);
-		}
-		if(request.getParameter("editarCategoria")!=null) {
-			int opcao = Integer.parseInt(request.getParameter("opcaoEdit"));
-			String newT = request.getParameter("newC");
-			int id = Integer.parseInt(request.getParameter("id"));
-			ejbcontent.editContent(opcao, id, newT);
-		}
-		if(request.getParameter("editarAno")!=null) {
-			int opcao = Integer.parseInt(request.getParameter("opcaoEdit"));
-			String newT = request.getParameter("newY");
-			int id = Integer.parseInt(request.getParameter("id"));
-			ejbcontent.editContent(opcao, id, newT);
-		}
-		if(request.getParameter("continueManager") != null) {
-			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+		if(request.getParameter("backEditContent") != null) {
+			request.setAttribute("action", "edit");
+			List<ContentDTO> content = ejbcontent.aplicarFiltros();
+			request.setAttribute("allContents", content);
+			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("backUser") != null) {
@@ -698,6 +667,72 @@ public class PlayersTallerThan extends HttpServlet {
 				request.setAttribute("message", "Invalid credit card number");
 			request.setAttribute("userDTO", ejbuser.getUserByID(getLoginToken(request)));
 			dispatcher = request.getRequestDispatcher("/editPersonal.jsp");
+			dispatcher.forward(request, response);
+		}
+		
+		// Editar conteúdo
+		if (request.getParameter("editTitle") != null && sessionHasLogin(request))
+		{
+			String title = request.getParameter("title");
+			int contentID = Integer.parseInt(request.getParameter("content_id"));
+			if(ejbcontent.isTitleValid(title))
+				ejbcontent.editContent(contentID, title, null, null, -1);
+			else
+				request.setAttribute("message", "Invalid title");
+			ContentDTO content = ejbcontent.getContentByID(contentID);
+			List<String> categories = ejbcontent.getAvailableCategories();
+			request.setAttribute("contentDTO", content);
+			categories.sort(Comparator.naturalOrder());
+			request.setAttribute("categories", categories);
+			dispatcher = request.getRequestDispatcher("/editContent.jsp");
+			dispatcher.forward(request, response);
+		}
+		if (request.getParameter("editDirector") != null && sessionHasLogin(request))
+		{
+			String director = request.getParameter("director");
+			int contentID = Integer.parseInt(request.getParameter("content_id"));
+			if(ejbcontent.isDirectorValid(director))
+				ejbcontent.editContent(contentID, null, director, null, -1);
+			else
+				request.setAttribute("message", "Invalid director");
+			ContentDTO content = ejbcontent.getContentByID(contentID);
+			List<String> categories = ejbcontent.getAvailableCategories();
+			request.setAttribute("contentDTO", content);
+			categories.sort(Comparator.naturalOrder());
+			request.setAttribute("categories", categories);
+			dispatcher = request.getRequestDispatcher("/editContent.jsp");
+			dispatcher.forward(request, response);
+		}
+		if (request.getParameter("editCategory") != null && sessionHasLogin(request))
+		{
+			String category = request.getParameter("category");
+			int contentID = Integer.parseInt(request.getParameter("content_id"));
+			if(ejbcontent.isCategoryValid(category))
+				ejbcontent.editContent(contentID, null, null, category, -1);
+			else
+				request.setAttribute("message", "Invalid category");
+			ContentDTO content = ejbcontent.getContentByID(contentID);
+			List<String> categories = ejbcontent.getAvailableCategories();
+			request.setAttribute("contentDTO", content);
+			categories.sort(Comparator.naturalOrder());
+			request.setAttribute("categories", categories);
+			dispatcher = request.getRequestDispatcher("/editContent.jsp");
+			dispatcher.forward(request, response);
+		}
+		if (request.getParameter("editYear") != null && sessionHasLogin(request))
+		{
+			int year = Integer.parseInt(request.getParameter("year"));
+			int contentID = Integer.parseInt(request.getParameter("content_id"));
+			if(ejbcontent.isYearValid(year))
+				ejbcontent.editContent(contentID, null, null, null, year);
+			else
+				request.setAttribute("message", "Invalid year");
+			ContentDTO content = ejbcontent.getContentByID(contentID);
+			List<String> categories = ejbcontent.getAvailableCategories();
+			request.setAttribute("contentDTO", content);
+			categories.sort(Comparator.naturalOrder());
+			request.setAttribute("categories", categories);
+			dispatcher = request.getRequestDispatcher("/editContent.jsp");
 			dispatcher.forward(request, response);
 		}
 		

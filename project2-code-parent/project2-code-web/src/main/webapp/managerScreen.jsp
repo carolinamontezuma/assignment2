@@ -33,17 +33,5 @@ if(request.getAttribute("source")  == null)
    		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
  	</form>
 
- <c:if test= "${action == 'teste'}"> 
- 	<c:if test= "${valor == 1}"> 
-	<p> Sucess creating new content!</p>
-	<form action="PlayersTallerThan" method="get"> 
-    	<input class="botoes" type="submit" name="continueManager" id ="continueManager" value="Continue">
- 	</form>
- 	</c:if>
- 	<c:if test= "${valor == 0}"> 
- 		<p>The content already exists!</p>
- 	</c:if>
- </c:if>
-
 </body>
 </html>

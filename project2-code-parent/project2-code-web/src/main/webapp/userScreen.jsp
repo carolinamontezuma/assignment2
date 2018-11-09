@@ -62,12 +62,12 @@ if(request.getAttribute("source")  == null)
   	<div class="mySlides fade">
     	<div class="numbertext">4 / 5</div>
     	<img src="breakingbad-john.png" style="width:50%">
-    	<div class="text">Caption Three</div>
+    	<div class="text">Caption Four</div>
   	</div>
   	<div class="mySlides fade">
     	<div class="numbertext">5 / 5</div>
     	<img src="breakingbad-john.png" style="width:50%">
-    	<div class="text">Caption Three</div>
+    	<div class="text">Caption Five</div>
   	</div>
 
   <!-- Next and previous buttons -->
