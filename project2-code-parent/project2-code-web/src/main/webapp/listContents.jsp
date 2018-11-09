@@ -133,6 +133,12 @@ else{
 		<input type="hidden" name="action" value="<%= action %>">
    	</form></th>
   </tr>
+  
+  
+<%
+for(ContentDTO content : list) {
+	String mult = content.getMultimedia();
+    %>
 
   <tr>
     <td>
@@ -301,7 +307,7 @@ else{
  	    		<input class="botoes bot_aux removeFromWL_aux" type="submit" name="removeFromWL" id ="removeFromWL" value="Remove from WL">
  	    		<input type="hidden" name="action" value="<%= action %>">
  	    	</form>
- 	    </td>
+ 	    	<% } %> </td>
  	    	
  	  </tr>
  	    <% } %>
