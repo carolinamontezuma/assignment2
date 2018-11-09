@@ -20,6 +20,14 @@ String card2 = "" + dto.getCreditCard().subSequence(4, 8);
 String card3 = "" + dto.getCreditCard().subSequence(8, 12);
 String card4 = "" + dto.getCreditCard().subSequence(12, 16);
 %>
+<div id="botoesBackLog">
+<form action="PlayersTallerThan" method="get">	
+ 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+</form>
+<form action="PlayersTallerThan" method="post"> 
+   		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
+</form>
+</div>
 <div class="wrap_registar aux2">
 <div class="Text">
 	<p class="Title">Edit account</p>
@@ -104,11 +112,5 @@ String card4 = "" + dto.getCreditCard().subSequence(12, 16);
 	    }
 	}
 	</script>
-	<form action="PlayersTallerThan" method="get">	
- 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
- 	</form>
-	<form action="PlayersTallerThan" method="post"> 
-   		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
- 	</form>
 </body>
 </html>

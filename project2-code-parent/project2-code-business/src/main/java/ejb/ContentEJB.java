@@ -45,8 +45,9 @@ public class ContentEJB implements ContentEJBLocal {
 	public void populate() {
 
 		Content[] contents = { 
-				new Content("Suits", "Peter", 2000, "Comedy"),
-				new Content("Game Of Thrones", "Henry", 2005, "Action") };
+				new Content("Suits", "Peter", 2000, "Comedy","suits-peter"),
+				new Content("Game Of Thrones", "Henry", 2005, "Action","gameofthrones-henry"),
+				new Content("Breaking Bad", "John", 2005, "Action","breakingbad-john")};
 
 		logger.debug("Populating the database with " + contents.length + " Contents");
 		for (Content c : contents)
@@ -67,6 +68,7 @@ public class ContentEJB implements ContentEJBLocal {
 			newContent.setTitle(title);
 			String str = title.replaceAll("\\s+","").toLowerCase();
 			StringBuilder value = new StringBuilder();
+			//value.append("/contents/");
 			value.append(str);
 			value.append("-");
 			String str2 = director.replaceAll("\\s+","").toLowerCase();
@@ -216,6 +218,9 @@ public class ContentEJB implements ContentEJBLocal {
 		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
 		Query query;
+		if(countList()==0) {
+			return cd;
+		}
 		if(minYear == -1) {
 			minYear = getMinMax(1);
 		}
@@ -286,13 +291,19 @@ public class ContentEJB implements ContentEJBLocal {
 	public List<ContentDTO> aplicarFiltrosWL(int userID){
 		return aplicarFiltrosWL(userID,1,false);
 	}
+	public long countList() {
+		Query query = em.createQuery("SELECT COUNT (c) FROM Content c");
+		return (long)query.getSingleResult();
+	}
 	
 	@Override
 	public List<ContentDTO> aplicarFiltrosWL(int userID, int opcao, boolean asc){
 		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
 		Query query;
-
+		if(countList()==0) {
+			return cd;
+		}
 		String order;
 		if(opcao == 1) {
 			order="";

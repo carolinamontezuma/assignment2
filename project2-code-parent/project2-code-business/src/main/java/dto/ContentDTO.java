@@ -26,16 +26,17 @@ public class ContentDTO implements Serializable {
 	}
 
 	public ContentDTO(Content c) {
-		this(c.getID(), c.getTitle(), c.Director(), c.getYear(), c.getCategory());
+		this(c.getID(), c.getTitle(), c.Director(), c.getYear(), c.getCategory(),c.getMultimedia());
 	}
 
-	public ContentDTO(int ID, String title, String director, int year, String category) {
+	public ContentDTO(int ID, String title, String director, int year, String category,String multimedia) {
 		super();
 		this.id = ID;
 		this.title = title;
 		this.director = director;
 		this.year = year;
 		this.category = category;
+		this.nomeMultimedia=multimedia;
 	}
 
 	public int getID() {

@@ -22,16 +22,15 @@ if(request.getAttribute("source")  == null)
 	<p class="Title">Login</p>
 	
 	<form action="PlayersTallerThan" method="post">
-		
+			<% String message= (String)request.getAttribute("message"); %>
 			<label class ="Text"for="uname"><b>Email</b></label>
 			<input type="email" placeholder="Email" name="fmail" required>
 			<label class="Text" for="psw"><b>Password</b></label>
 			<input type="password" placeholder="Password" name="fpass" required>
-
 			<button class ="botoes" type="submit" name="login">Login</button>
-			<label class="Text">
-				<input  class="Text" type="checkbox" checked="checked" name="remember" value="true"> Remember me
-			</label>
+			<% if(message!=null){ %>
+			<p class="Text"><% out.print(message); %>
+			<% } %>
 		
 	</form>
 	

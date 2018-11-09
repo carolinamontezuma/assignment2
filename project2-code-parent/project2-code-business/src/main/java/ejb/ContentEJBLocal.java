@@ -26,6 +26,7 @@ public interface ContentEJBLocal {
 	List<ContentDTO> aplicarFiltrosWL(int userID);
 	List<ContentDTO> aplicarFiltrosWL(int userID, int opcao, boolean asc);
 	List<ContentDTO> getSuggestedCotent(int userID);
+	long countList();
 	boolean isTitleValid(String title);
 	boolean isDirectorValid(String director);
 	boolean isCategoryValid(String category);

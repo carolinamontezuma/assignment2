@@ -47,32 +47,6 @@ public class PlayersTallerThan extends HttpServlet {
 	 */
 	public PlayersTallerThan() {
 		super();
-		 
-		new java.util.Timer().schedule(new java.util.TimerTask() {
-	        @Override
-	        public void run() {
-	        	List<UserDTO> user = ejbuser.listAllUsers();
-	        	String body= new String();
-	        	for(UserDTO u : user) {
-	        		Date d = new Date();
-	        		int diffInDays = (int)( (d.getTime() - u.getDate().getTime())/ (1000 * 60 * 60 * 24)); 
-	        		if(diffInDays==0) {
-	        			Random rand = new Random();
-	        			int randomNum = rand.nextInt((9 - 0) + 1) + 0;
-	        			if(randomNum<=5) {
-	        				body="Sucesso ao efetuar pagamento";
-	        			}
-	        			else {
-	        				body="Erro ao efetuar pagamento";
-	        			}
-	        			ejbuser.send(u.getEmail(),"pagamento",body);
-	        		}
-	        		else {
-	        			continue;
-	        		}
-	        	}
-	        }
-		}, 60000);
 	}
 		
 	/**
@@ -482,6 +456,7 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		if(request.getParameter("botaoTitulo")!=null) {
 			String multimedia =request.getParameter("multimedia");
+			String titulo =request.getParameter("titulo");
 			StringBuilder sbImage = new StringBuilder();
 			StringBuilder sbMovie = new StringBuilder();
 			sbImage.append(multimedia);
@@ -490,6 +465,7 @@ public class PlayersTallerThan extends HttpServlet {
 			sbMovie.append(".mp4");
 			request.setAttribute("pathImage", sbImage.toString());
 			request.setAttribute("pathMovie", sbMovie.toString());
+			request.setAttribute("titulo", titulo);
 			dispatcher = request.getRequestDispatcher("/multimedia.jsp");
 			dispatcher.forward(request, response);
 		}

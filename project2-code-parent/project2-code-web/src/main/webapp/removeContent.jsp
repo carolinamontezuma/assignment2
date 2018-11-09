@@ -30,15 +30,22 @@ th, td {
 <%
 if(request.getAttribute("source")  == null)
 	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
-
- 	ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("list"); 
+	ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("list"); 
     if(list.size()==0){
  		out.println("No contents were found!");%>
- 		<% 
+ 	<% 
  	}
     else{ 
  	%>
- 	
+<div id="botoesBackLog">
+<form action="PlayersTallerThan" method="get">	
+	<input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+</form>
+<form action="PlayersTallerThan" method="post"> 
+	<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
+</form>
+</div>
+
  	 <table class="Text" id="myTable">
  	  <tr>
 	    <th id="tituloTabela">Title</th>
@@ -63,11 +70,11 @@ if(request.getAttribute("source")  == null)
 
 </body>
 <form action="PlayersTallerThan" method="get">	
- 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+	<input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
 </form>
 <form action="PlayersTallerThan" method="post"> 
-   		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
- 	</form>
+	<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
+ </form>
 </div>
 </body>
 

@@ -36,9 +36,6 @@ public class UserEJB implements UserEJBLocal {
 	@PersistenceContext(name = "Users")
 	EntityManager em;
 	
-	@Resource(name="java:jboss/mail/gmail")
-	private Session session;
-	
 	private org.slf4j.Logger logger;
 
 	/**
@@ -163,37 +160,6 @@ public class UserEJB implements UserEJBLocal {
 	public boolean isCreditCardValid(String creditCard)
 	{
 		return creditCard != null && creditCard.matches("[0-9]+") && creditCard.length() == 16;
-	}
-	
-	
-	//Função do tutorial para enviar emails
-	@Override
-	public void send(String to,String subject,String body) {
-		try {
-				Message message =new MimeMessage(session);
-				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-				message.setSubject(subject);
-				message.setText(body);
-				Transport.send(message);
-				
-		}catch(MessagingException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	//Função para listar todos os utilizadores
-	@Override
-	public List<UserDTO> listAllUsers(){
-		List<User> c = new ArrayList<User>();
-		List<UserDTO> cd = new ArrayList<UserDTO>();
-		
-		Query query=em.createQuery("FROM User");
-		c = query.getResultList();
-		
-		for (User con : c) {
-			cd.add(new UserDTO(con));
-		}
-		return cd;
 	}
 	
 	

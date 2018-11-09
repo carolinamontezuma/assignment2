@@ -30,12 +30,13 @@ public class Content implements Serializable {
 		super();
 	}
 
-	public Content(String title, String director, int year, String category) {
+	public Content(String title, String director, int year, String category,String multimedia) {
 		super();
 		this.title = title;
 		this.director = director;
 		this.year = year;
 		this.category = category;
+		this.nomeMultimedia=multimedia;
 	}
 
 	public int getID() {

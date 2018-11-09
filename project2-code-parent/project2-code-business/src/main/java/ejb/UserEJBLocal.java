@@ -25,6 +25,4 @@ public interface UserEJBLocal {
 	boolean isPasswordValid(String password);
 	boolean isEmailValid(String email);
 	boolean isCreditCardValid(String creditCard);
-	public void send(String to,String subject,String body);
-	public List<UserDTO> listAllUsers();
 }

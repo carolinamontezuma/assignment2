@@ -56,12 +56,21 @@ String lastMaxYear = (String)request.getAttribute("lastMaxYear");
 lastMaxYear = lastMaxYear == null? "" : lastMaxYear;
 
 if(list.size()==0){
+%>
+<form action="PlayersTallerThan" method="get">	
+	<input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+</form>
+<form action="PlayersTallerThan" method="post"> 
+	<input class="botoes logout" type="submit" name="logout" id="logout" value="Logout">
+</form>	
+<% 
 	out.println("No contents were found!");
-	%>
+%>
 <% 
 }
 else{
 %>
+
 
 <script type="text/javascript">
 	function setParams(elementIDs)
@@ -72,10 +81,18 @@ else{
 		document.getElementById(elementIDs[3]).value = document.getElementById('id_max_year').value;
 	}
 	</script>
+<div id="botoesBackLog">
+<form action="PlayersTallerThan" method="get">	
+	<input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+</form>
+<form action="PlayersTallerThan" method="post"> 
+	<input class="botoes logout" type="submit" name="logout" id="logout" value="Logout">
+</form>	
+</div>
 
 <table class="Text" id="myTable">
   <tr>
-    <th id="tituloTabela">>Title
+    <th id="tituloTabela">Title
     <form action="PlayersTallerThan" method="get" onsubmit="setParams(['t_dir', 't_cat', 't_ymin', 't_ymax'])">
 		<input type="submit" class="botoesOrdem" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc">
 		<input type="submit" class="botoesOrdem" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc">
@@ -116,17 +133,12 @@ else{
 		<input type="hidden" name="action" value="<%= action %>">
    	</form></th>
   </tr>
-  
-  
-<%
-for(ContentDTO content : list) {
-	String mult = content.getMultimedia();
-    %>
 
   <tr>
     <td>
     <form action="PlayersTallerThan" method="get">
     <input type="hidden" name="multimedia" value="<%=mult%>"> 
+    <input type="hidden" name="titulo" value="<%=content.getTitle()%>"> 
     <input type="submit" class="botaoTitulo" name="botaoTitulo" value="<% out.println(content.getTitle()); %>">
     </form>
     </td>
@@ -195,7 +207,14 @@ for(ContentDTO content : list) {
 
 <!--  EDITAR CONTEUDO [MANAGER] -->
 <c:if test= "${action == 'edit'}">
-  
+<div id="botoesBackLog">
+<form action="PlayersTallerThan" method="get">	
+	<input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+</form>
+<form action="PlayersTallerThan" method="post"> 
+	<input class="botoes logout" type="submit" name="logout" id="logout" value="Logout">
+</form>	
+</div>
    <%  
    ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("allContents");
    for(ContentDTO content : list) {
@@ -221,13 +240,26 @@ for(ContentDTO content : list) {
 <c:if test= "${action == 'watchlist'}">
     <% 
  	ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("wl"); 
-    if(list.size()==0){
- 		out.println("You have no contents in your watchlist!");%>
- 		<% 
+    if(list.size()==0){%>
+    	<form action="PlayersTallerThan" method="get">	
+		<input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+	</form>
+	<form action="PlayersTallerThan" method="post"> 
+		<input class="botoes logout" type="submit" name="logout" id="logout" value="Logout">
+	</form>	
+	<% 
+ 	out.println("You have no contents in your watchlist!");
  	}
     else{ 
  	%>
- 	
+ 	<div id="botoesBackLog">
+ 	<form action="PlayersTallerThan" method="get">	
+		<input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+	</form>
+	<form action="PlayersTallerThan" method="post"> 
+		<input class="botoes logout" type="submit" name="logout" id="logout" value="Logout">
+	</form>	
+	</div>
  	 <table class="Text" id="myTable">
  	  <tr>
 	    <th id="tituloTabela">Title
@@ -269,18 +301,13 @@ for(ContentDTO content : list) {
  	    		<input class="botoes bot_aux removeFromWL_aux" type="submit" name="removeFromWL" id ="removeFromWL" value="Remove from WL">
  	    		<input type="hidden" name="action" value="<%= action %>">
  	    	</form>
- 	    	<% } %> </td>
+ 	    </td>
  	    	
  	  </tr>
+ 	    <% } %>
  	  </table>
- 	  <% } %>
+ 	   	
 </c:if>
 </div>
-<form action="PlayersTallerThan" method="get">	
- 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
-</form>
-	<form action="PlayersTallerThan" method="post"> 
-   		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
- 	</form>
 </body>
 </html>

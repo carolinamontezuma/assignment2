@@ -43,7 +43,6 @@ public class User implements Serializable {
 		this.creditCard = creditCard;
 		this.watchList = new ArrayList<>();
 		this.loginCount = 0;
-		this.registerDate=date;
 	}
 	
 	public void updateLoginCount()
@@ -108,12 +107,7 @@ public class User implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public void setDate(Date date) {
-		this.registerDate=date;
-	}
-	public Date getDate() {
-		return registerDate;
-	}
+
 
 	@Override
 	public String toString() {
