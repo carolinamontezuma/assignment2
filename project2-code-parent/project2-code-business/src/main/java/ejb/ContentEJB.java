@@ -38,7 +38,7 @@ public class ContentEJB implements ContentEJBLocal {
 	// Adicionar Contents à BD - função do professor
 	@Override
 	public void populate() {
-		Content[] contents = { new Content("Breaking Bad", "John", 1996, "Comedy"),
+		Content[] contents = {
 				new Content("Suits", "Peter", 2000, "Comedy"),
 				new Content("Game Of Thrones", "Henry", 2005, "Action") };
 
@@ -60,7 +60,8 @@ public class ContentEJB implements ContentEJBLocal {
 			StringBuilder value = new StringBuilder();
 			value.append(str);
 			value.append("-");
-			value.append(director.toLowerCase());
+			String str2 = director.replaceAll("\\s+","").toLowerCase();
+			value.append(str2);
 			newContent.setMultimedia(value.toString());
 			newContent.setDirector(director);
 			newContent.setYear(year);
@@ -236,111 +237,67 @@ public class ContentEJB implements ContentEJBLocal {
 	
 	@Override
 	public List<ContentDTO> aplicarFiltros(String diretor, String categoria, int minYear, int maxYear, int opcao, boolean asc){
-		List<Content> c = new ArrayList<Content>();
-		List<ContentDTO> cd = new ArrayList<ContentDTO>();
-		Query query;
-		if(minYear == -1) {
-			minYear = getMinMax(1);
-		}
-		if(maxYear == -1) {
-			maxYear = getMinMax(2);
-		}
-
-		String order;
-		if(opcao == 1) {
-			order=" ";
-		}
-		else if(opcao == 2) {
-			order="ORDER BY c.director "+(asc?"ASC":"DESC");
-		}
-		else if(opcao == 3) {
-			order="ORDER BY c.title "+(asc?"ASC":"DESC");;
-		}
-		else if(opcao == 4) {
-			order="ORDER BY c.year "+(asc?"ASC":"DESC");;
-		}
-		else {
-			order="ORDER BY c.category "+(asc?"ASC":"DESC");
-		}
-
-		if(diretor.equals("-") && !(categoria.equals("-")) ) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
-					.setParameter("Categoria", categoria)
-					.setParameter("yearMin", minYear)
-					.setParameter("yearMax", maxYear);
-		
-
-		boolean dir = !diretor.equals("-");
-		boolean cat = !categoria.equals("-");
-		
-		if(!dir && cat) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
-					.setParameter("Categoria", categoria)
-					.setParameter("yearMin", minYear)
-					.setParameter("yearMax", maxYear);
-			c = query.getResultList();
-		}
-
-
-		else if(!(diretor.equals("-")) && categoria.equals("-")) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
-					.setParameter("Diretor", diretor)
-					.setParameter("yearMin", minYear)
-					.setParameter("yearMax", maxYear);
-			c = query.getResultList();
-		}
-
-		else if(dir && !cat) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax"+order)
-
-		else if(dir && !cat) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax " + order)
-
-					.setParameter("Diretor", diretor)
-					.setParameter("yearMin", minYear)
-					.setParameter("yearMax", maxYear);
-			c = query.getResultList();
-		}
-
-
-		else if(!(diretor.equals("-")) && !(categoria.equals("-"))) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
-					.setParameter("Diretor", diretor)
-					.setParameter("Categoria", categoria)
-					.setParameter("yearMin", minYear)
-					.setParameter("yearMax", maxYear);
-					c = query.getResultList();
-		}
-
-
-		else if(dir && cat) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
-					.setParameter("Diretor", diretor)
-					.setParameter("Categoria",categoria)
-					.setParameter("yearMin", minYear)
-					.setParameter("yearMax", maxYear);
-			c = query.getResultList();
-		}
-
-		else if(diretor.equals("-") && !(categoria.equals("-")) && minYear ==-1) {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax"+" "+order)
-					.setParameter("Diretor", diretor)
-					.setParameter("Categoria",categoria)
-					.setParameter("yearMin", minYear)
-					.setParameter("yearMax", maxYear);
-				c = query.getResultList();
-		}
-
-		else {
-			query = em.createQuery("SELECT c FROM Content c WHERE c.year BETWEEN :yearMin AND :yearMax " + order)
-					.setParameter("yearMin", minYear)
-					.setParameter("yearMax", maxYear);
-			c = query.getResultList();
-		}
-		for (Content con : c) {
-			cd.add(new ContentDTO(con));
-		}
-		return cd;
+        List<Content> c = new ArrayList<Content>();
+        List<ContentDTO> cd = new ArrayList<ContentDTO>();
+        Query query;
+        if(minYear == -1) {
+            minYear = getMinMax(1);
+        }
+        if(maxYear == -1) {
+            maxYear = getMinMax(2);
+        }
+ 
+        String order;
+        if(opcao == 1) {
+            order=" ";
+        }
+        else if(opcao == 2) {
+            order="ORDER BY c.director "+(asc?"ASC":"DESC");
+        }
+        else if(opcao == 3) {
+            order="ORDER BY c.title "+(asc?"ASC":"DESC");;
+        }
+        else if(opcao == 4) {
+            order="ORDER BY c.year "+(asc?"ASC":"DESC");;
+        }
+        else {
+            order="ORDER BY c.category "+(asc?"ASC":"DESC");
+        }
+        boolean dir = !diretor.equals("-");
+        boolean cat = !categoria.equals("-");
+       
+        if(!dir && cat) {
+            query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
+                    .setParameter("Categoria", categoria)
+                    .setParameter("yearMin", minYear)
+                    .setParameter("yearMax", maxYear);
+            c = query.getResultList();
+        }
+        else if(dir && !cat) {
+            query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax " + order)
+                    .setParameter("Diretor", diretor)
+                    .setParameter("yearMin", minYear)
+                    .setParameter("yearMax", maxYear);
+            c = query.getResultList();
+        }
+        else if(dir && cat) {
+            query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
+                    .setParameter("Diretor", diretor)
+                    .setParameter("Categoria",categoria)
+                    .setParameter("yearMin", minYear)
+                    .setParameter("yearMax", maxYear);
+            c = query.getResultList();
+        }
+        else {
+            query = em.createQuery("SELECT c FROM Content c WHERE c.year BETWEEN :yearMin AND :yearMax " + order)
+                    .setParameter("yearMin", minYear)
+                    .setParameter("yearMax", maxYear);
+            c = query.getResultList();
+        }
+        for (Content con : c) {
+            cd.add(new ContentDTO(con));
+        }
+        return cd;
 	}
 	
 	@Override

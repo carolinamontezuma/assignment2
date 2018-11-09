@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import data.User;
 import dto.ContentDTO;
 import dto.ManagerDTO;
 import ejb.ContentEJBLocal;
@@ -582,14 +581,22 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
 			dispatcher.forward(request, response);
 		}
+		if(request.getParameter("backAdmin") != null) {
+			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+			request.setAttribute("suggestedContent", suggestedContent);
+			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
+			dispatcher.forward(request, response);
+		}
 		if(request.getParameter("botaoTitulo")!=null) {
 			String multimedia =request.getParameter("multimedia");
-			StringBuilder sb = new StringBuilder();
-			sb.append(multimedia);
-			String pathImage = sb.toString()+".png";
-			String pathMovie = sb.toString()+".mp4";
-			request.setAttribute("pathImage", pathImage);
-			request.setAttribute("pathMovie", pathMovie);
+			StringBuilder sbImage = new StringBuilder();
+			StringBuilder sbMovie = new StringBuilder();
+			sbImage.append(multimedia);
+			sbMovie.append(multimedia);
+			sbImage.append(".png");
+			sbMovie.append(".mp4");
+			request.setAttribute("pathImage", sbImage.toString());
+			request.setAttribute("pathMovie", sbMovie.toString());
 			dispatcher = request.getRequestDispatcher("/multimedia.jsp");
 			dispatcher.forward(request, response);
 		}

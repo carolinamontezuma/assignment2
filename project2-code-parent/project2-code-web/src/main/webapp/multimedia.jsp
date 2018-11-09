@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,23 +28,29 @@ function myVideo() {
 </script>
 </head>
 <%
-String pathMovie = (String)request.getAttribute("pathMovie");
-String pathImage = (String)request.getAttribute("pathImage");
- %>
+String pathImage = request.getParameter("pathImage");
+String pathMovie = request.getParameter("pathMovie");
 
+ %>
+ <p class="Text"><% out.println(pathImage); %></p>
+<c:set var="testImage" value="${pathImage}" />
+<c:set var="testVideo" value="${pathVideo}" />
 <body >
 <p class="Title"> Content Details</p>
-<img class="imagem" id="loadingImage" src=pathImage style="visibility:visible"/>
+<img class="imagem" id="loadingImage" src="${testImage}" style="visibility:visible"/>
 
 <div class="popup" onclick="myVideo()" >
 <button class="botoes">Watch video</button>
 <video class="popuptext" id="myPopup" style="width:800px;" >
-<source src=pathMovie type="video/mp4">
+<source src="${testVideo}" type="video/mp4">
 </video>
 </div>
+<form action="PlayersTallerThan" method="get">	
+ 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+ 	</form>
 <form action="PlayersTallerThan" method="post"> 
    		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
- 	</form>
+ </form>
 
 </body>
 </html>

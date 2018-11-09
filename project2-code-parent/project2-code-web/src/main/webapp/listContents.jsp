@@ -7,7 +7,9 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <%! public String diretorName, categoriaName; %>
+<html>
 <head>
+<title>listContents.jsp</title>
 <style>
 table {
     border-spacing: 0;
@@ -23,13 +25,8 @@ th, td {
 
 </style>
 <link rel="stylesheet" href="index.css">
-	
-<title>listContents.jsp</title>
-
 </head>
-
 <body>
-
 <%
 if(request.getAttribute("source")  == null)
 	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
@@ -70,14 +67,27 @@ else{
 %>
 
 <table class="Text" id="myTable">
-
-    <table id="myTable">
   <tr>
-  
-    <th>Title 	 <form action="PlayersTallerThan" method="get">	<input type="submit" class="botoesOrdem" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc"><input type="submit" class="botoesOrdem" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc"> </form></th>
-    <th>Category 	 <form action="PlayersTallerThan" method="get">	<input type="submit" class="botoesOrdem" class="botoes"name="OrderCategoryAsc" id ="OrderCategoryAsc" value="Asc"><input type="submit" class="botoesOrdem" name="OrderCategoryDesc" id ="OrderCategoryDesc" value="Desc"> </form></th>
-    <th>Director	   <form action="PlayersTallerThan" method="get"> <input type="submit" class="botoesOrdem" name="OrderDirectorAsc" id ="OrderDirectorAsc" value="Asc"><input type="submit" class="botoesOrdem" name="OrderDirectorDesc" id ="OrderDirectorDesc" value="Desc"> </form></th>
-    <th>Year <form action="PlayersTallerThan" method="get">	<input type="submit" class="botoesOrdem" name="OrderYearAsc" id ="OrderYearAsc" value="Asc"><input type="submit" name="OrderYearDesc" class="botoesOrdem" id ="OrderYearDesc" value="Desc"> </form></th>
+    <th id="tituloTabela">Title
+    <form action="PlayersTallerThan" method="get">
+		<input type="submit" class="botoesOrdem" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc">
+		<input type="submit" class="botoesOrdem" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc">
+	</form></th>
+    <th id="tituloTabela">Category
+	<form action="PlayersTallerThan" method="get">
+		<input type="submit" class="botoesOrdem" class="botoes"name="OrderCategoryAsc" id ="OrderCategoryAsc" value="Asc">
+		<input type="submit" class="botoesOrdem" name="OrderCategoryDesc" id ="OrderCategoryDesc" value="Desc">
+	</form></th>
+   <th id="tituloTabela">Director
+   <form action="PlayersTallerThan" method="get">
+		<input type="submit" class="botoesOrdem" name="OrderDirectorAsc" id ="OrderDirectorAsc" value="Asc">
+		<input type="submit" class="botoesOrdem" name="OrderDirectorDesc" id ="OrderDirectorDesc" value="Desc">
+	</form ></th>
+    <th id="tituloTabela">Year
+    <form action="PlayersTallerThan" method="get">
+    	<input type="submit" class="botoesOrdem" name="OrderYearAsc" id ="OrderYearAsc" value="Asc">
+    	<input type="submit" name="OrderYearDesc" class="botoesOrdem" id ="OrderYearDesc" value="Desc">
+   	</form></th>
   </tr>
   
   
@@ -87,10 +97,12 @@ for(ContentDTO content : list) {
     %>
 
   <tr>
-    <td><form action="PlayersTallerThan" method="get">
+    <td>
+    <form action="PlayersTallerThan" method="get">
     <input type="hidden" name="multimedia" value="<%=mult%>"> 
     <input type="submit" class="botaoTitulo" name="botaoTitulo" value="<% out.println(content.getTitle()); %>">
-    </form></td>
+    </form>
+    </td>
     <td><% out.println(content.getCategory()); %></td>
    	<td><% out.println(content.Director()); %></td>
     <td><% out.println(content.getYear()); 
@@ -101,9 +113,8 @@ for(ContentDTO content : list) {
     	
   </tr>
   
-    <% 
+<%
 }
-
 %>
 </table>
 
@@ -131,13 +142,9 @@ for(ContentDTO content : list) {
 	<% } %>
 </select>
 <!--  TEXT BOX PARA ESCOLHER O RANGE DE YEARS -->
-<input class="Text" type="number" placeholder="Year" name="minYear" required>
-<input class="Text" type="number" placeholder="Year" name="maxYear" required>
-<button class="botoes" type="submit" name="filtrar" id="filtrar">Filtrar</button>
-
-<input type="number" placeholder="Year" name="minYear" value="<%= lastMinYear %>">
-<input type="number" placeholder="Year" name="maxYear" value="<%= lastMaxYear %>">
-<button type="submit" name="filtrar" id="filtrar">Filtrar</button>
+<input class="Text" type="number" placeholder="Year" name="minYear" value="<%= lastMinYear %>">
+<input class="Text" type="number" placeholder="Year" name="maxYear" value="<%= lastMaxYear %>">
+<button class="botoes" type="submit" name="filtrar" id="filtrar">Filter</button>
  
 
 </form> 
@@ -148,7 +155,6 @@ for(ContentDTO content : list) {
 
 
 <!--  EDITAR CONTEUDO [MANAGER] -->
-
 <c:if test= "${action == 'edit'}">
   
    <%  
@@ -182,9 +188,6 @@ for(ContentDTO content : list) {
  	ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("watchList"); 
     if(list.size()==0){
  		out.println("No contents were found!");%>
- 		 <form action="PlayersTallerThan" method="get">	
- 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
- 		</form>
  		<% 
  	}
     else{ 
@@ -192,11 +195,27 @@ for(ContentDTO content : list) {
  	
  	 <table class="Text" id="myTable">
  	  <tr>
- 	    <th>Title 	 <form action="PlayersTallerThan" method="get">	<input type="submit" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc"><input type="submit" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc"> </form></th>
- 	    <th>Category 	 <form action="PlayersTallerThan" method="get">	<input type="submit" name="OrderCategoryAsc" id ="OrderCategoryAsc" value="Asc"><input type="submit" name="OrderCategoryDesc" id ="OrderCategoryDesc" value="Desc"> </form></th>
- 	    <th>Director	   <form action="PlayersTallerThan" method="get"> <input type="submit" name="OrderDirectorAsc" id ="OrderDirectorAsc" value="Asc"><input type="submit" name="OrderDirectorDesc" id ="OrderDirectorDesc" value="Desc"> </form></th>
- 	    <th>Year <form action="PlayersTallerThan" method="get">	<input type="submit" name="OrderYearAsc" id ="OrderYearAsc" value="Asc"><input type="submit" name="OrderYearDesc" id ="OrderYearDesc" value="Desc"> </form></th>
- 	  </tr>
+	    <th id="tituloTabela">Title
+	    <form action="PlayersTallerThan" method="get">
+			<input type="submit" class="botoesOrdem" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc">
+			<input type="submit" class="botoesOrdem" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc">
+		</form></th>
+	    <th id="tituloTabela">Category
+		<form action="PlayersTallerThan" method="get">
+			<input type="submit" class="botoesOrdem" class="botoes"name="OrderCategoryAsc" id ="OrderCategoryAsc" value="Asc">
+			<input type="submit" class="botoesOrdem" name="OrderCategoryDesc" id ="OrderCategoryDesc" value="Desc">
+		</form></th>
+	   <th id="tituloTabela">Director
+	   <form action="PlayersTallerThan" method="get">
+			<input type="submit" class="botoesOrdem" name="OrderDirectorAsc" id ="OrderDirectorAsc" value="Asc">
+			<input type="submit" class="botoesOrdem" name="OrderDirectorDesc" id ="OrderDirectorDesc" value="Desc">
+		</form></th>
+	    <th id="tituloTabela">Year
+	    <form action="PlayersTallerThan" method="get">
+	    	<input type="submit" class="botoesOrdem" name="OrderYearAsc" id ="OrderYearAsc" value="Asc">
+	    	<input type="submit" name="OrderYearDesc" class="botoesOrdem" id ="OrderYearDesc" value="Desc">
+	   	</form></th>
+	  </tr>
 	<%
  	for(ContentDTO content : list) {
  	    %>
@@ -205,7 +224,7 @@ for(ContentDTO content : list) {
  	    <td><% out.println(content.getCategory()); %></td>
  	   	<td><% out.println(content.Director()); %></td>
  	    <td><% out.println(content.getYear()); 
- 	    	%><form action="PlayersTallerThan" method="get"> <input class="botoes" type="hidden" name="content_id" value="<%=content.getID()%>"> <input type="submit" name="removeFromWL" id ="removeFromWL" value="Remove from WL"></form>
+ 	    	%><form action="PlayersTallerThan" method="get"> <input type="hidden" name="content_id" value="<%=content.getID()%>"> <input class="botoes bot_aux removeFromWL_aux" type="submit" name="removeFromWL"  value="Remove from WL"></form>
  	    	<% } %> </td>
  	    	
  	  </tr>
@@ -213,8 +232,11 @@ for(ContentDTO content : list) {
  	  <% } %>
 </c:if>
 </div>
-<form action="PlayersTallerThan" method="post"> 
+	<form action="PlayersTallerThan" method="post"> 
    		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
+ 	</form>
+ 	<form action="PlayersTallerThan" method="get">	
+ 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
  	</form>
 </body>
 </html>
