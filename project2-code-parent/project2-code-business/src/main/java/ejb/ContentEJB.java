@@ -55,6 +55,9 @@ public class ContentEJB implements ContentEJBLocal {
 				new Content("Coco", "Pablo", 1960, "Animation", "coco-pablo"),
 				new Content("Zorro", "Mike", 1990, "Romance", "zorro-mike")
 		};
+		
+		for(Content con : c)
+			em.persist(con);
 	}
 	
 	// Adicionar novo Content à aplicação

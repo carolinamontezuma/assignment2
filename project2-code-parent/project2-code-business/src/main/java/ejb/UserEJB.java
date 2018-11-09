@@ -45,6 +45,18 @@ public class UserEJB implements UserEJBLocal {
 		logger = LoggerFactory.getLogger(UserEJB.class);
 	}
 	
+	@Override
+	public void populate()
+	{
+		User u[] = new User[] {
+				new User("Carolina", PasswordHasher.plainTextToHash("carolina"), "carolina@mail.com", "1234123412341234", new Date()),
+				new User("João", PasswordHasher.plainTextToHash("joao"), "joao@mail.com", "2345234523452345", new Date())
+		};
+		
+		for(User user : u)
+			em.persist(user);
+	}
+	
 	// adicionar informação pessoal de um novo utilizador (=criar conta)
 	@Override
 	public void addAccount(String username, String password, String email, String creditCard) {

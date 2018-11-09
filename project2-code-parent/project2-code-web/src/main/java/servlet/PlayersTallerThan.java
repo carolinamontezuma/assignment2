@@ -41,6 +41,8 @@ public class PlayersTallerThan extends HttpServlet {
 	@EJB
 	ManagerEJBLocal ejbmanager;
 	
+	private boolean hasPopulated = false;
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -75,6 +77,14 @@ public class PlayersTallerThan extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 		RequestDispatcher dispatcher;
+		
+		if(!hasPopulated)
+		{
+			ejbcontent.populate();
+			ejbuser.populate();
+			ejbmanager.populate();
+			hasPopulated = true;
+		}
 		
 		request.setAttribute("source", "servlet");
 		

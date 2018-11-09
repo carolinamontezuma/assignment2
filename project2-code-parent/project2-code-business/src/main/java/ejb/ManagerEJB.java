@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import org.slf4j.LoggerFactory;
 
+import data.Content;
 import data.Manager;
 import data.User;
 import dto.ManagerDTO;
@@ -29,6 +30,18 @@ public class ManagerEJB implements ManagerEJBLocal {
 	 */
 	public ManagerEJB() {
 		logger = LoggerFactory.getLogger(ManagerEJB.class);
+	}
+	
+	@Override
+	public void populate()
+	{
+		Manager m[] = new Manager[] {
+				new Manager("admin1", PasswordHasher.plainTextToHash("admin1"), "admin1@admin.com"),
+				new Manager("admin2", PasswordHasher.plainTextToHash("admin2"), "admin2@admin.com")
+		};
+		
+		for(Manager man : m)
+			em.persist(man);
 	}
 
 	// adicionar informação de um novo manager (=criar conta)
