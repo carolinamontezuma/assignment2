@@ -3,6 +3,8 @@
 <%@ page import = "java.util.List"%>
 <%@ page import = "dto.ContentDTO"%>
 <%@ page import = "java.util.ArrayList"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,56 +36,28 @@ if(request.getAttribute("source")  == null)
 	<p class="Text">Welcome, <% out.println(request.getSession().getAttribute("loginName")); %> !</p>
 	
 	<p class="Subtitle">Suggested Content</p>
+		<div class="slideshow-container">
 		<%
 		List<ContentDTO> suggestedContent = (List<ContentDTO>)request.getAttribute("suggestedContent");
 		List<String> nomes = new ArrayList<String>();
 		for(ContentDTO c : suggestedContent){
 			nomes.add(c.getMultimedia());
 		}
+		for(String s: nomes){
+			StringBuilder s1= new StringBuilder();
+			s1.append(s);
+			s1.append(".png");
+			String new1= s1.toString();
 	%>
-	
-	<div class="slideshow-container">
+	<c:set var="imagem" value="${new1}" />
   	<!-- Full-width images with number and caption text -->
   	<div class="mySlides fade">
-    	<div class="numbertext">1 / 3</div>
-    	<img src="breakingbad-john.png" style="width:50%">
-    	<div class="text">Caption Text</div>
+    	<img src="${imagem}" style="width:50%">
   	</div>
-  	<div class="mySlides fade">
-    	<div class="numbertext">2 / 3</div>
-    	<img src="breakingbad-john.png" style="width:50%">
-    	<div class="text">Caption Two</div>
-  	</div>
-  	<div class="mySlides fade">
-    	<div class="numbertext">3 / 3</div>
-    	<img src="breakingbad-john.png" style="width:50%">
-    	<div class="text">Caption Three</div>
-  	</div>
-  	<div class="mySlides fade">
-    	<div class="numbertext">3 / 3</div>
-    	<img src="breakingbad-john.png" style="width:50%">
-    	<div class="text">Caption Three</div>
-  	</div>
-  	<div class="mySlides fade">
-    	<div class="numbertext">3 / 3</div>
-    	<img src="breakingbad-john.png" style="width:50%">
-    	<div class="text">Caption Three</div>
-  	</div>
-
-  <!-- Next and previous buttons -->
-  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+<% } %>
 </div>
 <br>
 
-<!-- The dots/circles -->
-<div style="text-align:center">
-  <span class="dot" onclick="currentSlide(1)"></span> 
-  <span class="dot" onclick="currentSlide(2)"></span> 
-  <span class="dot" onclick="currentSlide(3)"></span>
-  <span class="dot" onclick="currentSlide(4)"></span> 
-  <span class="dot" onclick="currentSlide(5)"></span>  
-</div>
 
 <div id="user_bot_wrap">
 	<form action="PlayersTallerThan" method="get" class="form_userscreen"> 
@@ -99,7 +73,7 @@ if(request.getAttribute("source")  == null)
  	</form>
  	
  	<form action="PlayersTallerThan" method="post" class="form_userscreen"> 
-   		<input class="b_userscreen" type="submit" name="logout" id="logout" value="Logout">
+   		<input class="b_userscreen" type="submit" name="logout" id="logout_screen" value="Logout">
  	</form>
  </div>	
 

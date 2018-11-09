@@ -14,6 +14,7 @@
 <%
 if(request.getAttribute("source")  == null)
 	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
+String mensagem = (String)request.getAttribute("message");
 %>
 
 	<p>Welcome, <% out.println(request.getSession().getAttribute("loginName")); %>!</p>

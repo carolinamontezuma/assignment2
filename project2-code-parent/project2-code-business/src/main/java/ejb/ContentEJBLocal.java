@@ -26,4 +26,5 @@ public interface ContentEJBLocal {
 	List<ContentDTO> aplicarFiltrosWL(int userID);
 	List<ContentDTO> aplicarFiltrosWL(int userID, int opcao, boolean asc);
 	List<ContentDTO> getSuggestedCotent(int userID);
+	long countList();
 }

@@ -17,6 +17,16 @@ List<String> categories = (List<String>) request.getAttribute("categories");
 %>
 
 <%! public int id; %>
+<div id="botoesBackLog">
+	<div id="botoesBackLog">
+	<form action="PlayersTallerThan" method="get">
+		<input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+	</form>
+	<form action="PlayersTallerThan" method="post"> 
+		<input class="botoes logout" type="submit" name="logout" id="logout" value="Logout">
+	</form>	
+</div>
+</div>
 <c:if test= "${action == 'selectEdit'}">
   
    <% 

@@ -31,10 +31,10 @@ public class UserDTO implements Serializable {
 	}
 
 	public UserDTO(User u) {
-		this(u.getID(), u.getUserame(), u.getPassword(), u.getEmail(), u.getCreditCard(), u.getLoginCount(),u.getDate());
+		this(u.getID(), u.getUserame(), u.getPassword(), u.getEmail(), u.getCreditCard(), u.getLoginCount());
 	}
 
-	public UserDTO(int ID, String username, String password, String email, String creditCard, int loginCount,Date registerDate) {
+	public UserDTO(int ID, String username, String password, String email, String creditCard, int loginCount) {
 		super();
 		this.id = ID;
 		this.username = username;
@@ -43,7 +43,6 @@ public class UserDTO implements Serializable {
 		this.creditCard = creditCard;
 		this.watchList = new ArrayList<>();
 		this.loginCount = loginCount;
-		this.registerDate=registerDate;
 	}
 	
 	public int getLoginCount()
@@ -103,13 +102,6 @@ public class UserDTO implements Serializable {
 	@Override
 	public String toString() {
 		return " id = " + this.id + " user = " + this.username + " email = " + this.email;
-	}
-	
-	public void setDate(Date date) {
-		this.registerDate=date;
-	}
-	public Date getDate() {
-		return registerDate;
 	}
 
 	@Override

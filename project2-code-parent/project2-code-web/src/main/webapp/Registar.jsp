@@ -28,6 +28,7 @@ String usedCard3 = (String)request.getAttribute("usedCard3");
 usedCard3 = usedCard3 == null ? "" : usedCard3;
 String usedCard4 = (String)request.getAttribute("usedCard4");
 usedCard4 = usedCard4 == null ? "" : usedCard4;
+String message = (String)request.getAttribute("message");
 %>
 <div class="wrap_registar aux2">
 <p class="Title">Register</p>
@@ -42,6 +43,9 @@ usedCard4 = usedCard4 == null ? "" : usedCard4;
   		<input class="inputstyle" type="number" id="id_fcard3" name="fcard3" oninput="limitLength('id_fcard3', 4, 'id_fcard4')" value="<%= usedCard3 %>" required>
   		<input class="inputstyle" type="number" id="id_fcard4" name="fcard4" oninput="limitLength('id_fcard4', 4, null)" value="<%= usedCard4 %>" required>
   		<br>
+  		<% if(message!=null){ %>
+  		<p class="Text"><%out.print(message); %></p>
+  		<%} %>
   		<input class="botoes" type="submit" name="registar" value="Create account">
 	</form>
 </div>
