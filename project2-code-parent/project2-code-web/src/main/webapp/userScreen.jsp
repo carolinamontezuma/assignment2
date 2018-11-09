@@ -48,6 +48,7 @@ if(request.getAttribute("source")  == null)
 			s1.append(s);
 			s1.append(".png");
 			String new1= s1.toString();
+			out.println(new1);
 	%>
 	<c:set var="imagem" value="${new1}" />
   	<!-- Full-width images with number and caption text -->
