@@ -117,7 +117,7 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return " id = " + this.id + " user = " + this.username + " email = " + this.email;
+		return " id: " + this.id + " name: " + this.username + " email: " + this.email;
 	}
 
 	@Override

@@ -168,11 +168,11 @@ public class PlayersTallerThan extends HttpServlet {
 		// Listar a watch list do utilizador
 		if (request.getParameter("listWatchList") != null) {
 			int idUser = getLoginToken(request);
-			List<ContentDTO> content = ejbcontent.seeWatchList(idUser);
+			
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(idUser);
+			request.setAttribute("wl", wl);
 			request.setAttribute("action", "watchlist");
-			request.setAttribute("watchList", content);
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			ListContents(request, response);
 		}
 		//Adicionar conteudo a watchlist do utilizador
 		if(request.getParameter("addtowl") != null) {
@@ -180,17 +180,12 @@ public class PlayersTallerThan extends HttpServlet {
 			int idContent = Integer.parseInt(request.getParameter("content_id"));
 			ejbcontent.addContentToWatchList(idContent, idUser);
 
-			List<ContentDTO> content = ejbcontent.seeAllContent(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> content = ejbcontent.aplicarFiltros();
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request));
 			request.setAttribute("allContents", content);
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 
 		}
 		//Remover conteudo da watchlist
@@ -199,17 +194,12 @@ public class PlayersTallerThan extends HttpServlet {
 			int idContent = Integer.parseInt(request.getParameter("content_id"));
 			ejbcontent.removeContentFromWatchList(idContent, idUser);
 
-			List<ContentDTO> content = ejbcontent.seeAllContent(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> content = ejbcontent.aplicarFiltros();
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request));
 			request.setAttribute("allContents", content);
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		// Editar a informação do utilizador
 		if (request.getParameter("editPersonal") != null) {
@@ -221,17 +211,12 @@ public class PlayersTallerThan extends HttpServlet {
 		
 		// Listar todo o conteúdo da aplicação
 		if (request.getParameter("listAll") != null) {
-			List<ContentDTO> content = ejbcontent.seeAllContent(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
+			List<ContentDTO> content = ejbcontent.aplicarFiltros();
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request));
 			request.setAttribute("allContents", content);
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
 			request.setAttribute("wl", wl);
 			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			ListContents(request, response);
 		}
 		//Aplicar os filtros - nome diretor/ categoria/ anos
 		if(request.getParameter("filtrar")!=null) {
@@ -239,30 +224,20 @@ public class PlayersTallerThan extends HttpServlet {
 			String categoria = request.getParameter("categoryName");
 			int anoMin = -1;
 			int anoMax = -1;
-			if(request.getParameter("minYear").matches("[0-9]+")) {
+			if(request.getParameter("minYear") != null && request.getParameter("minYear").matches("[0-9]+"))
 				anoMin = Integer.parseInt(request.getParameter("minYear"));
-			}
-			if(request.getParameter("maxYear").matches("[0-9]+")) {
+			if(request.getParameter("maxYear") != null && request.getParameter("maxYear").matches("[0-9]+"))
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
-			}
-			if(anoMin > anoMax && anoMax != -1) {
+
+			if(anoMin > anoMax && anoMax != -1)
 				anoMin=-1;
-			}
+			
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax);
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request));
 			request.setAttribute("allContents", content);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			request.setAttribute("lastDirectorName", diretor);
-			request.setAttribute("lastCategoryName", categoria);
-			request.setAttribute("lastMinYear", (String)request.getParameter("minYear"));
-			request.setAttribute("lastMaxYear", (String)request.getParameter("maxYear"));
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		
 		if(request.getParameter("OrderTitleAsc")!=null) {
@@ -270,208 +245,152 @@ public class PlayersTallerThan extends HttpServlet {
 			String categoria = request.getParameter("categoryName");
 			int anoMin = -1;
 			int anoMax = -1;
-			if(request.getParameter("minYear").matches("[0-9]+")) {
+			if(request.getParameter("minYear") != null && request.getParameter("minYear").matches("[0-9]+"))
 				anoMin = Integer.parseInt(request.getParameter("minYear"));
-			}
-			if(request.getParameter("maxYear").matches("[0-9]+")) {
+			if(request.getParameter("maxYear") != null && request.getParameter("maxYear").matches("[0-9]+"))
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
-			}
-			if(anoMin > anoMax) {
+
+			if(anoMin > anoMax)
 				anoMin=-1;
-			}
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,3,true);
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request), 3, true);
 			request.setAttribute("allContents", content);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		if(request.getParameter("OrderTitleDesc")!=null) {
 			String diretor = request.getParameter("directorName");
 			String categoria = request.getParameter("categoryName");
 			int anoMin = -1;
 			int anoMax = -1;
-			if(request.getParameter("minYear").matches("[0-9]+")) {
+			if(request.getParameter("minYear") != null && request.getParameter("minYear").matches("[0-9]+"))
 				anoMin = Integer.parseInt(request.getParameter("minYear"));
-			}
-			if(request.getParameter("maxYear").matches("[0-9]+")) {
+			if(request.getParameter("maxYear") != null && request.getParameter("maxYear").matches("[0-9]+"))
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
-			}
-			if(anoMin > anoMax) {
+
+			if(anoMin > anoMax)
 				anoMin=-1;
-			}
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,3,false);
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request), 3, false);
 			request.setAttribute("allContents", content);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		if(request.getParameter("OrderCategoryAsc")!=null) {
 			String diretor = request.getParameter("directorName");
 			String categoria = request.getParameter("categoryName");
 			int anoMin = -1;
 			int anoMax = -1;
-			if(request.getParameter("minYear").matches("[0-9]+")) {
+			if(request.getParameter("minYear") != null && request.getParameter("minYear").matches("[0-9]+"))
 				anoMin = Integer.parseInt(request.getParameter("minYear"));
-			}
-			if(request.getParameter("maxYear").matches("[0-9]+")) {
+			if(request.getParameter("maxYear") != null && request.getParameter("maxYear").matches("[0-9]+"))
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
-			}
-			if(anoMin > anoMax) {
+
+			if(anoMin > anoMax)
 				anoMin=-1;
-			}
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,5,true);
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request), 5, true);
 			request.setAttribute("allContents", content);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		if(request.getParameter("OrderCategoryDesc")!=null) {
 			String diretor = request.getParameter("directorName");
 			String categoria = request.getParameter("categoryName");
 			int anoMin = -1;
 			int anoMax = -1;
-			if(request.getParameter("minYear").matches("[0-9]+")) {
+			if(request.getParameter("minYear") != null && request.getParameter("minYear").matches("[0-9]+"))
 				anoMin = Integer.parseInt(request.getParameter("minYear"));
-			}
-			if(request.getParameter("maxYear").matches("[0-9]+")) {
+			if(request.getParameter("maxYear") != null && request.getParameter("maxYear").matches("[0-9]+"))
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
-			}
-			if(anoMin > anoMax) {
+
+			if(anoMin > anoMax)
 				anoMin=-1;
-			}
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,5,false);
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request), 5, false);
 			request.setAttribute("allContents", content);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		if(request.getParameter("OrderDirectorAsc")!=null) {
 			String diretor = request.getParameter("directorName");
 			String categoria = request.getParameter("categoryName");
 			int anoMin = -1;
 			int anoMax = -1;
-			if(request.getParameter("minYear").matches("[0-9]+")) {
+			if(request.getParameter("minYear") != null && request.getParameter("minYear").matches("[0-9]+"))
 				anoMin = Integer.parseInt(request.getParameter("minYear"));
-			}
-			if(request.getParameter("maxYear").matches("[0-9]+")) {
+			if(request.getParameter("maxYear") != null && request.getParameter("maxYear").matches("[0-9]+"))
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
-			}
-			if(anoMin > anoMax) {
+	
+			if(anoMin > anoMax)
 				anoMin=-1;
-			}
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,2,true);
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request), 2, true);
 			request.setAttribute("allContents", content);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		if(request.getParameter("OrderDirectorDesc")!=null) {
 			String diretor = request.getParameter("directorName");
 			String categoria = request.getParameter("categoryName");
 			int anoMin = -1;
 			int anoMax = -1;
-			if(request.getParameter("minYear").matches("[0-9]+")) {
+			if(request.getParameter("minYear") != null && request.getParameter("minYear").matches("[0-9]+"))
 				anoMin = Integer.parseInt(request.getParameter("minYear"));
-			}
-			if(request.getParameter("maxYear").matches("[0-9]+")) {
+			if(request.getParameter("maxYear") != null && request.getParameter("maxYear").matches("[0-9]+"))
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
-			}
-			if(anoMin > anoMax) {
+
+			if(anoMin > anoMax)
 				anoMin=-1;
-			}
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,2,false);
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request), 2, false);
 			request.setAttribute("allContents", content);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		if(request.getParameter("OrderYearAsc")!=null) {
 			String diretor = request.getParameter("directorName");
 			String categoria = request.getParameter("categoryName");
 			int anoMin = -1;
 			int anoMax = -1;
-			if(request.getParameter("minYear").matches("[0-9]+")) {
+			if(request.getParameter("minYear") != null && request.getParameter("minYear").matches("[0-9]+"))
 				anoMin = Integer.parseInt(request.getParameter("minYear"));
-			}
-			if(request.getParameter("maxYear").matches("[0-9]+")) {
+			if(request.getParameter("maxYear") != null && request.getParameter("maxYear").matches("[0-9]+"))
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
-			}
-			if(anoMin > anoMax) {
+
+			if(anoMin > anoMax)
 				anoMin=-1;
-			}
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,4,true);
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request), 4, true);
 			request.setAttribute("allContents", content);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		if(request.getParameter("OrderYearDesc")!=null) {
 			String diretor = request.getParameter("directorName");
 			String categoria = request.getParameter("categoryName");
 			int anoMin = -1;
 			int anoMax = -1;
-			if(request.getParameter("minYear").matches("[0-9]+")) {
+			if(request.getParameter("minYear") != null && request.getParameter("minYear").matches("[0-9]+"))
 				anoMin = Integer.parseInt(request.getParameter("minYear"));
-			}
-			if(request.getParameter("maxYear").matches("[0-9]+")) {
+			if(request.getParameter("maxYear") != null && request.getParameter("maxYear").matches("[0-9]+"))
 				anoMax = Integer.parseInt(request.getParameter("maxYear"));
-			}
-			if(anoMin > anoMax) {
+				
+			if(anoMin > anoMax)
 				anoMin=-1;
-			}
 			List<ContentDTO> content = ejbcontent.aplicarFiltros(diretor, categoria,anoMin,anoMax,4,false);
-			List<String> diretores = ejbcontent.getDirectorName(1);
-			List<String> categorias = ejbcontent.getCategories(1);
-			List<ContentDTO> wl = ejbcontent.seeWatchList(getLoginToken(request));
-			request.setAttribute("diretores", diretores);
-			request.setAttribute("categorias", categorias);
+			List<ContentDTO> wl = ejbcontent.aplicarFiltrosWL(getLoginToken(request), 4, false);
 			request.setAttribute("allContents", content);
 			request.setAttribute("wl", wl);
-			request.setAttribute("action", "allContents");
-			dispatcher = request.getRequestDispatcher("/listContents.jsp");
-			dispatcher.forward(request, response);
+			request.setAttribute("action", request.getParameter("action"));
+			ListContents(request, response);
 		}
 		
 		
@@ -501,7 +420,7 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		// ----- APAGAR UM CONTEUDO --------
 		if(request.getParameter("deleteContent") != null) {
-			List<ContentDTO> content = ejbcontent.seeAllContent(2);
+			List<ContentDTO> content = ejbcontent.aplicarFiltros();
 			request.setAttribute("list", content);
 			dispatcher = request.getRequestDispatcher("/removeContent.jsp");
 			dispatcher.forward(request, response);
@@ -515,7 +434,7 @@ public class PlayersTallerThan extends HttpServlet {
 		//----------EDITAR UM CONTEUDO -------------
 		if(request.getParameter("editContent") != null) {
 			request.setAttribute("action", "edit");
-			List<ContentDTO> content = ejbcontent.seeAllContent(1);
+			List<ContentDTO> content = ejbcontent.aplicarFiltros();
 			request.setAttribute("allContents", content);
 			dispatcher = request.getRequestDispatcher("/listContents.jsp");
 			dispatcher.forward(request, response);
@@ -577,9 +496,14 @@ public class PlayersTallerThan extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("backUser") != null) {
-			List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
-			request.setAttribute("suggestedContent", suggestedContent);
-			dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+			if(!loginIsAdmin(request))
+			{
+				List<ContentDTO> suggestedContent = ejbcontent.getSuggestedCotent(getLoginToken(request));
+				request.setAttribute("suggestedContent", suggestedContent);
+				dispatcher = request.getRequestDispatcher("/userScreen.jsp");
+			}
+			else
+				dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
 			dispatcher.forward(request, response);
 		}
 		if(request.getParameter("botaoTitulo")!=null) {
@@ -689,6 +613,7 @@ public class PlayersTallerThan extends HttpServlet {
 				request.getSession().setAttribute("loginName", manager.getUsername());				
 				request.getSession().setAttribute("loginToken", manager.getID());
 				request.getSession().setAttribute("loginIsAdmin", hasManager);
+				ejbmanager.managerLoggedIn(manager.getID());
 				dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
 				dispatcher.forward(request, response);
 			}
@@ -707,9 +632,12 @@ public class PlayersTallerThan extends HttpServlet {
 		}
 		
 		// Logout
-		if (request.getParameter("logout") != null) {
-			if(sessionHasLogin(request))
-				request.getSession().invalidate();
+		if (request.getParameter("logout") != null && sessionHasLogin(request)) {
+			if(loginIsAdmin(request))
+				ejbmanager.managerLoggedOut(getLoginToken(request));
+			else
+				ejbuser.userLoggedOut(getLoginToken(request));
+			request.getSession().invalidate();
 			request.setAttribute("source", "servlet");
 			dispatcher = request.getRequestDispatcher("/Login.jsp");
 			dispatcher.forward(request, response);
@@ -776,4 +704,18 @@ public class PlayersTallerThan extends HttpServlet {
 
 		}
 	}
+	
+	private void ListContents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		RequestDispatcher dispatcher;
+		request.setAttribute("diretores", ejbcontent.getDirectorName(1));
+		request.setAttribute("categorias", ejbcontent.getCategories(1));
+		request.setAttribute("lastDirectorName", request.getParameter("directorName"));
+		request.setAttribute("lastCategoryName", request.getParameter("categoryName"));
+		request.setAttribute("lastMinYear", request.getParameter("minYear"));
+		request.setAttribute("lastMaxYear", request.getParameter("maxYear"));
+		dispatcher = request.getRequestDispatcher("/listContents.jsp");
+		dispatcher.forward(request, response);
+	}
+	
 }
