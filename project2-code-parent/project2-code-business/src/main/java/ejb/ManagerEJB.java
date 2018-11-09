@@ -6,7 +6,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.slf4j.LoggerFactory;
+
 import data.Manager;
+import data.User;
 import dto.ManagerDTO;
 import utils.PasswordHasher;
 
@@ -19,11 +22,13 @@ public class ManagerEJB implements ManagerEJBLocal {
 	@PersistenceContext(name = "Managers")
 	EntityManager em;
 
+	private org.slf4j.Logger logger;
+	
 	/**
 	 * Default constructor.
 	 */
 	public ManagerEJB() {
-
+		logger = LoggerFactory.getLogger(ManagerEJB.class);
 	}
 	
 	@Override
@@ -40,12 +45,16 @@ public class ManagerEJB implements ManagerEJBLocal {
 		Manager manager = new Manager(username, password, email);
 
 		em.persist(manager);
+		
+		logger.info("New account created for manager " + manager);
 	}
 
 	// apagar conta
 	@Override
 	public void deleteAccount(int managerID) {
 		em.remove(em.find(Manager.class, managerID));
+		
+		logger.info("Manager with id " + managerID + " was removed");
 	}
 	
 	@Override
@@ -56,6 +65,18 @@ public class ManagerEJB implements ManagerEJBLocal {
 				.setParameter("password", password);
 		
 		return query.getResultList().size() == 1; //True se apenas houver 1 manager, False caso contrário
+	}
+	
+	@Override
+	public void managerLoggedIn(int managerID)
+	{
+		logger.info("Manager with id " + managerID + " has logged in");
+	}
+	
+	@Override
+	public void managerLoggedOut(int managerID)
+	{
+		logger.info("Manager with id " + managerID + " has logged out");
 	}
 
 	@Override

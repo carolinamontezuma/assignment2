@@ -15,6 +15,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.slf4j.LoggerFactory;
+
 import data.Content;
 import data.User;
 import dto.ContentDTO;
@@ -28,23 +30,25 @@ public class ContentEJB implements ContentEJBLocal {
 	@PersistenceContext(name = "Contents")
 	EntityManager em;
 
+	private org.slf4j.Logger logger;
+	
 	/**
 	 * Default constructor.
 	 */
 	public ContentEJB() {
-
+		logger = LoggerFactory.getLogger(ContentEJB.class);
 	}
 
 	// Adicionar Contents à BD - função do professor
 	@Override
 	public void populate() {
-		Content[] contents = {
+
+		Content[] contents = { 
 				new Content("Suits", "Peter", 2000, "Comedy"),
 				new Content("Game Of Thrones", "Henry", 2005, "Action") };
 
 		for (Content c : contents)
 			em.persist(c);
-
 	}
 	
 	// Adicionar novo Content à aplicação
@@ -67,6 +71,9 @@ public class ContentEJB implements ContentEJBLocal {
 			newContent.setYear(year);
 			newContent.setCategory(category);
 			em.persist(newContent);
+			
+			logger.info("New content has been added (" + newContent + ")");
+			
 			return 1;
 		}
 		return 0;
@@ -83,6 +90,8 @@ public class ContentEJB implements ContentEJBLocal {
 			u.getWatchList().remove(content);
 		
 		em.remove(content);
+		
+		logger.info("Content with id " + contentID + " and title + \"" + content.getTitle() + "\" has been removed");
 	}
 		
 	//Editar conteudo 
@@ -103,7 +112,7 @@ public class ContentEJB implements ContentEJBLocal {
 			content.setYear(year);
 		}
 		
-		//em.merge(content);
+		logger.info("Content with id " + id + " and title + \"" + content.getTitle() + "\" has been edited");
 	}
 
 	// adicionar um Content à watchList de um user
@@ -113,8 +122,9 @@ public class ContentEJB implements ContentEJBLocal {
 		Content content = em.find(Content.class, contentID);
 
 		user.getWatchList().add(content);
-
-		//em.merge(user);
+		
+		logger.info("Content with id " + contentID + " and title + \"" + content.getTitle() + "\""
+				+ "has been added to the watchlist of the user with id " + userID);
 	}
 
 	// remover um Content da watchList de um user
@@ -124,53 +134,9 @@ public class ContentEJB implements ContentEJBLocal {
 		Content content = em.find(Content.class, contentID);
 
 		user.getWatchList().remove(content);
-
-		//em.merge(user);
-	}
-	
-	//Listar a watch list de um determinado utilizador
-	@Override
-	public List<ContentDTO> seeWatchList(int id){
-		List<ContentDTO> cd = new ArrayList<ContentDTO>();
-		for (Content con : em.find(User.class, id).getWatchList()) {
-			cd.add(new ContentDTO(con));
-		}
-		return cd;
-	}
-
-	// listar todos os Content
-	@Override
-	public List<ContentDTO> seeAllContent(int ordem) {
-		List<Content> c = new ArrayList<Content>();
-		List<ContentDTO> cd = new ArrayList<ContentDTO>();
-		Query query;
-		switch(ordem) {
-		//Sem ordem
-		case 1:
-			query = em.createQuery("FROM Content");
-			c = query.getResultList();
-			for (Content con : c) {
-				cd.add(new ContentDTO(con));
-			}
-			
-			break;
-		//Ordem descendente
-		case 2:
-			query = em.createQuery("FROM Content c ORDER BY c.title DESC");
-			c = query.getResultList();
-			for (Content con : c) {
-				cd.add(new ContentDTO(con));
-			}
-			break;
-		case 3:
-			query = em.createQuery("FROM Content c ORDER BY c.title ASC");
-			c = query.getResultList();
-			for (Content con : c) {
-				cd.add(new ContentDTO(con));
-			}
-			break;
-		}
-		return cd;
+		
+		logger.info("Content with id " + contentID + " and title + \"" + content.getTitle() + "\""
+				+ "has been removed from the watchlist of the user with id " + userID);
 	}
 
 	// listar Content de determinada categoria
@@ -231,136 +197,122 @@ public class ContentEJB implements ContentEJBLocal {
 	}
 	//Aplicar os filtros
 	@Override
+	public List<ContentDTO> aplicarFiltros(){
+		return aplicarFiltros("-", "-", -1, -1);
+	}
+	
+	@Override
 	public List<ContentDTO> aplicarFiltros(String diretor, String categoria, int minYear, int maxYear){
 		return aplicarFiltros(diretor,categoria,minYear,maxYear,1,false);
 	}
 	
 	@Override
 	public List<ContentDTO> aplicarFiltros(String diretor, String categoria, int minYear, int maxYear, int opcao, boolean asc){
-        List<Content> c = new ArrayList<Content>();
-        List<ContentDTO> cd = new ArrayList<ContentDTO>();
-        Query query;
-        if(minYear == -1) {
-            minYear = getMinMax(1);
-        }
-        if(maxYear == -1) {
-            maxYear = getMinMax(2);
-        }
- 
-        String order;
-        if(opcao == 1) {
-            order=" ";
-        }
-        else if(opcao == 2) {
-            order="ORDER BY c.director "+(asc?"ASC":"DESC");
-        }
-        else if(opcao == 3) {
-            order="ORDER BY c.title "+(asc?"ASC":"DESC");;
-        }
-        else if(opcao == 4) {
-            order="ORDER BY c.year "+(asc?"ASC":"DESC");;
-        }
-        else {
-            order="ORDER BY c.category "+(asc?"ASC":"DESC");
-        }
-        boolean dir = !diretor.equals("-");
-        boolean cat = !categoria.equals("-");
-       
-        if(!dir && cat) {
-            query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
-                    .setParameter("Categoria", categoria)
-                    .setParameter("yearMin", minYear)
-                    .setParameter("yearMax", maxYear);
-            c = query.getResultList();
-        }
-        else if(dir && !cat) {
-            query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax " + order)
-                    .setParameter("Diretor", diretor)
-                    .setParameter("yearMin", minYear)
-                    .setParameter("yearMax", maxYear);
-            c = query.getResultList();
-        }
-        else if(dir && cat) {
-            query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
-                    .setParameter("Diretor", diretor)
-                    .setParameter("Categoria",categoria)
-                    .setParameter("yearMin", minYear)
-                    .setParameter("yearMax", maxYear);
-            c = query.getResultList();
-        }
-        else {
-            query = em.createQuery("SELECT c FROM Content c WHERE c.year BETWEEN :yearMin AND :yearMax " + order)
-                    .setParameter("yearMin", minYear)
-                    .setParameter("yearMax", maxYear);
-            c = query.getResultList();
-        }
-        for (Content con : c) {
-            cd.add(new ContentDTO(con));
-        }
-        return cd;
-	}
-	
-	@Override
-	public List<ContentDTO> orderTable(int opcaoFiltro, int opcaoOrdena) {
 		List<Content> c = new ArrayList<Content>();
 		List<ContentDTO> cd = new ArrayList<ContentDTO>();
 		Query query;
-		//Vai ordenar de forma ascendente
-		if(opcaoOrdena == 1) {
-			//TITULO
-			if(opcaoFiltro==1) {
-				query = em.createQuery("SELECT c FROM Content c ORDER BY c.title ASC");
-				c = query.getResultList();
-			}
-			//CATEGORIA
-			if(opcaoFiltro==2) {
-				query = em.createQuery("SELECT c FROM Content c ORDER BY c.category ASC");
-				c = query.getResultList();
-			}
-			//DIRETOR
-			if(opcaoFiltro==3) {
-				query = em.createQuery("SELECT c FROM Content c ORDER BY c.director ASC");
-				c = query.getResultList();
-			}
-			//YEAR
-			if(opcaoFiltro==4) {
-				query = em.createQuery("SELECT c FROM Content c ORDER BY c.year ASC");
-				c = query.getResultList();
-			}
+		if(minYear == -1) {
+			minYear = getMinMax(1);
 		}
-		else if(opcaoOrdena == 2) {
-			//Ordenar por titulo
-			if(opcaoFiltro==1) {
-				query = em.createQuery("SELECT c FROM Content c ORDER BY c.title DESC");
-				c = query.getResultList();
-			}
-			if(opcaoFiltro==2) {
-				query = em.createQuery("SELECT c FROM Content c ORDER BY c.category DESC");
-				c = query.getResultList();
-			}
-			//CATEGORIA
-			if(opcaoFiltro==3) {
-				query = em.createQuery("SELECT c FROM Content c ORDER BY c.director DESC");
-				c = query.getResultList();
-			}
-			//DIRETOR
-			if(opcaoFiltro==4) {
-				query = em.createQuery("SELECT c FROM Content c ORDER BY c.year DESC");
-				c = query.getResultList();
-			}
+		if(maxYear == -1) {
+			maxYear = getMinMax(2);
+		}
+
+		String order;
+		if(opcao == 1) {
+			order="";
+		}
+		else if(opcao == 2) {
+			order="ORDER BY c.director "+(asc?"ASC":"DESC");
+		}
+		else if(opcao == 3) {
+			order="ORDER BY c.title "+(asc?"ASC":"DESC");;
+		}
+		else if(opcao == 4) {
+			order="ORDER BY c.year "+(asc?"ASC":"DESC");;
 		}
 		else {
-			query = em.createQuery("SELECT FROM Content");
+			order="ORDER BY c.category "+(asc?"ASC":"DESC");
+		}
+		
+		if(diretor == null || categoria == null)
+			diretor = categoria = "-";
 
+		boolean dir = !diretor.equals("-");
+		boolean cat = !categoria.equals("-");
+		
+		if(!dir && cat) {
+			query = em.createQuery("SELECT c FROM Content c WHERE c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
+					.setParameter("Categoria", categoria)
+					.setParameter("yearMin", minYear)
+					.setParameter("yearMax", maxYear);
+			c = query.getResultList();
+		}
+		else if(dir && !cat) {
+			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax " + order)
+
+					.setParameter("Diretor", diretor)
+					.setParameter("yearMin", minYear)
+					.setParameter("yearMax", maxYear);
+			c = query.getResultList();
+		}
+		else if(dir && cat) {
+			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.category LIKE:Categoria AND c.year BETWEEN :yearMin AND :yearMax " + order)
+					.setParameter("Diretor", diretor)
+					.setParameter("Categoria",categoria)
+					.setParameter("yearMin", minYear)
+					.setParameter("yearMax", maxYear);
+			c = query.getResultList();
+		}
+		else {
+			query = em.createQuery("SELECT c FROM Content c WHERE c.year BETWEEN :yearMin AND :yearMax " + order)
+					.setParameter("yearMin", minYear)
+					.setParameter("yearMax", maxYear);
+			c = query.getResultList();
 		}
 		for (Content con : c) {
 			cd.add(new ContentDTO(con));
 		}
-		
 		return cd;
+
 	}
 	
+	@Override
+	public List<ContentDTO> aplicarFiltrosWL(int userID){
+		return aplicarFiltrosWL(userID,1,false);
+	}
 	
+	@Override
+	public List<ContentDTO> aplicarFiltrosWL(int userID, int opcao, boolean asc){
+		List<Content> c = new ArrayList<Content>();
+		List<ContentDTO> cd = new ArrayList<ContentDTO>();
+		Query query;
+
+		String order;
+		if(opcao == 1) {
+			order="";
+		}
+		else if(opcao == 2) {
+			order="ORDER BY c.director "+(asc?"ASC":"DESC");
+		}
+		else if(opcao == 3) {
+			order="ORDER BY c.title "+(asc?"ASC":"DESC");;
+		}
+		else if(opcao == 4) {
+			order="ORDER BY c.year "+(asc?"ASC":"DESC");;
+		}
+		else {
+			order="ORDER BY c.category "+(asc?"ASC":"DESC");
+		}
+
+		query = em.createQuery("SELECT c FROM Content c, User u WHERE u.id = " + userID + " AND c MEMBER OF u.watchList " + order);
+		c = query.getResultList();
+		
+		for (Content con : c) {
+			cd.add(new ContentDTO(con));
+		}
+		return cd;
+	}
 	
 	// Devolve todos os nomes dos directores 
 	@Override
@@ -425,7 +377,7 @@ public class ContentEJB implements ContentEJBLocal {
 	@Override
 	public List<ContentDTO> getSuggestedCotent(int userID)
 	{
-		List<ContentDTO> watchList = seeWatchList(userID);
+		List<ContentDTO> watchList = aplicarFiltrosWL(userID);
 		List<ContentDTO> suggestedContent = new ArrayList<>();
 		
 		long contentCount = (long) em.createQuery("SELECT COUNT(c.id) FROM Content c").getSingleResult();
@@ -477,6 +429,8 @@ public class ContentEJB implements ContentEJBLocal {
 			notYetSuggested.add(new ContentDTO(c));
 		Collections.shuffle(notYetSuggested);
 		suggestedContent.addAll(notYetSuggested.subList(0, count > notYetSuggested.size()? notYetSuggested.size() : count));
+		
+		logger.info("Generating list of suggested content for user with id " + userID);
 		
 		return suggestedContent;
 	}

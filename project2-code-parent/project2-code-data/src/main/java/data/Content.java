@@ -84,8 +84,7 @@ public class Content implements Serializable {
 
 	@Override
 	public String toString() {
-		return " title = " + this.title + " director = " + this.director + " year = " + this.year + "category = "
-				+ this.category;
+		return " title: " + this.title + " director: " + this.director + " year: " + this.year + "category: " + this.category;
 	}
 
 	@Override

@@ -58,35 +58,62 @@ lastMaxYear = lastMaxYear == null? "" : lastMaxYear;
 if(list.size()==0){
 	out.println("No contents were found!");
 	%>
-	 <form action="PlayersTallerThan" method="get"> 
-	 <input type="submit" class="botoes" name="backUser" id ="backUser" value="Back">
-	 </form>
 <% 
 }
 else{
 %>
 
+<script type="text/javascript">
+	function setParams(elementIDs)
+	{
+		document.getElementById(elementIDs[0]).value = document.getElementById('id_of_director').value;
+		document.getElementById(elementIDs[1]).value = document.getElementById('id_of_category').value;
+		document.getElementById(elementIDs[2]).value = document.getElementById('id_min_year').value;
+		document.getElementById(elementIDs[3]).value = document.getElementById('id_max_year').value;
+	}
+	</script>
+
 <table class="Text" id="myTable">
   <tr>
-    <th id="tituloTabela">Title
-    <form action="PlayersTallerThan" method="get">
+    <th id="tituloTabela">>Title
+    <form action="PlayersTallerThan" method="get" onsubmit="setParams(['t_dir', 't_cat', 't_ymin', 't_ymax'])">
 		<input type="submit" class="botoesOrdem" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc">
 		<input type="submit" class="botoesOrdem" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc">
+		<input type="hidden" id="t_dir" name="directorName">
+		<input type="hidden" id="t_cat" name="categoryName">
+		<input type="hidden" id="t_ymin" name="minYear">
+		<input type="hidden" id="t_ymax" name="maxYear">
+		<input type="hidden" name="action" value="<%= action %>">
 	</form></th>
     <th id="tituloTabela">Category
-	<form action="PlayersTallerThan" method="get">
+	<form action="PlayersTallerThan" method="get" onsubmit="setParams(['c_dir', 'c_cat', 'c_ymin', 'c_ymax'])">
 		<input type="submit" class="botoesOrdem" class="botoes"name="OrderCategoryAsc" id ="OrderCategoryAsc" value="Asc">
 		<input type="submit" class="botoesOrdem" name="OrderCategoryDesc" id ="OrderCategoryDesc" value="Desc">
+		<input type="hidden" id="c_dir" name="directorName">
+		<input type="hidden" id="c_cat" name="categoryName">
+		<input type="hidden" id="c_ymin" name="minYear">
+		<input type="hidden" id="c_ymax" name="maxYear">
+		<input type="hidden" name="action" value="<%= action %>">
 	</form></th>
    <th id="tituloTabela">Director
-   <form action="PlayersTallerThan" method="get">
+   <form action="PlayersTallerThan" method="get" onsubmit="setParams(['d_dir', 'd_cat', 'd_ymin', 'd_ymax'])">
 		<input type="submit" class="botoesOrdem" name="OrderDirectorAsc" id ="OrderDirectorAsc" value="Asc">
 		<input type="submit" class="botoesOrdem" name="OrderDirectorDesc" id ="OrderDirectorDesc" value="Desc">
-	</form ></th>
+		<input type="hidden" id="d_dir" name="directorName">
+		<input type="hidden" id="d_cat" name="categoryName">
+		<input type="hidden" id="d_ymin" name="minYear">
+		<input type="hidden" id="d_ymax" name="maxYear">
+		<input type="hidden" name="action" value="<%= action %>">
+	</form></th>
     <th id="tituloTabela">Year
-    <form action="PlayersTallerThan" method="get">
+    <form action="PlayersTallerThan" method="get" onsubmit="setParams(['y_dir', 'y_cat', 'y_ymin', 'y_ymax'])">
     	<input type="submit" class="botoesOrdem" name="OrderYearAsc" id ="OrderYearAsc" value="Asc">
     	<input type="submit" name="OrderYearDesc" class="botoesOrdem" id ="OrderYearDesc" value="Desc">
+    	<input type="hidden" id="y_dir" name="directorName">
+		<input type="hidden" id="y_cat" name="categoryName">
+		<input type="hidden" id="y_ymin" name="minYear">
+		<input type="hidden" id="y_ymax" name="maxYear">
+		<input type="hidden" name="action" value="<%= action %>">
    	</form></th>
   </tr>
   
@@ -107,8 +134,18 @@ for(ContentDTO content : list) {
    	<td><% out.println(content.Director()); %></td>
     <td><% out.println(content.getYear()); 
     	if(!wl.contains(content)){ 
-    	%> <form action="PlayersTallerThan" method="get">  	<input type="hidden" name="content_id" value="<%=content.getID()%>"> <input type="submit" class="botoes" name="addtowl" id ="addtowl" value="Add to WL"></form> 
-    	<%} else{ %> <form action="PlayersTallerThan" method="get">  	<input type="hidden" name="content_id" value="<%=content.getID()%>"> <input type="submit" class="botoes" name="removeFromWL" id ="removeFromWL" value="Remove from WL"></form>
+    	%>
+    	<form action="PlayersTallerThan" method="get">
+    		<input type="hidden" name="content_id" value="<%=content.getID()%>">
+    		<input type="submit" class="botoes" name="addtowl" id ="addtowl" value="Add to WL">
+    		<input type="hidden" name="action" value="<%= action %>">
+    	</form> 
+    	<%} else{ %>
+    	<form action="PlayersTallerThan" method="get">
+    		<input type="hidden" name="content_id" value="<%=content.getID()%>">
+    		<input type="submit" class="botoes" name="removeFromWL" id ="removeFromWL" value="Remove from WL">
+    		<input type="hidden" name="action" value="<%= action %>">
+    	</form>
     	<% } %> </td>
     	
   </tr>
@@ -142,12 +179,14 @@ for(ContentDTO content : list) {
 	<% } %>
 </select>
 <!--  TEXT BOX PARA ESCOLHER O RANGE DE YEARS -->
-<input class="Text" type="number" placeholder="Year" name="minYear" value="<%= lastMinYear %>">
-<input class="Text" type="number" placeholder="Year" name="maxYear" value="<%= lastMaxYear %>">
+
+<input class="Text" type="number" placeholder="Minimum year" id="id_min_year" name="minYear" value="<%= lastMinYear %>">
+<input class="Text" type="number" placeholder="Maximum year" id="id_max_year" name="maxYear" value="<%= lastMaxYear %>">
+<input type="hidden" name="action" value="<%= action %>">
 <button class="botoes" type="submit" name="filtrar" id="filtrar">Filter</button>
  
 
-</form> 
+</form>
 <%} %>
 </div>
  </c:if>
@@ -185,9 +224,9 @@ for(ContentDTO content : list) {
 <!--  LISTAR A WATCH LIST DO USER -->
 <c:if test= "${action == 'watchlist'}">
     <% 
- 	ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("watchList"); 
+ 	ArrayList<ContentDTO> list = (ArrayList<ContentDTO>) request.getAttribute("wl"); 
     if(list.size()==0){
- 		out.println("No contents were found!");%>
+ 		out.println("You have no contents in your watchlist!");%>
  		<% 
  	}
     else{ 
@@ -199,21 +238,25 @@ for(ContentDTO content : list) {
 	    <form action="PlayersTallerThan" method="get">
 			<input type="submit" class="botoesOrdem" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc">
 			<input type="submit" class="botoesOrdem" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc">
+			<input type="hidden" name="action" value="<%= action %>">
 		</form></th>
 	    <th id="tituloTabela">Category
 		<form action="PlayersTallerThan" method="get">
 			<input type="submit" class="botoesOrdem" class="botoes"name="OrderCategoryAsc" id ="OrderCategoryAsc" value="Asc">
 			<input type="submit" class="botoesOrdem" name="OrderCategoryDesc" id ="OrderCategoryDesc" value="Desc">
+			<input type="hidden" name="action" value="<%= action %>">
 		</form></th>
 	   <th id="tituloTabela">Director
 	   <form action="PlayersTallerThan" method="get">
 			<input type="submit" class="botoesOrdem" name="OrderDirectorAsc" id ="OrderDirectorAsc" value="Asc">
 			<input type="submit" class="botoesOrdem" name="OrderDirectorDesc" id ="OrderDirectorDesc" value="Desc">
+			<input type="hidden" name="action" value="<%= action %>">
 		</form></th>
 	    <th id="tituloTabela">Year
 	    <form action="PlayersTallerThan" method="get">
 	    	<input type="submit" class="botoesOrdem" name="OrderYearAsc" id ="OrderYearAsc" value="Asc">
 	    	<input type="submit" name="OrderYearDesc" class="botoesOrdem" id ="OrderYearDesc" value="Desc">
+	    	<input type="hidden" name="action" value="<%= action %>">
 	   	</form></th>
 	  </tr>
 	<%
@@ -224,7 +267,12 @@ for(ContentDTO content : list) {
  	    <td><% out.println(content.getCategory()); %></td>
  	   	<td><% out.println(content.Director()); %></td>
  	    <td><% out.println(content.getYear()); 
- 	    	%><form action="PlayersTallerThan" method="get"> <input type="hidden" name="content_id" value="<%=content.getID()%>"> <input class="botoes bot_aux removeFromWL_aux" type="submit" name="removeFromWL"  value="Remove from WL"></form>
+ 	    	%>
+ 	    	<form action="PlayersTallerThan" method="get">
+ 	    		<input class="botoes" type="hidden" name="content_id" value="<%=content.getID()%>">
+ 	    		<input class="botoes bot_aux removeFromWL_aux" type="submit" name="removeFromWL" id ="removeFromWL" value="Remove from WL">
+ 	    		<input type="hidden" name="action" value="<%= action %>">
+ 	    	</form>
  	    	<% } %> </td>
  	    	
  	  </tr>
@@ -232,11 +280,11 @@ for(ContentDTO content : list) {
  	  <% } %>
 </c:if>
 </div>
+<form action="PlayersTallerThan" method="get">	
+ 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+</form>
 	<form action="PlayersTallerThan" method="post"> 
    		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
- 	</form>
- 	<form action="PlayersTallerThan" method="get">	
- 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
  	</form>
 </body>
 </html>

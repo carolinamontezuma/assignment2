@@ -18,6 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.slf4j.LoggerFactory;
+
 import data.Content;
 import data.Manager;
 import data.User;
@@ -36,12 +38,14 @@ public class UserEJB implements UserEJBLocal {
 	
 	@Resource(name="java:jboss/mail/gmail")
 	private Session session;
+	
+	private org.slf4j.Logger logger;
 
 	/**
 	 * Default constructor.
 	 */
 	public UserEJB() {
-
+		logger = LoggerFactory.getLogger(UserEJB.class);
 	}
 	
 	// adicionar informação pessoal de um novo utilizador (=criar conta)
@@ -50,6 +54,8 @@ public class UserEJB implements UserEJBLocal {
 		Date date = new Date();
 		User user = new User(username, password, email, creditCard,date);
 		em.persist(user);
+		
+		logger.info("New account created for user " + user);
 	}
 
 	// editar a informação pessoal de um utilizador
@@ -65,14 +71,16 @@ public class UserEJB implements UserEJBLocal {
 			user.setEmail(email);
 		if(creditCard != null)
 			user.setCreditCard(creditCard);
-
-		//em.merge(user);
+		
+		logger.info("User with id " + userID + " was edited");
 	}
 
 	// apagar conta
 	@Override
 	public void deleteAccount(int userID) {
 		em.remove(em.find(User.class, userID));
+		
+		logger.info("User with id " + userID + " was removed");
 	}
 	
 	@Override
@@ -99,7 +107,13 @@ public class UserEJB implements UserEJBLocal {
 
 		user.updateLoginCount();
 
-		//em.merge(user);
+		logger.info("User with id " + userID + " has logged in (total logins: " + user.getLoginCount() + ")");
+	}
+	
+	@Override
+	public void userLoggedOut(int userID)
+	{
+		logger.info("User with id " + userID + " has logged out");
 	}
 	
 	@Override

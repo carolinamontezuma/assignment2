@@ -61,11 +61,14 @@ if(request.getAttribute("source")  == null)
  	  <% } %>
 
 	<form action="PlayersTallerThan" method="post"> 
+
+</body>
+<form action="PlayersTallerThan" method="get">	
+ 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+</form>
+<form action="PlayersTallerThan" method="post"> 
    		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
  	</form>
- 	<form action="PlayersTallerThan" method="get">	
- 		 <input type="submit" class="botoes" name="backAdmin" id="backAdmin" value="Back">
- 	</form>	
 </div>
 </body>
 

@@ -36,10 +36,11 @@ List<String> categories = (List<String>) request.getAttribute("categories");
 		 <input class="botoes" type="submit" name="addContent" id ="addContent" value="Confirm">
 		
 	</form>
-	<form action="PlayersTallerThan" method="get">	
- 		 <input type="submit" class="botoes" name="backAdmin" id="backAdmin" value="Back">
- 	</form>	
-	<form action="PlayersTallerThan" method="post"> 
+</body>
+<form action="PlayersTallerThan" method="get">	
+ 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+</form>
+<form action="PlayersTallerThan" method="post"> 
    		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
  	</form>
 		</div>

@@ -20,6 +20,7 @@ public interface UserEJBLocal {
 	UserDTO getUserByEmail(String email);
 	boolean canRegister(String email);
 	void userLoggedIn(int userID);
+	void userLoggedOut(int userID);
 	boolean isUsernameValid(String username);
 	boolean isPasswordValid(String password);
 	boolean isEmailValid(String email);
