@@ -404,10 +404,10 @@ public class PlayersTallerThan extends HttpServlet {
 		if(request.getParameter("remove") != null) {
 			int id= Integer.parseInt(request.getParameter("content_id"));
 			String message = "";
-			//if(ejbcontent.removeContent(id))
+			if(ejbcontent.removeContent(id))
 				 message = "Successfully removed content";
-			// else
-			//	 message = "Failed to remove content";
+			else
+				message = "Failed to remove content";
 			 request.setAttribute("message", message);
 			dispatcher = request.getRequestDispatcher("/managerScreen.jsp");
 			dispatcher.forward(request, response);

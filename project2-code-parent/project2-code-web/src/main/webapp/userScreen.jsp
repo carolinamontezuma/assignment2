@@ -45,10 +45,9 @@ if(request.getAttribute("source")  == null)
 			s1.append(".png");
 			String new1= s1.toString();
 	%>
-	<c:set var="imagem" value="${new1}" />
   	<!-- Full-width images with number and caption text -->
   	<div class="mySlides fade">
-    	<img src="${imagem}" style="width:50%">
+    	<img src="<%= new1 %>" style="width:50%">
   	</div>
 <% } %>
 </div>

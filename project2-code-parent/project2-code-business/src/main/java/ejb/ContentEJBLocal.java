@@ -11,7 +11,7 @@ public interface ContentEJBLocal {
 	void populate();
 	boolean addNewContent(String title, String director, int year, String category);
 	void editContent(int contentID, String title, String director, String category, int year);
-	void removeContent(int contentID);
+	boolean removeContent(int contentID);
 	List<ContentDTO> seeContentFromCategory(String category);
 	List<ContentDTO> seeContentFromYears(int year1, int year2);
 	List<ContentDTO> seeContentFromDirector(String director);
