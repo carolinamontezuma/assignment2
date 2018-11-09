@@ -40,12 +40,10 @@ if(request.getAttribute("source")  == null)
 		<%
 		List<ContentDTO> suggestedContent = (List<ContentDTO>)request.getAttribute("suggestedContent");
 		for(ContentDTO c : suggestedContent){%>
-			<p class="Text"><%out.println(c.getMultimedia()); %></p>
 			<%StringBuilder s1= new StringBuilder();
 			s1.append(c.getMultimedia());
 			s1.append(".png");
 			String new1= s1.toString();
-			out.println(new1);
 	%>
 	<c:set var="imagem" value="${new1}" />
   	<!-- Full-width images with number and caption text -->
