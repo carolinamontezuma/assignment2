@@ -7,7 +7,7 @@ import javax.ejb.Local;
 import dto.ContentDTO;
 
 @Local
-public interface ContentEJBLocal {	
+public interface ContentEJBLocal {
 	void populate();
 	boolean addNewContent(String title, String director, int year, String category);
 	void editContent(int contentID, String title, String director, String category, int year);

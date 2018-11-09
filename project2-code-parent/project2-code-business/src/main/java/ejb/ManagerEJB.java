@@ -30,14 +30,6 @@ public class ManagerEJB implements ManagerEJBLocal {
 	public ManagerEJB() {
 		logger = LoggerFactory.getLogger(ManagerEJB.class);
 	}
-	
-	@Override
-	public void populate() {
-		Manager[] managers = { new Manager("Admin", PasswordHasher.plainTextToHash("admin"), "admin@admin.com") };
-
-		for (Manager m : managers)
-			em.persist(m);
-	}
 
 	// adicionar informação de um novo manager (=criar conta)
 	@Override

@@ -39,22 +39,22 @@ public class ContentEJB implements ContentEJBLocal {
 	public ContentEJB() {
 		logger = LoggerFactory.getLogger(ContentEJB.class);
 	}
-
-	// Adicionar Contents à BD - função do professor
+	
 	@Override
-	public void populate() {
-
-		Content[] contents = { 
-				new Content("Suits", "Peter", 2000, "Comedy","suits-peter"),
-				new Content("Game Of Thrones", "Henry", 2005, "Action","gameofthrones-henry"),
-				new Content("Breaking Bad", "John", 2005, "Action","breakingbad-john")};
-
-		logger.debug("Populating the database with " + contents.length + " Contents");
-		for (Content c : contents)
-		{
-			em.persist(c);
-			logger.debug("Populated database with \"" + c.getTitle() + "\" (" + c + ")");
-		}
+	public void populate()
+	{
+		Content c[] = new Content[] {
+				new Content("Breaking Bad", "John", 2000, "Action", "breakingbad-john"),
+				new Content("Game of Thrones", "Henry", 2009, "Action", "gameofthrones-henry"),
+				new Content("Suits", "Peter", 2003, "Comedy", "suits-peter"),
+				new Content("Big Bang Theory", "Mike", 2011, "Comedy", "bigbangtheory-mike"),
+				new Content("American Horror Story", "Douglas", 2008, "Horror", "americanhorrorstory-douglas"),
+				new Content("Lord of the Rings", "Richard", 2001, "Fantasy", "lordoftherings-richard"),
+				new Content("Pirates of Caribean", "Henry", 2014, "Adventure", "piratesofcaribean-henry"),
+				new Content("Star Wars", "Mike", 1980, "Science fiction", "starwars-mike"),
+				new Content("Coco", "Pablo", 1960, "Animation", "coco-pablo"),
+				new Content("Zorro", "Mike", 1990, "Romance", "zorro-mike")
+		};
 	}
 	
 	// Adicionar novo Content à aplicação

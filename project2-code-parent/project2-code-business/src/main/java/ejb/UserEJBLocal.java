@@ -11,7 +11,7 @@ import dto.UserDTO;
 
 @Local
 public interface UserEJBLocal {
-	//void populate();
+	void populate();
 	void addAccount(String username, String password, String email, String creditCard);
 	void editPersonalInformation(int userID, String username, String password, String email, String creditCard);
 	void deleteAccount(int userID);
