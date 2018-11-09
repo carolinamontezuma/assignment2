@@ -235,8 +235,7 @@ public class ContentEJB implements ContentEJBLocal {
 		
 		if(diretor == null || categoria == null)
 			diretor = categoria = "-";
-			
-		
+
 		boolean dir = !diretor.equals("-");
 		boolean cat = !categoria.equals("-");
 		
@@ -249,6 +248,7 @@ public class ContentEJB implements ContentEJBLocal {
 		}
 		else if(dir && !cat) {
 			query = em.createQuery("SELECT c FROM Content c WHERE c.director LIKE:Diretor AND c.year BETWEEN :yearMin AND :yearMax " + order)
+
 					.setParameter("Diretor", diretor)
 					.setParameter("yearMin", minYear)
 					.setParameter("yearMax", maxYear);
