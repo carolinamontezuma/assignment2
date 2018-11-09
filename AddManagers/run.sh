@@ -1,1 +1,1 @@
-java -jar /Users/Carolina/Desktop/assignment2/AddManagers/main/AddManagers.jar "managers.csv"
+java -jar /Users/Carolina/Desktop/assignment2/AddManagers/main/AddManagers.jar "/Users/Carolina/Desktop/assignment2/AddManagers/managers.csv"

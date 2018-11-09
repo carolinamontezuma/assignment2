@@ -34,7 +34,9 @@ body {background-color: black;}
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 16px; 
+    transition: 0.3s;
+    opacity: 0.6;
 }
 #logout{
     
@@ -46,8 +48,7 @@ body {background-color: black;}
 }
 
 #botoesBackLog{
-    background-color: pink;
-    display: inline-block;
+   display: inline-block;
     width: 100%;
        
 }
@@ -157,6 +158,8 @@ to {opacity:1 ;}
     text-align: center;
     text-decoration: none;
 	font-size: 16px;
+	transition: 0.3s;
+    opacity: 0.6;
 }
 
 .form_userscreen{
@@ -178,6 +181,13 @@ to {opacity:1 ;}
   margin: auto;
   text-align: center;
 }
+
+.slideshow-container img {
+  max-width:100%;
+	width:100%;
+	position:fixed;
+	left:0;
+  }
 
 /* Hide the images by default */
 .mySlides {
@@ -308,4 +318,25 @@ to {opacity:1 ;}
     text-decoration: none;
     display: inline-block;
     font-size: 12px;
+}
+
+
+.manbut{
+	margin-top:1%;
+}
+
+.botoes:hover{
+	 box-shadow: 10px 10px 5px grey;
+	 opacity:1;
+}
+.b_userscreen:hover{
+	box-shadow: 10px 10px 5px grey;
+	 opacity:1;
+}
+
+.manlogaux{
+	position:absolute;
+	margin-top: -15%;
+
+
 }
