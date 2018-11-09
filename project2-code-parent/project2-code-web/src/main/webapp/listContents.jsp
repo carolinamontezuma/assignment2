@@ -133,13 +133,6 @@ else{
 		<input type="hidden" name="action" value="<%= action %>">
    	</form></th>
   </tr>
-  
-  
-<%
-for(ContentDTO content : list) {
-	String mult = content.getMultimedia();
-	out.println(mult);
-    %>
 
   <tr>
     <td>
@@ -150,7 +143,7 @@ for(ContentDTO content : list) {
     </form>
     </td>
     <td><% out.println(content.getCategory()); %></td>
-   	<td><% out.println(content.Director()); %></td>
+   	<td><% out.println(content.getDirector()); %></td>
     <td><% out.println(content.getYear()); 
     	if(!wl.contains(content)){ 
     	%>
@@ -227,17 +220,13 @@ for(ContentDTO content : list) {
    for(ContentDTO content : list) {
 	    String title = content.getTitle();
 	    out.println(title);
-	   String director = content.Director();
+	   String director = content.getDirector();
 	    int year = content.getYear();
 	    String category=content.getCategory();
 	    int id = content.getID();
 	    %>
 	    <br>
 	     <form action="PlayersTallerThan" method="get"> 
-	     	<input type="hidden" name="content_title" value="<%=title%>">    
-	     	<input type="hidden" name="content_director" value="<%=director%>">     
-	    	<input type="hidden" name="content_year" value="<%=year%>">    
-	       	<input type="hidden" name="content_category" value="<%=category%>"> 
 	       	<input type="hidden" name="content_id" value="<%=id%>"> 
 	    	<input type="submit" name="buttonEdit" id ="buttonEdit" value="Edit">
 	 	</form>
@@ -304,7 +293,7 @@ for(ContentDTO content : list) {
  	  <tr>
  	    <td><% out.println(content.getTitle()); %></td>
  	    <td><% out.println(content.getCategory()); %></td>
- 	   	<td><% out.println(content.Director()); %></td>
+ 	   	<td><% out.println(content.getDirector()); %></td>
  	    <td><% out.println(content.getYear()); 
  	    	%>
  	    	<form action="PlayersTallerThan" method="get">
@@ -312,7 +301,7 @@ for(ContentDTO content : list) {
  	    		<input class="botoes bot_aux removeFromWL_aux" type="submit" name="removeFromWL" id ="removeFromWL" value="Remove from WL">
  	    		<input type="hidden" name="action" value="<%= action %>">
  	    	</form>
- 	    	<% } %> </td>
+ 	    </td>
  	    	
  	  </tr>
  	    <% } %>

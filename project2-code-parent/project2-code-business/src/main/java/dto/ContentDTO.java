@@ -51,7 +51,7 @@ public class ContentDTO implements Serializable {
 		this.title = title;
 	}
 
-	public String Director() {
+	public String getDirector() {
 		return director;
 	}
 

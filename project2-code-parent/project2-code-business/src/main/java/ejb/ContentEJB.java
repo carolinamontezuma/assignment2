@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import data.Content;
 import data.User;
 import dto.ContentDTO;
+import dto.UserDTO;
 
 /**
  * Session Bean implementation class ContentEJB
@@ -58,7 +59,7 @@ public class ContentEJB implements ContentEJBLocal {
 	
 	// Adicionar novo Content à aplicação
 	@Override
-	public int addNewContent(String title, String director, int year, String category) {
+	public boolean addNewContent(String title, String director, int year, String category) {
 		Query q = em.createQuery("SELECT COUNT(c.title) FROM Content c WHERE c.title =:title")
 				.setParameter("title", title);
 		long count = (long)q.getSingleResult();
@@ -80,12 +81,12 @@ public class ContentEJB implements ContentEJBLocal {
 			
 			logger.info("New content has been added (" + newContent + ")");
 			
-			return 1;
+			return true;
 		}
 		
 		logger.info("Failed to add new content with title " + title + " - content with same title already exists");
 		
-		return 0;
+		return false;
 	}
 
 	@Override
@@ -105,23 +106,20 @@ public class ContentEJB implements ContentEJBLocal {
 		
 	//Editar conteudo 
 	@Override
-	public void editContent(int opcao, int id, String info) {
-		Content content = em.find(Content.class, id);
-		if(opcao == 1) {
-			content.setTitle(info);
-		}
-		if(opcao == 2) {
-			content.setDirector(info);
-		}
-		if(opcao == 3) {
-			content.setCategory(info);
-		}
-		if(opcao == 4) {
-			int year = Integer.parseInt(info);
-			content.setYear(year);
-		}
+	public void editContent(int contentID, String title, String director, String category, int year)
+	{
+		Content content = em.find(Content.class, contentID);
 		
-		logger.info("Content with id " + id + " and title + \"" + content.getTitle() + "\" has been edited");
+		if(title != null)
+			content.setTitle(title);
+		if(director != null)
+			content.setDirector(director);
+		if(category != null)
+			content.setCategory(category);
+		if(year > 1800)
+			content.setYear(year);
+		
+		logger.info("Content with id " + contentID + " and title + \"" + content.getTitle() + "\" has been edited");
 	}
 
 	// adicionar um Content à watchList de um user
@@ -451,5 +449,39 @@ public class ContentEJB implements ContentEJBLocal {
 		logger.info("Generating list of suggested content for user with id " + userID);
 		
 		return suggestedContent;
+	}
+	
+	@Override
+	public boolean isTitleValid(String title)
+	{
+		if(title.isEmpty())
+			return false;
+		return em.createQuery("SELECT c FROM Content c WHERE c.title LIKE :title").setParameter("title", title).getResultList().isEmpty();
+	}
+	
+	@Override
+	public boolean isDirectorValid(String director)
+	{
+		return !director.isEmpty();
+	}
+	
+	@Override
+	public boolean isCategoryValid(String category)
+	{
+		return !category.isEmpty();
+	}
+	
+	@Override
+	public boolean isYearValid(int year)
+	{
+		return year > 1800;
+	}
+
+	@Override
+	public ContentDTO getContentByID(int contentID)
+	{
+		Content content = em.find(Content.class, contentID);
+		
+		return new ContentDTO(content);
 	}
 }

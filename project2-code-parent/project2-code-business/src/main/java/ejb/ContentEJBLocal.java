@@ -9,8 +9,8 @@ import dto.ContentDTO;
 @Local
 public interface ContentEJBLocal {	
 	void populate();
-	int addNewContent(String title, String director, int year, String category);
-	void editContent(int opcao, int id, String info);
+	boolean addNewContent(String title, String director, int year, String category);
+	void editContent(int contentID, String title, String director, String category, int year);
 	void removeContent(int contentID);
 	List<ContentDTO> seeContentFromCategory(String category);
 	List<ContentDTO> seeContentFromYears(int year1, int year2);
@@ -27,4 +27,9 @@ public interface ContentEJBLocal {
 	List<ContentDTO> aplicarFiltrosWL(int userID, int opcao, boolean asc);
 	List<ContentDTO> getSuggestedCotent(int userID);
 	long countList();
+	boolean isTitleValid(String title);
+	boolean isDirectorValid(String director);
+	boolean isCategoryValid(String category);
+	boolean isYearValid(int year);
+	ContentDTO getContentByID(int contentID);
 }
