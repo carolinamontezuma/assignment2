@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Registar.jsp</title>
+<title>Register</title>
 <link rel="stylesheet" href="index.css">
 
 </head>
@@ -30,7 +30,7 @@ String usedCard4 = (String)request.getAttribute("usedCard4");
 usedCard4 = usedCard4 == null ? "" : usedCard4;
 %>
 
-<p class="Text">Registar</p>
+<p class="Text">Registerr</p>
 <div class="Text">
 	<form action="PlayersTallerThan" method="post">
   		Name: <input type="text" name="fname" placeholder="Name" value="<%= usedName %>" required><br>

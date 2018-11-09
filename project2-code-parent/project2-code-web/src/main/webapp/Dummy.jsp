@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 </head>
+<title>Redirecting...</title>
 <body onload="redirect()">
 	<form action="PlayersTallerThan" method="get" id="redirect_form">
 		<input type="hidden" name="nullSource" value="">

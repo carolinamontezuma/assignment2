@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>userScreen.jsp</title>
+<title>Home</title>
 <link rel="stylesheet" href="index.css">
 <script type="text/javascript">
 var slideIndex = 0;
@@ -22,7 +22,7 @@ function showSlides() {
     slideIndex++;
     if (slideIndex > slides.length) {slideIndex = 1} 
     slides[slideIndex-1].style.display = "block"; 
-    setTimeout(showSlides, 2000); // mudar imagem de 2 em 2 segs
+    setTimeout(showSlides, 3000); // mudar imagem de 3 em 3 segs
 }
 </script>
 </head>
@@ -45,27 +45,27 @@ if(request.getAttribute("source")  == null)
 	<div class="slideshow-container">
   	<!-- Full-width images with number and caption text -->
   	<div class="mySlides fade">
-    	<div class="numbertext">1 / 3</div>
+    	<div class="numbertext">1 / 5</div>
     	<img src="breakingbad-john.png" style="width:50%">
     	<div class="text">Caption Text</div>
   	</div>
   	<div class="mySlides fade">
-    	<div class="numbertext">2 / 3</div>
+    	<div class="numbertext">2 / 5</div>
     	<img src="breakingbad-john.png" style="width:50%">
     	<div class="text">Caption Two</div>
   	</div>
   	<div class="mySlides fade">
-    	<div class="numbertext">3 / 3</div>
+    	<div class="numbertext">3 / 5</div>
     	<img src="breakingbad-john.png" style="width:50%">
     	<div class="text">Caption Three</div>
   	</div>
   	<div class="mySlides fade">
-    	<div class="numbertext">3 / 3</div>
+    	<div class="numbertext">4 / 5</div>
     	<img src="breakingbad-john.png" style="width:50%">
     	<div class="text">Caption Three</div>
   	</div>
   	<div class="mySlides fade">
-    	<div class="numbertext">3 / 3</div>
+    	<div class="numbertext">5 / 5</div>
     	<img src="breakingbad-john.png" style="width:50%">
     	<div class="text">Caption Three</div>
   	</div>

@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="index.css">
-<title>Login.jsp</title>
+<title>Login</title>
 </head>
 <body>
 

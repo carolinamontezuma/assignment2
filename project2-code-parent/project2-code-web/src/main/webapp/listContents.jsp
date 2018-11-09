@@ -9,7 +9,7 @@
 <%! public String diretorName, categoriaName; %>
 <html>
 <head>
-<title>listContents.jsp</title>
+<title>Contents</title>
 <style>
 table {
     border-spacing: 0;

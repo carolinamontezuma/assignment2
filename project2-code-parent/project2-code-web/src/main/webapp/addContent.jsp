@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="index.css">
 </head>
+<title>Add content</title>
 <body>
 <%
 if(request.getAttribute("source")  == null)
