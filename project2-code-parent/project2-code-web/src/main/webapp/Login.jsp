@@ -17,9 +17,12 @@ if(request.getAttribute("source")  == null)
 	request.getRequestDispatcher("/Dummy.jsp").forward(request, response);
 %>
 
+<div class="container aux">
+
 	<p class="Title">Login</p>
+	
 	<form action="PlayersTallerThan" method="post">
-		<div class="container">
+		
 			<label class ="Text"for="uname"><b>Email</b></label>
 			<input type="email" placeholder="Email" name="fmail" required>
 			<label class="Text" for="psw"><b>Password</b></label>
@@ -29,12 +32,15 @@ if(request.getAttribute("source")  == null)
 			<label class="Text">
 				<input  class="Text" type="checkbox" checked="checked" name="remember" value="true"> Remember me
 			</label>
-		</div>
+		
 	</form>
+	
 	<br>
+	
 	<div class="Text">Don't have an account yet?</div>
 	 <form action="PlayersTallerThan" method="get"> 
    	<input class ="botoes" type="submit" name="Registar" id ="Registar" value="Register">
  </form> 
+ </div>
 </body>
 </html>

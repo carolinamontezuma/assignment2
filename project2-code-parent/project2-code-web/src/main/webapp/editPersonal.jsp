@@ -20,38 +20,40 @@ String card2 = "" + dto.getCreditCard().subSequence(4, 8);
 String card3 = "" + dto.getCreditCard().subSequence(8, 12);
 String card4 = "" + dto.getCreditCard().subSequence(12, 16);
 %>
-
-	<p>Edit account</p>
+<div class="wrap_registar aux2">
+<div class="Text">
+	<p class="Title">Edit account</p>
 	
 	<form action="PlayersTallerThan" method="post">
-  		Name: <input type="text" id="id_fname" name="fname" placeholder="Name" value="<%= dto.getUsername() %>" disabled>
+  		<b>Name</b> <input class="inputstyle_aux" type="text" id="id_fname" name="fname" placeholder="Name" value="<%= dto.getUsername() %>" disabled>
   		<input type="button" id="id_btfname" name="editName" onclick="editElement('id_fname', 'id_btfname')" value="Edit" formnovalidate>
 	</form>
 	
   	<form action="PlayersTallerThan" method="post">
-  		Email: <input type="email" id="id_fmail" name="fmail" placeholder="example@email.com" value="<%= dto.getEmail() %>" disabled>
+  		<b>Email</b> <input class="inputstyle" type="email" id="id_fmail" name="fmail" placeholder="example@email.com" value="<%= dto.getEmail() %>" disabled>
   		<input type="button" id="id_btfmail" name="editMail" onclick="editElement('id_fmail', 'id_btfmail')" value="Edit" formnovalidate>
   	</form>
   	
   	<form action="PlayersTallerThan" method="post">
-  		Password: <input type="password" id="id_fpass" name="fpass" placeholder="Password" value="<%= dto.getPassword() %>" disabled>
+  		<b>Password</b> <input class="inputstyle" type="password" id="id_fpass" name="fpass" placeholder="Password" value="<%= dto.getPassword() %>" disabled>
   		<input type="button" id="id_btfpass" name="editPass" onclick="editElement('id_fpass', 'id_btfpass')" value="Edit" formnovalidate>
   	</form>
   	
   	<form action="PlayersTallerThan" method="post">
-  		Credit card:
-  		<input type="number" id="id_fcard1" name="fcard1" oninput="limitLength('id_fcard1', 4, 'id_fcard2')" value="<%= card1 %>" disabled>
-  		<input type="number" id="id_fcard2" name="fcard2" oninput="limitLength('id_fcard2', 4, 'id_fcard3')" value="<%= card2 %>" disabled>
-  		<input type="number" id="id_fcard3" name="fcard3" oninput="limitLength('id_fcard3', 4, 'id_fcard4')" value="" disabled>
-  		<input type="number" id="id_fcard4" name="fcard4" oninput="limitLength('id_fcard4', 4, null)" value="" disabled>
-  		<input type="button" id="id_btcredit" name="editCredit" onclick="editCreditCard('id_btcredit')" value="Edit" formnovalidate>
+  	<b>Credit Card</b>	
+  		<input class="inputstyle" type="number" id="id_fcard1" name="fcard1" oninput="limitLength('id_fcard1', 4, 'id_fcard2')" value="<%= card1 %>" disabled>
+  		<input class="inputstyle" type="number" id="id_fcard2" name="fcard2" oninput="limitLength('id_fcard2', 4, 'id_fcard3')" value="<%= card2 %>" disabled>
+  		<input class="inputstyle" type="number" id="id_fcard3" name="fcard3" oninput="limitLength('id_fcard3', 4, 'id_fcard4')" value="" disabled>
+  		<input class="inputstyle" type="number" id="id_fcard4" name="fcard4" oninput="limitLength('id_fcard4', 4, null)" value="" disabled>
+  		<input class="inputstyle" type="button" id="id_btcredit" name="editCredit" onclick="editCreditCard('id_btcredit')" value="Edit" formnovalidate>
   	</form>
   	
   		<br>
 	<form action="PlayersTallerThan" method="post">  		
-  		<input type="submit" name="deleteAccount" value="Delete account" formnovalidate>
+  		<input class="botoes" type="submit" name="deleteAccount" value="Delete account" formnovalidate>
  	</form>
-	
+</div>
+</div>	
 	<script type="text/javascript">
 	function editElement(elementID, btID)
 	{
@@ -102,5 +104,11 @@ String card4 = "" + dto.getCreditCard().subSequence(12, 16);
 	    }
 	}
 	</script>
+	<form action="PlayersTallerThan" method="get">	
+ 		 <input type="submit" class="botoes" name="backUser" id="backUser" value="Back">
+ 	</form>
+	<form action="PlayersTallerThan" method="post"> 
+   		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
+ 	</form>
 </body>
 </html>

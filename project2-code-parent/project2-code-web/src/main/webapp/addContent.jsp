@@ -16,14 +16,15 @@ if(request.getAttribute("source")  == null)
 
 List<String> categories = (List<String>) request.getAttribute("categories");
 %>
-
+<div class="wrap_registar aux2">
+<p class="Title">Add Content</p>
 	<form class="Text" action="PlayersTallerThan" method="get">
-  		Tile <input class="Text" type="text" name="ftitle" placeholder="Title" required><br>
+  		<b>Title</b> <input class="inputstyle_aux" type="text" name="ftitle" placeholder="Title" required><br>
   		<br>
-  		Director <input class="Text" type="text" name="fdirector" placeholder="Director" required><br>
+  		<b>Director</b> <input class="inputstyle" type="text" name="fdirector" placeholder="Director" required><br>
   		<br>
-  		Category
-  		<select class="Text" class="select-box" name="fcategory">
+  		<b>Category </b>
+  		<select class="Text" class="select-box inputstyle" name="fcategory">
 			  <%for(String category : categories){
 					%><option value="<%= category %>">
 			  		<%out.println(category);%></option>
@@ -31,7 +32,7 @@ List<String> categories = (List<String>) request.getAttribute("categories");
 		</select> 		
 		<br>
 		<br>
-		  Year <input class="Text" type="number" name="fyear" placeholder="Year" required><br>
+		 <b> Year</b> <input class="inputstyle" type="number" name="fyear" placeholder="Year" required><br>
 		  <br>
 		 <input class="botoes" type="submit" name="addContent" id ="addContent" value="Confirm">
 		
@@ -43,4 +44,8 @@ List<String> categories = (List<String>) request.getAttribute("categories");
 <form action="PlayersTallerThan" method="post"> 
    		<input class="botoes" type="submit" name="logout" id="logout" value="Logout">
  	</form>
+		</div>
+</body>
+
+ 
 </html>

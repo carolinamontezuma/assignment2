@@ -75,7 +75,7 @@ else{
 
 <table class="Text" id="myTable">
   <tr>
-    <th>Title
+    <th id="tituloTabela">>Title
     <form action="PlayersTallerThan" method="get" onsubmit="setParams(['t_dir', 't_cat', 't_ymin', 't_ymax'])">
 		<input type="submit" class="botoesOrdem" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc">
 		<input type="submit" class="botoesOrdem" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc">
@@ -85,7 +85,7 @@ else{
 		<input type="hidden" id="t_ymax" name="maxYear">
 		<input type="hidden" name="action" value="<%= action %>">
 	</form></th>
-    <th>Category
+    <th id="tituloTabela">Category
 	<form action="PlayersTallerThan" method="get" onsubmit="setParams(['c_dir', 'c_cat', 'c_ymin', 'c_ymax'])">
 		<input type="submit" class="botoesOrdem" class="botoes"name="OrderCategoryAsc" id ="OrderCategoryAsc" value="Asc">
 		<input type="submit" class="botoesOrdem" name="OrderCategoryDesc" id ="OrderCategoryDesc" value="Desc">
@@ -95,7 +95,7 @@ else{
 		<input type="hidden" id="c_ymax" name="maxYear">
 		<input type="hidden" name="action" value="<%= action %>">
 	</form></th>
-   <th>Director
+   <th id="tituloTabela">Director
    <form action="PlayersTallerThan" method="get" onsubmit="setParams(['d_dir', 'd_cat', 'd_ymin', 'd_ymax'])">
 		<input type="submit" class="botoesOrdem" name="OrderDirectorAsc" id ="OrderDirectorAsc" value="Asc">
 		<input type="submit" class="botoesOrdem" name="OrderDirectorDesc" id ="OrderDirectorDesc" value="Desc">
@@ -105,7 +105,7 @@ else{
 		<input type="hidden" id="d_ymax" name="maxYear">
 		<input type="hidden" name="action" value="<%= action %>">
 	</form></th>
-    <th>Year
+    <th id="tituloTabela">Year
     <form action="PlayersTallerThan" method="get" onsubmit="setParams(['y_dir', 'y_cat', 'y_ymin', 'y_ymax'])">
     	<input type="submit" class="botoesOrdem" name="OrderYearAsc" id ="OrderYearAsc" value="Asc">
     	<input type="submit" name="OrderYearDesc" class="botoesOrdem" id ="OrderYearDesc" value="Desc">
@@ -124,10 +124,12 @@ for(ContentDTO content : list) {
     %>
 
   <tr>
-    <td><form action="PlayersTallerThan" method="get">
+    <td>
+    <form action="PlayersTallerThan" method="get">
     <input type="hidden" name="multimedia" value="<%=mult%>"> 
     <input type="submit" class="botaoTitulo" name="botaoTitulo" value="<% out.println(content.getTitle()); %>">
-    </form></td>
+    </form>
+    </td>
     <td><% out.println(content.getCategory()); %></td>
    	<td><% out.println(content.Director()); %></td>
     <td><% out.println(content.getYear()); 
@@ -177,6 +179,7 @@ for(ContentDTO content : list) {
 	<% } %>
 </select>
 <!--  TEXT BOX PARA ESCOLHER O RANGE DE YEARS -->
+
 <input class="Text" type="number" placeholder="Minimum year" id="id_min_year" name="minYear" value="<%= lastMinYear %>">
 <input class="Text" type="number" placeholder="Maximum year" id="id_max_year" name="maxYear" value="<%= lastMaxYear %>">
 <input type="hidden" name="action" value="<%= action %>">
@@ -231,25 +234,25 @@ for(ContentDTO content : list) {
  	
  	 <table class="Text" id="myTable">
  	  <tr>
-	    <th>Title
+	    <th id="tituloTabela">Title
 	    <form action="PlayersTallerThan" method="get">
 			<input type="submit" class="botoesOrdem" name="OrderTitleAsc" id ="OrderTitleAsc" value="Asc">
 			<input type="submit" class="botoesOrdem" name="OrderTitleDesc" id ="OrderTitleDesc" value="Desc">
 			<input type="hidden" name="action" value="<%= action %>">
 		</form></th>
-	    <th>Category
+	    <th id="tituloTabela">Category
 		<form action="PlayersTallerThan" method="get">
 			<input type="submit" class="botoesOrdem" class="botoes"name="OrderCategoryAsc" id ="OrderCategoryAsc" value="Asc">
 			<input type="submit" class="botoesOrdem" name="OrderCategoryDesc" id ="OrderCategoryDesc" value="Desc">
 			<input type="hidden" name="action" value="<%= action %>">
 		</form></th>
-	   <th>Director
+	   <th id="tituloTabela">Director
 	   <form action="PlayersTallerThan" method="get">
 			<input type="submit" class="botoesOrdem" name="OrderDirectorAsc" id ="OrderDirectorAsc" value="Asc">
 			<input type="submit" class="botoesOrdem" name="OrderDirectorDesc" id ="OrderDirectorDesc" value="Desc">
 			<input type="hidden" name="action" value="<%= action %>">
 		</form></th>
-	    <th>Year
+	    <th id="tituloTabela">Year
 	    <form action="PlayersTallerThan" method="get">
 	    	<input type="submit" class="botoesOrdem" name="OrderYearAsc" id ="OrderYearAsc" value="Asc">
 	    	<input type="submit" name="OrderYearDesc" class="botoesOrdem" id ="OrderYearDesc" value="Desc">
@@ -267,7 +270,7 @@ for(ContentDTO content : list) {
  	    	%>
  	    	<form action="PlayersTallerThan" method="get">
  	    		<input class="botoes" type="hidden" name="content_id" value="<%=content.getID()%>">
- 	    		<input type="submit" name="removeFromWL" id ="removeFromWL" value="Remove from WL">
+ 	    		<input class="botoes bot_aux removeFromWL_aux" type="submit" name="removeFromWL" id ="removeFromWL" value="Remove from WL">
  	    		<input type="hidden" name="action" value="<%= action %>">
  	    	</form>
  	    	<% } %> </td>

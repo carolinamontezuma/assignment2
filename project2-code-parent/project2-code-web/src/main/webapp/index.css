@@ -41,6 +41,50 @@ body {background-color: black;}
 		font-family: "HelveticaNeue";
 	
 }
+
+<!-- LOGIN -->
+
+
+.container{
+	background-color:pink;
+
+}
+
+.aux{
+	margin-top: 15%;
+}
+<!-- REGISTAR -->
+
+.wrap_registar{
+	background-color: pink;
+}
+
+<!-- Apagar conteudo -->
+.remove{
+	margin-left:15px;
+}
+
+.aux2{
+	margin-left: 20%;
+	margin-top: 15%;
+}
+
+.inputstyle{
+	background-color: transparent;
+	border: 1px solid white;
+	border-radius: 2px;
+	padding-bottom: 1%;
+	color:white;
+	margin-bottom: 2%;
+}
+
+.inputstyle_aux{
+	background-color: transparent;
+	color:white;
+	margin-bottom: 2%;
+}
+
+
 input[type="text"],select,input[type="button"]{
   padding:5px;
   border-radius:3px;
@@ -92,10 +136,11 @@ to {opacity:1 ;}
     width: 15%;
 }
 .botaoTitulo{
-	background-color:black;
-	text-color:white;
-	text-size:20;
+	background-color:#808080;
+	color:white;
+	font-size:20px;
 	border:none;
+	border-bottom:2px solid
 }
 
 #user_bot_wrap{
@@ -219,25 +264,52 @@ to {opacity:1 ;}
 /*  Tabela Content */
 #addtowl{
 	position: absolute;
-	margin-left: 21%;
+	margin-left: 14.8%;
+	margin-top: -2.8%;
+}
+#removeFromWL{
+	position: absolute;
+	margin-left: 13%;
 	margin-top: -2.8%;
 }
 
+.removeFromWL_aux{
+	position: absolute;
+	margin-left: 15.5%;
+	margin-top: -2.8%;
+}
+
+.removeFromWL_aux3{
+	position: absolute;
+	margin-left: 21.5%;
+	margin-top: -2.8%;
+}
+
+
 #myTable{
 	margin-top: 15%;
+	background-color:#808080;
 	margin-left: 10%;
 	width:70%;
+	text-align:center;
+}
+#tituloTabela{
+	font-size:30px;
 }
 .filtros{
     text-align: center;
     margin-top: 5%;
+    border-top: 2px solid;
+    width:70%;
+    margin-left:10%;
+    margin-top:3%;
 }
 .botoesOrdem{
 	font-family: "HelveticaNeue";
 	color: white;
 	background-color: #202020; 
     border-style: solid;
-    border-width: 3px;
+    border-width: 1.5px;
 	border-color: white;   
     padding: 5px 7px;
     text-align: center;

@@ -42,7 +42,8 @@ public class ContentEJB implements ContentEJBLocal {
 	// Adicionar Contents à BD - função do professor
 	@Override
 	public void populate() {
-		Content[] contents = { new Content("Breaking Bad", "John", 1996, "Action"),
+
+		Content[] contents = { 
 				new Content("Suits", "Peter", 2000, "Comedy"),
 				new Content("Game Of Thrones", "Henry", 2005, "Action") };
 
@@ -67,7 +68,8 @@ public class ContentEJB implements ContentEJBLocal {
 			StringBuilder value = new StringBuilder();
 			value.append(str);
 			value.append("-");
-			value.append(director.toLowerCase());
+			String str2 = director.replaceAll("\\s+","").toLowerCase();
+			value.append(str2);
 			newContent.setMultimedia(value.toString());
 			newContent.setDirector(director);
 			newContent.setYear(year);
@@ -279,6 +281,7 @@ public class ContentEJB implements ContentEJBLocal {
 			cd.add(new ContentDTO(con));
 		}
 		return cd;
+
 	}
 	
 	@Override
