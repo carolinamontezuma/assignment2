@@ -90,7 +90,7 @@ public class ContentEJB implements ContentEJBLocal {
 	}
 
 	@Override
-	public void removeContent(int contentID)
+	public boolean removeContent(int contentID)
 	{
 		Content content = em.find(Content.class, contentID);
 		Query queryUsers = em.createQuery("SELECT u FROM User u WHERE :content MEMBER OF u.watchList").setParameter("content", content);
@@ -101,7 +101,12 @@ public class ContentEJB implements ContentEJBLocal {
 		
 		em.remove(content);
 		
+		if(em.find(Content.class, contentID) == null)
+			return false;
+		
 		logger.info("Content with id " + contentID + " and title + \"" + content.getTitle() + "\" has been removed");
+		
+		return true;
 	}
 		
 	//Editar conteudo 
