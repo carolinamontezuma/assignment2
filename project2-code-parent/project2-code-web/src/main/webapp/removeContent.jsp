@@ -24,6 +24,7 @@ th, td {
 </style>
 <link rel="stylesheet" href="index.css">
 </head>
+<title>Remove content</title>
 <body>
 
 <%

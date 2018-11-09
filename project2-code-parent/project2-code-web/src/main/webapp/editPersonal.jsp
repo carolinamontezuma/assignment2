@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="index.css">
-<title>editPersonal.jsp</title>
+<title>Edit account</title>
 </head>
 <body>
 <%

@@ -48,8 +48,12 @@ public class ContentEJB implements ContentEJBLocal {
 				new Content("Game Of Thrones", "Henry", 2005, "Action","gameofthrones-henry"),
 				new Content("Breaking Bad", "John", 2005, "Action","breakingbad-john")};
 
+		logger.debug("Populating the database with " + contents.length + " Contents");
 		for (Content c : contents)
+		{
 			em.persist(c);
+			logger.debug("Populated database with \"" + c.getTitle() + "\" (" + c + ")");
+		}
 	}
 	
 	// Adicionar novo Content à aplicação
@@ -78,6 +82,9 @@ public class ContentEJB implements ContentEJBLocal {
 			
 			return 1;
 		}
+		
+		logger.info("Failed to add new content with title " + title + " - content with same title already exists");
+		
 		return 0;
 	}
 

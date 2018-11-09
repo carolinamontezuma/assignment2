@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>userScreen.jsp</title>
+<title>Home</title>
 <link rel="stylesheet" href="index.css">
 <script type="text/javascript">
 var slideIndex = 0;
@@ -24,7 +24,7 @@ function showSlides() {
     slideIndex++;
     if (slideIndex > slides.length) {slideIndex = 1} 
     slides[slideIndex-1].style.display = "block"; 
-    setTimeout(showSlides, 2000); // mudar imagem de 2 em 2 segs
+    setTimeout(showSlides, 2000); // mudar imagem de 3 em 3 segs
 }
 </script>
 </head>

@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="index.css">
-<title>multimedia.jsp</title>
+<title>Multimedia</title>
 <script>
 function showImage(){
     document.getElementById('loadingImage').style.visibility=visible;

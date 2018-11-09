@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Registar.jsp</title>
+<title>Register</title>
 <link rel="stylesheet" href="index.css">
 
 </head>
@@ -32,6 +32,7 @@ String message = (String)request.getAttribute("message");
 %>
 <div class="wrap_registar aux2">
 <p class="Title">Register</p>
+
 <div class="Text">
 	<form action="PlayersTallerThan" method="post">
   		<b>Name </b> <input class="inputstyle_aux"  type="text" name="fname" placeholder="Name" value="<%= usedName %>" required><br>
